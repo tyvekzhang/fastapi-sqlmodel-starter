@@ -2,7 +2,7 @@
 
 FastapiSqlmodelStarter旨在成为搭建Python Web领域的小而美的工具。
 
-##### Translate to: [English](doc/README_en.md)
+##### Translate to: [English](docs/README_en.md)
 ## 特性
 
 - 开箱即用的 RESTful API 支持
