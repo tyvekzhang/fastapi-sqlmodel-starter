@@ -18,3 +18,23 @@ body:
       label: Why is this needed?
     validations:
       required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: |
+        Please specify the criteria that must be met for this feature to be considered complete.
+        Provide a clear and testable definition of done.
+      value: |
+        <details>
+
+        ```console
+        - function
+        - extensibility
+        - test coverage
+        ```
+
+        </details>
+    validations:
+      required: true
