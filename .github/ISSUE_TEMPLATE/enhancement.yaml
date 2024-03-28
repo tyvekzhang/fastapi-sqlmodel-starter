@@ -1,40 +1,36 @@
-name: Enhancement Tracking Issue
-description: Provide supporting details for a feature in development
+name: Enhancement Tracking Issue(增强功能跟踪问题)
+description: Provide supporting details for a feature in development(为开发中的一个功能提供支持性细节。)
 labels: kind/feature
 body:
   - type: textarea
     id: feature
     attributes:
-      label: What would you like to be added?
+      label: What would you like to be added(你想添加什么功能)?
       description: |
-        Feature requests are unlikely to make progress as issues. A proposal that works through the design along with
-         the implications of the change can be opened as a FEP.
+        Please list out the detailed feature description(请列出详细的功能描述)
     validations:
       required: true
 
   - type: textarea
-    id: rationale
+    id: reference
     attributes:
-      label: Why is this needed?
+      label: Requirement reference(功能、界面参考的文档或链接)?
     validations:
       required: true
 
   - type: textarea
     id: acceptance_criteria
     attributes:
-      label: Acceptance Criteria
+      label: Acceptance Criteria(验收标准)
       description: |
-        Please specify the criteria that must be met for this feature to be considered complete.
-        Provide a clear and testable definition of done.
+        Please provide a clear and quantifiable completion indicator(请提供一个清晰可量化的完成指标).
       value: |
         <details>
-
         ```console
         - function
         - extensibility
         - test coverage
         ```
-
         </details>
     validations:
       required: true
