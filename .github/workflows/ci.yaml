@@ -54,4 +54,3 @@ jobs:
       - name: Test with pytest
         run: |
           echo "This is part one of ci.yml, will update soon!"
-
