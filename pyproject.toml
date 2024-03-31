@@ -1,0 +1,56 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = [
+  "poetry-core",
+]
+
+[tool.poetry]
+name = "fastapi-sqlmodel-starter"
+version = "0.1.0"
+description = "FastapiSqlmodelStarter aims to be a compact and beautiful tool for building Python Web applications."
+license = "MIT"
+authors = [
+  "tyvekZhang <tyvekzhang@gmail.com>",
+]
+maintainers = [
+  "tyvekZhang <tyvekzhang@gmail.com>",
+]
+readme = "README.md"
+homepage = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter"
+repository = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter"
+documentation = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter/wiki"
+keywords = ["fastapi", "sqlmodel", "tools", "web"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Software Development :: Python Web Tools"
+]
+packages = [
+  { include = "fss"},
+  { include = "tests"},
+  { include = ".env.example"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "*"
+
+[tool.poetry.scripts]
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
+priority = "default"

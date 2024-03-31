@@ -2,3 +2,5 @@
 .idea/
 *.lock
 .tox/
+/fss/common/version.py
+/.ruff_cache/

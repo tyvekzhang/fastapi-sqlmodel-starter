@@ -41,4 +41,3 @@ Enter your extended release note in the block below. If the PR requires addition
 ```release-note
 
 ```
-
