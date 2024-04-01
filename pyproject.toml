@@ -24,7 +24,6 @@ classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -37,11 +36,12 @@ classifiers = [
 packages = [
   { include = "fss"},
   { include = "tests"},
-  { include = ".env.example"},
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
+fastapi = "^0.110.0"
+uvicorn = "^0.29.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
