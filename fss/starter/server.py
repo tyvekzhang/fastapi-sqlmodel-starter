@@ -1,12 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
 
+from fss.starter.modules.system.router.system_router import system_router
+
 app = FastAPI()
-
-
-@app.get("/")
-def healthz():
-    return {"code": 0, "msg": "healthy"}
+app.include_router(system_router)
 
 
 def run() -> None:
