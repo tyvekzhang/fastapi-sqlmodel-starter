@@ -17,11 +17,11 @@ class Service(Generic[T], ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def save_batch(self, *, datas: List[T]) -> bool:
+    async def save_batch(self, *, data_list: List[T]) -> bool:
         raise NotImplementedError
 
     @abstractmethod
-    async def save_or_update_batch(self, *, datas: List[T]) -> bool:
+    async def save_or_update_batch(self, *, data_list: List[T]) -> bool:
         raise NotImplementedError
 
     @abstractmethod
@@ -61,7 +61,7 @@ class Service(Generic[T], ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def update_batch_by_ids(self, *, datas: List[T]) -> bool:
+    async def update_batch_by_ids(self, *, data_list: List[T]) -> bool:
         raise NotImplementedError
 
     @abstractmethod

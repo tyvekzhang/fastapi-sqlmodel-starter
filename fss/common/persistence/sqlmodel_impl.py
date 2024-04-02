@@ -37,15 +37,17 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         db_session.add(orm_data)
         return orm_data
 
-    async def insert_batch(self, *, datas: List[Any], db_session: Any = None) -> int:
+    async def insert_batch(
+        self, *, data_list: List[Any], db_session: Any = None
+    ) -> int:
         db_session = db_session or self.db.session
         orm_datas = [
             self.model.from_orm(data) if not isinstance(data, self.model) else data
-            for data in datas
+            for data in data_list
         ]
         statement = insert(self.model).values([data.dict() for data in orm_datas])
         await db_session.execute(statement)
-        return len(datas)
+        return len(data_list)
 
     async def select_by_id(self, *, id: Any, db_session: Any = None) -> Any:
         db_session = db_session or self.db.session
@@ -159,10 +161,10 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         return self.count_affected_rows(db_data)
 
     async def update_batch_by_ids(
-        self, *, datas: List[Any], db_session: Any = None
+        self, *, data_list: List[Any], db_session: Any = None
     ) -> int:
         db_session = db_session or self.db.session
-        for data in datas:
+        for data in data_list:
             if hasattr(data, "id"):
                 statement = (
                     update(self.model)
@@ -170,7 +172,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
                     .values(**data.dict(exclude_unset=True))
                 )
                 await db_session.execute(statement)
-        return len(datas)
+        return len(data_list)
 
     async def delete_by_id(self, *, id: Any, db_session: Any = None) -> int:
         db_session = db_session or self.db.session
