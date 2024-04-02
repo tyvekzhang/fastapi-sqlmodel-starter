@@ -1,3 +1,5 @@
+"""Add project to python path"""
+
 import os
 import sys
 from pathlib import Path
