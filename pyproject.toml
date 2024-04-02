@@ -19,7 +19,7 @@ readme = "README.md"
 homepage = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter"
 repository = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter"
 documentation = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter/wiki"
-keywords = ["fastapi", "sqlmodel", "tools", "web"]
+keywords = ["fastapi", "sqlmodel", "tools", "web", "scaffold"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
@@ -40,8 +40,17 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
+loguru = "^0.7.2"
 fastapi = "^0.110.0"
+fastapi-pagination = "^0.12.21"
+fastapi-async-sqlalchemy = "^0.6.1"
 uvicorn = "^0.29.0"
+sqlmodel = "^0.0.16"
+python-dotenv = "^1.0.1"
+python-multipart = "^0.0.9"
+alembic = "^1.13.1"
+sqlalchemy-utils = "^0.41.2"
+aiosqlite = "^0.20.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
