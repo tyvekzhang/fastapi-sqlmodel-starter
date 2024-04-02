@@ -8,7 +8,8 @@ from sqlmodel import SQLModel
 
 from alembic import context
 
-from fss.starter.modules.system.model._migrate import start_signal
+from fss.starter.system.model._migrate import start_signal
+
 print(start_signal)
 
 # this is the Alembic Config object, which provides
