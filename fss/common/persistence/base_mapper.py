@@ -22,7 +22,7 @@ class BaseMapper(Mapper):
         raise NotImplementedError
 
     @abstractmethod
-    async def insert_batch(self, *, datas: List[Any], db_session: Any) -> int:
+    async def insert_batch(self, *, data_list: List[Any], db_session: Any) -> int:
         raise NotImplementedError
 
     @abstractmethod
@@ -81,7 +81,9 @@ class BaseMapper(Mapper):
         raise NotImplementedError
 
     @abstractmethod
-    async def update_batch_by_ids(self, *, datas: List[Any], db_session: Any) -> int:
+    async def update_batch_by_ids(
+        self, *, data_list: List[Any], db_session: Any
+    ) -> int:
         raise NotImplementedError
 
     @abstractmethod

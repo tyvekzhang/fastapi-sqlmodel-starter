@@ -1,4 +1,4 @@
-"""Service impl for the project"""
+"""Common service impl"""
 
 from typing import Any, TypeVar, List, Generic
 
@@ -24,17 +24,17 @@ class ServiceImpl(Generic[M, T], Service[T]):
             result = await self.update_by_id(data=data)
         return result
 
-    async def save_batch(self, *, datas: List[T]) -> bool:
-        result = await self.mapper.insert_batch(datas=datas)
-        return result == len(datas)
+    async def save_batch(self, *, data_list: List[T]) -> bool:
+        result = await self.mapper.insert_batch(data_list=data_list)
+        return result == len(data_list)
 
-    async def save_or_update_batch(self, *, datas: List[T]) -> bool:
-        if len(datas) == 0:
+    async def save_or_update_batch(self, *, data_list: List[T]) -> bool:
+        if len(data_list) == 0:
             return False
-        if datas[0].id is None:
-            return await self.save_batch(datas=datas)
+        if data_list[0].id is None:
+            return await self.save_batch(data_list=data_list)
         else:
-            return await self.update_batch_by_ids(datas=datas)
+            return await self.update_batch_by_ids(data_list=data_list)
 
     async def get_by_id(self, *, id: T) -> T:
         return await self.mapper.select_by_id(id=id)
@@ -66,8 +66,8 @@ class ServiceImpl(Generic[M, T], Service[T]):
     async def update_by_id(self, *, data: T) -> bool:
         return self.mapper.update_by_id(data=data)
 
-    async def update_batch_by_ids(self, *, datas: List[T]) -> bool:
-        return self.mapper.update_batch_by_ids(datas=datas)
+    async def update_batch_by_ids(self, *, data_list: List[T]) -> bool:
+        return self.mapper.update_batch_by_ids(data_list=data_list)
 
     async def remove_by_id(self, *, id: T) -> bool:
         return self.mapper.delete_by_id(id=id)
