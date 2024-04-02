@@ -3,3 +3,4 @@
 *.lock
 .tox/
 .ruff_cache/
+/fss/fss.db
