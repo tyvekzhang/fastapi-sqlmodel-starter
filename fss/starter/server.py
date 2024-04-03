@@ -10,7 +10,7 @@ from starlette.responses import JSONResponse
 from fss.common.config import configs
 from fss.common import config
 from fss.middleware.db_session_middleware import SQLAlchemyMiddleware
-from fss.starter.system.router import system_router
+from fss.starter.system.router.system import system_router
 
 # FastAPIOffline setting
 app = FastAPIOffline(
