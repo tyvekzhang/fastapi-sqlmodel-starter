@@ -23,15 +23,22 @@ class Configs(BaseSettings):
     app_desc: str
     mode: str
     port: int
-    pool_size: int
+    access_token_expire_minutes: int = 60 * 24  # 24 hour
+    refresh_token_expire_minutes: int = 60 * 24 * 30  # 30 days
     win_tz: str
     linux_tz: str
     workers: Union[str, int]
     backend_cors_origins: str
+    white_list_routes: str
+    algorithm: str
     secret_key: str
     log_file: str
-    api_version_v1: str
+    api_version: str
     sqlalchemy_database_url: str
+    enable_redis: bool
+    cache_pass: str
+    cache_host: str
+    cache_port: str
 
     class Config:
         env_file = ENV_FILE

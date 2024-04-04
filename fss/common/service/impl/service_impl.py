@@ -1,6 +1,6 @@
 """Common service impl"""
 
-from typing import Any, TypeVar, List, Generic
+from typing import Any, TypeVar, List, Generic, Type
 
 from fss.common.persistence.base_mapper import BaseMapper
 from fss.common.service.service import Service
@@ -10,7 +10,7 @@ M = TypeVar("M", bound=BaseMapper)
 
 
 class ServiceImpl(Generic[M, T], Service[T]):
-    def __init__(self, mapper: type[M]):
+    def __init__(self, mapper: Type[M]):
         self.mapper = mapper
 
     async def save(self, *, data: T) -> bool:
