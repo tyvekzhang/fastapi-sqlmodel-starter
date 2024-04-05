@@ -39,6 +39,7 @@ class Configs(BaseSettings):
     cache_pass: str
     cache_host: str
     cache_port: str
+    enable_swagger: bool
 
     class Config:
         env_file = ENV_FILE

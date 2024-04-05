@@ -120,7 +120,13 @@ async def jwt_middleware(request: Request, call_next):
     if not raw_url_path.__contains__(configs.api_version) or raw_url_path.__contains__(
         ".json"
     ):
-        return await call_next(request)
+        if configs.enable_swagger:
+            return await call_next(request)
+        else:
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "The documentation isn't ready yet."},
+            )
     request_url_path = configs.api_version + raw_url_path.split(configs.api_version)[1]
     if request_url_path in WHITE_LIST_ROUTES:
         return await call_next(request)
