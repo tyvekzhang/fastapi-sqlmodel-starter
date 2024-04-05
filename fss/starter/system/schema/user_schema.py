@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 # UserCreate schema
-class UserCreate(BaseModel):
+class UserCreateCmd(BaseModel):
     username: str
     password: str
     nickname: str
@@ -15,3 +15,9 @@ class UserQuery(BaseModel):
     id: int
     username: str
     nickname: str
+
+
+# Login schema
+class LoginCmd(BaseModel):
+    username: str
+    password: str

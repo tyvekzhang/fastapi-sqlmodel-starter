@@ -13,7 +13,28 @@ FastapiSqlmodelStarter旨在成为搭建Python Web领域的小而美的工具。
 - 优秀的性能表现，适合中小型应用
 
 ## 快速开始
-
+1. 首先确保python的版本是3.8及以上的
+2. 克隆代码
+```shell
+git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
+cd fastapi-sqlmodel-starter
+```
+3. 创建虚拟环境, 本篇以venv为例, 类似的工具还有conda, virtualenv等
+```shell
+python -m venv env_fss
+```
+2. 激活虚拟环境
+    - Windows: env_fss\Scripts\activate
+    - macOS 或 Linux: source env_fss/bin/activate
+3. 安装 Poetry并下载依赖
+```shell
+pip install poetry -i https://pypi.tuna.tsinghua.edu.cn/simple
+poetry install
+```
+4. 启动
+   - Windows: python fss\apiserver.py
+   - macOS 或 Linux: python fss/apiserver.py
+5. 访问: http://127.0.0.1:9010/docs
 ## 文档
 
 ## 贡献

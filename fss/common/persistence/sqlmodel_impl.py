@@ -1,6 +1,6 @@
 """Sqlmodel impl that do database operations"""
 
-from typing import Generic, TypeVar, List, Any
+from typing import Generic, TypeVar, List, Any, Type, Union
 
 from fastapi_pagination.ext.sqlmodel import paginate
 from pydantic import BaseModel
@@ -19,18 +19,18 @@ T = TypeVar("T", bound=SQLModel)
 
 
 class SqlModelMapper(Generic[ModelType], BaseMapper):
-    def __init__(self, model: type[ModelType]):
+    def __init__(self, model: Type[ModelType]):
         self.model = model
         self.db = db
 
-    def get_db_session(self) -> type(Any):
+    def get_db_session(self) -> Type[Any]:
         return self.db
 
     async def insert(
         self,
         *,
-        data: ModelType | SchemaType,
-        db_session: AsyncSession | None = None,
+        data: Union[ModelType, SchemaType],
+        db_session: Union[AsyncSession, None] = None,
     ) -> int:
         db_session = db_session or self.db.session
         orm_data = self.model.from_orm(data)

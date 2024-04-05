@@ -2,7 +2,7 @@
 
 import os
 import time
-from collections.abc import Generator
+from typing import Generator
 
 API_EPOCH = 1640995200000
 
@@ -28,7 +28,7 @@ def generator(
     worker_id: int = 1,
     process_id: int = os.getpid() % 31,
     sleep=lambda x: time.sleep(x),
-) -> Generator[int]:
+) -> Generator[int, None, None]:
     assert 0 <= worker_id <= max_worker_id
     assert 0 <= process_id <= max_process_id
 
