@@ -1,4 +1,5 @@
 """User operation mapper"""
+
 from typing import Union
 
 from sqlmodel import select

@@ -1,4 +1,5 @@
 """Simple in-memory page cache implementation"""
+
 from typing import Any
 
 import diskcache

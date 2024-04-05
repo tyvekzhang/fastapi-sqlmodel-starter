@@ -1,6 +1,5 @@
 """Redis cache implementation"""
 
-
 import asyncio
 from typing import Optional
 
@@ -33,7 +32,6 @@ class RedisManager:
 
 
 class RedisCache(Cache):
-
     def __init__(self, redis_client):
         self.redis_client = redis_client
 

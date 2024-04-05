@@ -102,6 +102,7 @@ def create_middleware_and_session_proxy():
 
 SQLAlchemyMiddleware, db = create_middleware_and_session_proxy()
 
+
 class MissingSessionException(Exception):
     """
     Exception raised for when the user tries to access a database session before it is created.
@@ -132,4 +133,3 @@ class SessionNotInitialisedException(Exception):
         """
 
         super().__init__(detail)
-

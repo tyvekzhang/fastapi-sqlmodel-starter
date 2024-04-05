@@ -1,4 +1,5 @@
 """The exceptions used in the project"""
+
 import http
 
 

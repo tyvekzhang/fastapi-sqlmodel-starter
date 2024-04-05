@@ -2,7 +2,10 @@
 
 import uvicorn
 from fastapi import Request
-from fastapi.exception_handlers import http_exception_handler, request_validation_exception_handler
+from fastapi.exception_handlers import (
+    http_exception_handler,
+    request_validation_exception_handler,
+)
 from fastapi.exceptions import RequestValidationError
 from fastapi.utils import is_body_allowed_for_status_code
 from fastapi_offline import FastAPIOffline
@@ -50,16 +53,20 @@ async def service_exception_handler(request: Request, exc: ServiceException):
                 JSONResponse, depending on whether a response body is allowed for
                 the given status code.
     """
-    logger.error(f"Exception occurred: {exc} \n"
-                 f"Request path: {request.url.path} \n"
-                 f"Request method: {request.method} \n"
-                 f"Request headers: {request.headers} \n"
-                 f"Request body: {await request.body()}")
+    logger.error(
+        f"Exception occurred: {exc} \n"
+        f"Request path: {request.url.path} \n"
+        f"Request method: {request.method} \n"
+        f"Request headers: {request.headers} \n"
+        f"Request body: {await request.body()}"
+    )
     headers = getattr(exc, "headers", None)
     if not is_body_allowed_for_status_code(exc.status_code):
         return Response(status_code=exc.status_code, headers=headers)
     return JSONResponse(
-        {"code": exc.code, "detail": exc.detail}, status_code=exc.status_code, headers=headers
+        {"code": exc.code, "detail": exc.detail},
+        status_code=exc.status_code,
+        headers=headers,
     )
 
 
@@ -73,11 +80,13 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
                 JSONResponse, depending on whether a response body is allowed for
                 the given status code.
     """
-    logger.error(f"Exception occurred: {exc} \n"
-                 f"Request path: {request.url.path} \n"
-                 f"Request method: {request.method} \n"
-                 f"Request headers: {request.headers} \n"
-                 f"Request body: {await request.body()}")
+    logger.error(
+        f"Exception occurred: {exc} \n"
+        f"Request path: {request.url.path} \n"
+        f"Request method: {request.method} \n"
+        f"Request headers: {request.headers} \n"
+        f"Request body: {await request.body()}"
+    )
     return await http_exception_handler(request, exc)
 
 
@@ -89,11 +98,13 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     :param exc: StarletteHTTPException instance
     :return: A Starlette Response object.
     """
-    logger.error(f"Exception occurred: {exc} \n"
-                 f"Request path: {request.url.path} \n"
-                 f"Request method: {request.method} \n"
-                 f"Request headers: {request.headers} \n"
-                 f"Request body: {await request.body()}")
+    logger.error(
+        f"Exception occurred: {exc} \n"
+        f"Request path: {request.url.path} \n"
+        f"Request method: {request.method} \n"
+        f"Request headers: {request.headers} \n"
+        f"Request body: {await request.body()}"
+    )
     return await request_validation_exception_handler(request, exc)
 
 
@@ -106,7 +117,9 @@ for router in configs.white_list_routes.split(","):
 @app.middleware("http")
 async def jwt_middleware(request: Request, call_next):
     raw_url_path = request.url.path
-    if not raw_url_path.__contains__(configs.api_version) or raw_url_path.__contains__(".json"):
+    if not raw_url_path.__contains__(configs.api_version) or raw_url_path.__contains__(
+        ".json"
+    ):
         return await call_next(request)
     request_url_path = configs.api_version + raw_url_path.split(configs.api_version)[1]
     if request_url_path in WHITE_LIST_ROUTES:
@@ -131,6 +144,7 @@ async def jwt_middleware(request: Request, call_next):
         )
 
     return await call_next(request)
+
 
 # Cors processing
 if configs.backend_cors_origins:

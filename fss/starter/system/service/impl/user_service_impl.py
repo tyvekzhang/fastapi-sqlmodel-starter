@@ -1,11 +1,12 @@
 """User domain service impl"""
+
 from datetime import timedelta
 from typing import Optional
 
 from fss.common.cache.cache import get_cache_client, Cache
 from fss.common.config import configs
 from fss.common.enum.enum import TokenTypeEnum
-from fss.common.schema.token import Token
+from fss.common.schema.schema import Token
 from fss.common.service.impl.service_impl import ServiceImpl
 from fss.common.util import security
 from fss.common.util.security import verify_password
@@ -40,25 +41,36 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         :return: access token and refresh token
         """
         username: str = loginCmd.username
-        userDO: UserDO= await self.mapper.get_user_by_username(username=username)
+        userDO: UserDO = await self.mapper.get_user_by_username(username=username)
         if not userDO or not await verify_password(loginCmd.password, userDO.password):
-            raise SystemException(SystemResponseCode.AUTH_FAILED.code, SystemResponseCode.AUTH_FAILED.msg)
+            raise SystemException(
+                SystemResponseCode.AUTH_FAILED.code, SystemResponseCode.AUTH_FAILED.msg
+            )
         access_token_expires = timedelta(minutes=configs.access_token_expire_minutes)
         refresh_token_expires = timedelta(minutes=configs.refresh_token_expire_minutes)
         access_token = await security.create_token(
-            subject=userDO.id, expires_delta=access_token_expires, token_type=TokenTypeEnum.access
+            subject=userDO.id,
+            expires_delta=access_token_expires,
+            token_type=TokenTypeEnum.access,
         )
         refresh_token = await security.create_token(
-            subject=userDO.id, expires_delta=refresh_token_expires, token_type=TokenTypeEnum.refresh
+            subject=userDO.id,
+            expires_delta=refresh_token_expires,
+            token_type=TokenTypeEnum.refresh,
         )
         token = Token(
             access_token=access_token,
             expired_at=int(access_token_expires.total_seconds()),
+            token_type="bearer",
             refresh_token=refresh_token,
-            re_expired_at=int(refresh_token_expires.total_seconds())
+            re_expired_at=int(refresh_token_expires.total_seconds()),
         )
         cache_client: Cache = await get_cache_client()
-        await cache_client.set(f"{SystemConstantCode.USER_KEY.msg}{userDO.id}", access_token, access_token_expires)
+        await cache_client.set(
+            f"{SystemConstantCode.USER_KEY.msg}{userDO.id}",
+            access_token,
+            access_token_expires,
+        )
         return token
 
 

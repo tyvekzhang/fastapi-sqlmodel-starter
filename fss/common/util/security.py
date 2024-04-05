@@ -14,7 +14,7 @@ DAYS_WITHOUT_LOGIN = 30
 
 
 async def create_token(
-        subject: Union[str, Any], expires_delta: timedelta = None, token_type: str = None
+    subject: Union[str, Any], expires_delta: timedelta = None, token_type: str = None
 ) -> str:
     if expires_delta:
         expire = datetime.now() + expires_delta

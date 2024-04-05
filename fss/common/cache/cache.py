@@ -1,13 +1,12 @@
 """Abstract base class for Cache"""
+
 from abc import ABC, abstractmethod
 
-from loguru import logger
 
 from fss.common.config import configs
 
 
 class Cache(ABC):
-
     @abstractmethod
     async def get(self, key):
         """Retrieve a value by key from the cache."""
@@ -37,7 +36,9 @@ async def get_cache_client() -> Cache:
     if configs.enable_redis:
         from fss.common.cache.redis_cache import RedisCache
         from fss.common.cache.redis_cache import RedisManager
+
         redis_client = await RedisManager.get_instance()
         return RedisCache(redis_client)
     from fss.common.cache.page_cache import PageCache
+
     return PageCache()

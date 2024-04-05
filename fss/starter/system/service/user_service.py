@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 
-from fss.common.schema.token import Token
+from fss.common.schema.schema import Token
 from fss.common.service.service import Service
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.schema.user_schema import UserQuery, LoginCmd
