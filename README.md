@@ -1,6 +1,6 @@
 # FastapiSqlmodelStarter(Fss)
 
-FastapiSqlmodelStarter旨在成为搭建Python Web领域的小而美的工具。
+Fss旨在成为PyWeb中对用户最友好的脚手架工具之一。
 
 ##### Translate to: [English](docs/README_en.md)
 ## 特性
