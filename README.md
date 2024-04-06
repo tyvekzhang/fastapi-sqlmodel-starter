@@ -23,18 +23,22 @@ cd fastapi-sqlmodel-starter
 ```shell
 python -m venv env_fss
 ```
-2. 激活虚拟环境
+4. 激活虚拟环境
     - Windows: env_fss\Scripts\activate
     - macOS 或 Linux: source env_fss/bin/activate
-3. 安装 Poetry并下载依赖
+5. 安装 Poetry并下载依赖
 ```shell
 pip install poetry -i https://pypi.tuna.tsinghua.edu.cn/simple
 poetry install
 ```
-4. 启动
+6. 数据库迁移
+```shell
+alembic upgrade head
+```
+7. 启动
    - Windows: python fss\apiserver.py
    - macOS 或 Linux: python fss/apiserver.py
-5. 访问: http://127.0.0.1:9010/docs
+8. 访问: http://127.0.0.1:9010/docs
 ## 文档
 
 ## 贡献
