@@ -31,10 +31,14 @@ python -m venv env_fss
 pip install poetry -i https://pypi.tuna.tsinghua.edu.cn/simple
 poetry install
 ```
-6. Start the server:
+6. Db migration
+```shell
+alembic upgrade head
+```
+7. Start the server:
    - Windows: python fss\apiserver.py
    - macOS or Linux: python fss/apiserver.py
-7. Access: http://127.0.0.1:9010/docs
+8. Access: http://127.0.0.1:9010/docs
 
 ## Documentation
 
