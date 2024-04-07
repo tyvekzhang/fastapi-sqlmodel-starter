@@ -42,7 +42,9 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
     ) -> int:
         db_session = db_session or self.db.session
         orm_datas = [
-            self.model.model_validate(data) if not isinstance(data, self.model) else data
+            self.model.model_validate(data)
+            if not isinstance(data, self.model)
+            else data
             for data in data_list
         ]
         statement = insert(self.model).values([data.dict() for data in orm_datas])

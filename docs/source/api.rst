@@ -10,10 +10,7 @@ The liveness probe endpoint is used to check the health of the application. It r
     @probe_router.get("/liveness")
     def liveness():
         # Returns a success code and a 'HI' message if the application is alive
-        return {
-            "code": SystemResponseCode.SUCCESS.code,
-            "msg": "hi"
-        }
+        return {"code": SystemResponseCode.SUCCESS.code, "msg": "hi"}
 
 Readiness Probe
 ---------------
@@ -37,10 +34,7 @@ The readiness probe endpoint checks if the application is ready to handle reques
             }
 
         # Returns a success code and a 'HELLO' message if the service is ready
-        return {
-            "code": SystemResponseCode.SUCCESS.code,
-            "msg": "hello"
-        }
+        return {"code": SystemResponseCode.SUCCESS.code, "msg": "hello"}
 
 User Registration
 -----------------
