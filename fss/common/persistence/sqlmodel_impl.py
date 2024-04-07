@@ -33,7 +33,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         db_session: Union[AsyncSession, None] = None,
     ) -> int:
         db_session = db_session or self.db.session
-        orm_data = self.model.from_orm(data)
+        orm_data = self.model.model_validate(data)
         db_session.add(orm_data)
         return orm_data
 
@@ -42,7 +42,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
     ) -> int:
         db_session = db_session or self.db.session
         orm_datas = [
-            self.model.from_orm(data) if not isinstance(data, self.model) else data
+            self.model.model_validate(data) if not isinstance(data, self.model) else data
             for data in data_list
         ]
         statement = insert(self.model).values([data.dict() for data in orm_datas])

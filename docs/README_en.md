@@ -18,11 +18,11 @@ cd fastapi-sqlmodel-starter
 ```
 3. Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc.(Optional)
 ```shell
-python3 -m venv env_fss
+python3 -m venv .env_fss
 ```
 4. Activate the virtual environment:(Optional)
-    - Windows: env_fss\Scripts\activate
-    - macOS or Linux: source env_fss/bin/activate
+    - Windows: .env_fss\Scripts\activate
+    - macOS or Linux: source .env_fss/bin/activate
 5. Install Poetry and download dependencies:
 ```shell
 pip install poetry -i https://pypi.tuna.tsinghua.edu.cn/simple
