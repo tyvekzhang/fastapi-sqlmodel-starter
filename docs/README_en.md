@@ -16,11 +16,11 @@ Fss aims to be one of the most user-friendly scaffolding tools for PyWeb.
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
 cd fastapi-sqlmodel-starter
 ```
-3. Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc.
+3. Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc.(Optional)
 ```shell
-python -m venv env_fss
+python3 -m venv env_fss
 ```
-4. Activate the virtual environment:
+4. Activate the virtual environment:(Optional)
     - Windows: env_fss\Scripts\activate
     - macOS or Linux: source env_fss/bin/activate
 5. Install Poetry and download dependencies:
@@ -33,8 +33,8 @@ poetry install
 alembic upgrade head
 ```
 7. Start the server:
-   - Windows: python fss\apiserver.py
-   - macOS or Linux: python fss/apiserver.py
+   - Windows: python3 fss\apiserver.py
+   - macOS or Linux: python3 fss/apiserver.py
 8. Access: http://127.0.0.1:9010/docs
 
 ## Documentation
