@@ -5,3 +5,4 @@
 .ruff_cache/
 /fss/fss.db
 /env_fss/
+.*/
