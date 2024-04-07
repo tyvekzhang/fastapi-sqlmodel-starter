@@ -38,7 +38,7 @@ alembic upgrade head
 8. Access: http://127.0.0.1:9010/docs
 
 ## Documentation
-
+- https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/
 ## Contribution
 
 We welcome contributions to FastapiSqlmodelStarter! You can participate in the following ways:

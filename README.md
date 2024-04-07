@@ -37,7 +37,7 @@ alembic upgrade head
    - macOS 或 Linux: python3 fss/apiserver.py
 8. 访问: http://127.0.0.1:9010/docs
 ## 文档
-
+- https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/
 ## 贡献
 
 欢迎为 FastapiSqlmodelStarter 做出贡献！你可以通过以下方式参与：
