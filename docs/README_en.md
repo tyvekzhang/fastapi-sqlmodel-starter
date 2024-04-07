@@ -5,12 +5,9 @@ Fss aims to be one of the most user-friendly scaffolding tools for PyWeb.
 ##### 翻译成: [简体中文](../README.md)
 ## Features
 
-- Out-of-the-box RESTful API support
-- Integrated ORM, supporting multiple database backends
-- Built-in user authentication and authorization module
-- Flexible plugin mechanism for easy expansion
-- Built-in security measures to protect against common web attacks
-- Excellent performance, suitable for medium to small-sized applications
+- Out-of-the-box, built-in support for common database caching (Sqlite, PostgreSQL, MySQL, file cache, Redis)
+- Built-in operations for nearly all single-table actions
+- Features such as database migration, static code analysis, API documentation, and more
 
 ## Quick Start
 1. First, ensure that your Python version is 3.8 or above.
