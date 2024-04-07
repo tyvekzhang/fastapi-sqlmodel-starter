@@ -18,11 +18,11 @@ cd fastapi-sqlmodel-starter
 ```
 3. 创建虚拟环境, 本篇以venv为例, 类似的工具还有conda, virtualenv等(可选)
 ```shell
-python3 -m venv env_fss
+python3 -m venv .env_fss
 ```
 4. 激活虚拟环境(可选)
-    - Windows: env_fss\Scripts\activate
-    - macOS 或 Linux: source env_fss/bin/activate
+    - Windows: .env_fss\Scripts\activate
+    - macOS 或 Linux: source .env_fss/bin/activate
 5. 安装 Poetry并下载依赖
 ```shell
 pip install poetry -i https://pypi.tuna.tsinghua.edu.cn/simple
