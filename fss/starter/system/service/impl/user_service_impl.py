@@ -30,7 +30,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         """
         user_do = await self.mapper.select_by_id(id=id)
         if user_do:
-            return UserQuery(**user_do.dict())
+            return UserQuery(**user_do.model_dump())
         else:
             return None
 

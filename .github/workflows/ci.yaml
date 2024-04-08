@@ -54,5 +54,5 @@ jobs:
           python -m pip install pytest httpx
       - name: Test with pytest
         run: |
-          cd tests
+          alembic upgrade head
           pytest

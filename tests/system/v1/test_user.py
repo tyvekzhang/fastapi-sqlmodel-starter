@@ -1,5 +1,3 @@
-import random
-
 from fastapi.testclient import TestClient
 
 from fss.common.config import configs
@@ -9,9 +7,8 @@ client = TestClient(app)
 
 
 def test_user_register():
-    random_num = random.randint(0, 1000)
     user_data = {
-        "username": f"example_user_{random_num}",
+        "username": "example_user",
         "password": "example_password",
         "nickname": "Example Nickname",
     }

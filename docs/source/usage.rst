@@ -24,7 +24,7 @@ Quick Start
 
 5. Install Poetry and download dependencies::
 
-    pip install poetry -i https://pypi.tuna.tsinghua.edu.cn/simple
+    pip install poetry
     poetry install
 
 6. Database migration::
