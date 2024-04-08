@@ -5,7 +5,7 @@ Fss aims to be one of the most user-friendly scaffolding tools for PyWeb.
 ##### 翻译成: [简体中文](../README.md)
 ## Features
 
-- Out-of-the-box, built-in support for common database caching (Sqlite, PostgreSQL, MySQL, file cache, Redis)
+- Out-of-the-box, built-in support for common database caching (Sqlite[default], PostgreSQL, MySQL, file cache[default], Redis)
 - Built-in operations for nearly all single-table actions
 - Features such as database migration, static code analysis, API documentation, and more
 

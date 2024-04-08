@@ -10,7 +10,7 @@ from pathlib import Path as path
 from pydantic.v1 import BaseSettings
 
 current_file_path = os.path.abspath(__file__)
-env_directory = path(current_file_path).parent.parent
+env_directory = path(current_file_path).parent.parent.parent
 
 
 ENV_FILE = os.path.join(env_directory, ".env")

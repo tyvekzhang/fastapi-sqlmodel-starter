@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  fss_server:
+    container_name: fss_server
+    image: tyvek2zhang/fastapi-sqlmodel-starter:v1.0.0
+    restart: always
+    command: "sh -c 'alembic upgrade head && python fss/apiserver.py'"
+    ports:
+      - 9010:9010

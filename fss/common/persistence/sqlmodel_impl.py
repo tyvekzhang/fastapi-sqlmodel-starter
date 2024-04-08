@@ -47,7 +47,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
             else data
             for data in data_list
         ]
-        statement = insert(self.model).values([data.dict() for data in orm_datas])
+        statement = insert(self.model).values([data.model_dump() for data in orm_datas])
         await db_session.execute(statement)
         return len(data_list)
 

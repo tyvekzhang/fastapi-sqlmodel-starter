@@ -5,7 +5,7 @@ Fss旨在成为PyWeb中对用户最友好的脚手架工具之一。
 ##### Translate to: [English](docs/README_en.md)
 ## 特性
 
-- 开箱即用, 内置常见数据库缓存(Sqlite, PostgreSQL, MySQL, 文件缓存, Redis)
+- 开箱即用, 内置常见数据库、缓存(Sqlite[默认], PostgreSQL, MySQL, 文件缓存[默认], Redis)
 - 自带单表的几乎所有操作
 - 数据库迁移, 静态代码扫描, 接口文档等一众特性
 
@@ -25,7 +25,7 @@ python3 -m venv .env_fss
     - macOS 或 Linux: source .env_fss/bin/activate
 5. 安装 Poetry并下载依赖
 ```shell
-pip install poetry -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install poetry --trusted-host=mirrors.tuna.tsinghua.edu.cn --index-url=https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
 poetry install
 ```
 6. 数据库迁移
