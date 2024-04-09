@@ -17,9 +17,10 @@ RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; els
 ENV PYTHONPATH=/app
 
 COPY ./alembic.ini /app/
-COPY ./README.md /app/
 COPY ./migrations /app/migrations
+COPY ./.env.example /app/
 COPY ./fss /app/fss
 COPY ./tests /app/tests
+COPY ./README.md /app/
 
 EXPOSE 9010
