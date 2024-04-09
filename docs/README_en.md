@@ -1,5 +1,11 @@
 # FastapiSqlmodelStarter (Fss)
 
+![GitHub License](https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter)
+![CI](https://img.shields.io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml)
+![Codecov (with branch)](https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter/dev)
+![Read the Docs](https://img.shields.io/readthedocs/fastapi-sqlmodel-starter)
+
 Fss aims to be one of the most user-friendly scaffolding tools for PyWeb.
 
 ##### 翻译成: [简体中文](../README.md)
