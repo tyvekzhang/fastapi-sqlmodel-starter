@@ -3,6 +3,7 @@
 *.lock
 .tox/
 .ruff_cache/
-.*/
 *.db
 /dist/
+/.pytest_cache/
+/htmlcov/

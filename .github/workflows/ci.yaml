@@ -51,8 +51,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install .
-          python -m pip install pytest httpx
+          python -m pip install pytest httpx coverage
       - name: Test with pytest
         run: |
           alembic upgrade head
-          pytest
+          coverage run -m pytest
+          coverage xml
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          fail_ci_if_error: true
+          slug: tyvekzhang/fastapi-sqlmodel-starter
