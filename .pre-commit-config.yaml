@@ -1,42 +1,37 @@
+default_language_version:
+    python: python3.10
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
+      - id: name-tests-test
+      - id: check-added-large-files
+      - id: check-toml
+      - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
-  - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.0
-    hooks:
-      - id: check-github-workflows
-        args: [ "--verbose" ]
   - repo: https://github.com/codespell-project/codespell
     rev: v2.2.6
     hooks:
       - id: codespell
         additional_dependencies: ["tomli>=2.0.1"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.3.4"
+    rev: "v0.3.5"
     hooks:
       - id: ruff-format
       - id: ruff
-        args: ["--fix", "--unsafe-fixes", "--exit-non-zero-on-fix"]
-  - repo: https://github.com/asottile/blacken-docs
-    rev: 1.16.0
-    hooks:
-      - id: blacken-docs
-        additional_dependencies: [black==23.12.1]
-  - repo: meta
-    hooks:
-      - id: check-hooks-apply
-      - id: check-useless-excludes
+        args: ["--fix"]
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: "1.7.0"
     hooks:
       - id: pyproject-fmt
-        additional_dependencies: ["tox>=4.12.1"]
   - repo: https://github.com/python-poetry/poetry
     rev: "1.8"
     hooks:
       - id: poetry-check
       - id: poetry-lock
         args: ["--no-update"]
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes
