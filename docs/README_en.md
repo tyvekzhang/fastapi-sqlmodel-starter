@@ -1,15 +1,28 @@
-# FastapiSqlmodelStarter (Fss)
+<div  style="text-align: center; margin-top: 3%">
+   <p>
+     <img src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/docs/img/logo.png" alt="logo"
+style="vertical-align:middle; margin: 0.5%"/>
+     <span style="vertical-align:middle; font-size: 3rem;">FastAPI Sqlmodel Starter (Fss)</span>
+   </p>
+   <p>
+     <img alt="GitHub License" src="https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter">
+     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter">
+     <img alt="GitHub Actions Workflow Status" src="https://img.shields.
+io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml">
+     <img alt="Codecov" src="https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter">
+     <img alt="Read the Docs" src="https://img.shields.io/readthedocs/fastapi-sqlmodel-starter">
+   </p>
+   <h4>
+      <p>
+        <b>English</b> |
+        <a href="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/README.md">简体中文</a>
+     </p>
+   </h4>
+   <h3>
+    One of the best scaffolding in the PyWeb field.
+   </h3>
+</div>
 
-![GitHub License](https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter)
-![CI](https://img.shields.io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml)
-![Codecov (with branch)](https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter/dev)
-![Read the Docs](https://img.shields.io/readthedocs/fastapi-sqlmodel-starter)
-
-Fss aims to be one of the most user-friendly scaffolding tools for PyWeb.
-
-##### 翻译成: [简体中文](../README.md)
 ## Features
 
 - Out-of-the-box, built-in support for common database caching (Sqlite[default], PostgreSQL, MySQL, file cache[default], Redis)
