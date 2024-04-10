@@ -8,11 +8,11 @@ Quick Start
     git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
     cd fastapi-sqlmodel-starter
 
-3. Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc. (Optional)::
+3. (Optional)Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc:
 
     python3 -m venv .env_fss
 
-4. Activate the virtual environment: (Optional)
+4. (Optional)Activate the virtual environment:
 
    - Windows::
 

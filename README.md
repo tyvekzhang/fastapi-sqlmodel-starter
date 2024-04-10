@@ -1,18 +1,31 @@
-# FastapiSqlmodelStarter (Fss)
+<div  style="text-align: center; margin-top: 3%">
+   <p>
+     <img src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/docs/img/logo.png" alt="logo" style="vertical-align:middle; margin: 0.5%"/>
+     <span style="vertical-align:middle; font-size: 3rem;">FastAPI Sqlmodel Starter (Fss)</span>
+   </p>
+   <p>
+     <img alt="GitHub License" src="https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter">
+     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter">
+     <img alt="GitHub Actions Workflow Status" src="https://img.shields.
+io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml">
+     <img alt="Codecov" src="https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter">
+     <img alt="Read the Docs" src="https://img.shields.io/readthedocs/fastapi-sqlmodel-starter">
+   </p>
+   <h4>
+      <p>
+        <b>简体中文</b> |
+        <a href="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/docs/README_en.md">English</a>
+     </p>
+   </h4>
+   <h3>
+    PyWeb领域最好用的脚手架之一。
+   </h3>
+</div>
 
-![GitHub License](https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter)
-![CI](https://img.shields.io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml)
-![Codecov (with branch)](https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter/dev)
-![Read the Docs](https://img.shields.io/readthedocs/fastapi-sqlmodel-starter)
 
-Fss旨在成为PyWeb中对用户最友好的脚手架工具之一。
-
-##### Translate to: [English](docs/README_en.md)
 ## 特性
 
-- 开箱即用, 内置常见数据库、缓存(Sqlite[默认], PostgreSQL, MySQL, 文件缓存[默认], Redis)
+- 开箱即用, 内置常见数据库、缓存([默认]Sqlite, PostgreSQL, MySQL, [默认]文件缓存, Redis)
 - 自带单表的几乎所有操作
 - 数据库迁移, 静态代码扫描, 接口文档等一众特性
 
@@ -23,11 +36,11 @@ Fss旨在成为PyWeb中对用户最友好的脚手架工具之一。
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
 cd fastapi-sqlmodel-starter
 ```
-3. 创建虚拟环境, 本篇以venv为例, 类似的工具还有conda, virtualenv等(可选)
+3. [可选]创建虚拟环境, 本篇以venv为例, 类似的工具还有conda, virtualenv等
 ```shell
 python3 -m venv .env_fss
 ```
-4. 激活虚拟环境(可选)
+4. [可选]激活虚拟环境
     - Windows: .env_fss\Scripts\activate
     - macOS 或 Linux: source .env_fss/bin/activate
 5. 安装 Poetry并下载依赖
