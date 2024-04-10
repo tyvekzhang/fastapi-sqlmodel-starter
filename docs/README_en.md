@@ -1,6 +1,7 @@
 # FastapiSqlmodelStarter (Fss)
 
 ![GitHub License](https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter)
 ![CI](https://img.shields.io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml)
 ![Codecov (with branch)](https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter/dev)
