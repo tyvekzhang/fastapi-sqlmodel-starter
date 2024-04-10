@@ -1,14 +1,14 @@
-<div  style="text-align: center; margin-top: 3%">
+<div  align="center" style="margin-top: 3%">
+   <h1>
+     FastAPI Sqlmodel Starter (Fss)
+   </h1>
    <p>
-     <img src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/docs/img/logo.png" alt="logo"
-style="vertical-align:middle; margin: 0.5%"/>
-     <span style="vertical-align:middle; font-size: 3rem;">FastAPI Sqlmodel Starter (Fss)</span>
+     <img src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/logo.png" alt="logo" style="vertical-align:middle; margin: 0.5%"/>
    </p>
    <p>
      <img alt="GitHub License" src="https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter">
      <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter">
-     <img alt="GitHub Actions Workflow Status" src="https://img.shields.
-io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml">
+     <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml">
      <img alt="Codecov" src="https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter">
      <img alt="Read the Docs" src="https://img.shields.io/readthedocs/fastapi-sqlmodel-starter">
    </p>
