@@ -1,7 +1,9 @@
 <div  align="center" style="margin-top: 3%">
+   <h1>
+     FastAPI Sqlmodel Starter (Fss)
+   </h1>
    <p>
      <img src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/logo.png" alt="logo" style="vertical-align:middle; margin: 0.5%"/>
-     <span style="vertical-align:middle; font-size: 48px;">FastAPI Sqlmodel Starter (Fss)</span>
    </p>
    <p>
      <img alt="GitHub License" src="https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter">
