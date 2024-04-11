@@ -54,13 +54,14 @@ jobs:
           python -m pip install pytest httpx coverage
       - name: Test with pytest
         run: |
+          cd src
           alembic upgrade head
           coverage run -m pytest
           coverage xml
       - name: Upload coverage reports to Codecov
+        if: matrix.python-version == '3.12' && matrix.os == 'Ubuntu'
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
           fail_ci_if_error: true
-          slug: tyvekzhang/fastapi-sqlmodel-starter

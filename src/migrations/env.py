@@ -1,3 +1,6 @@
+import os
+import sys
+from pathlib import Path
 import asyncio
 from logging.config import fileConfig
 
@@ -8,7 +11,11 @@ from sqlmodel import SQLModel
 
 from alembic import context
 
-from fss.starter.system.model._migrate import start_signal
+current_dir = Path(os.path.dirname(os.path.abspath(__file__)))
+project_dir = str(Path(current_dir).parent.parent)
+sys.path.insert(0, project_dir)
+
+from fss.starter.system.model.migrate import start_signal  # noqa
 
 print(start_signal)
 
@@ -26,6 +33,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = SQLModel.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

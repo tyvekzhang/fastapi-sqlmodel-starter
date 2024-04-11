@@ -7,3 +7,5 @@
 /dist/
 /.pytest_cache/
 /htmlcov/
+/src/htmlcov/
+.coverage*

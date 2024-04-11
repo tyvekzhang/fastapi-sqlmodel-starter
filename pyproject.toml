@@ -75,8 +75,9 @@ url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
 priority = "primary"
 
 [tool.coverage.run]
+parallel = true
 branch = true
-source = ["fss", "tests"]
+source = ["src/fss", "src/tests"]
 
 [tool.coverage.report]
 show_missing = true
