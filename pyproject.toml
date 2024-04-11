@@ -33,8 +33,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 packages = [
-  { include = "fss"},
-  { include = "tests"},
+  { include = "src"},
 ]
 
 [tool.poetry.dependencies]
@@ -75,8 +74,9 @@ url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
 priority = "primary"
 
 [tool.coverage.run]
+parallel = true
 branch = true
-source = ["fss", "tests"]
+source = ["src/fss", "src/tests"]
 
 [tool.coverage.report]
 show_missing = true
