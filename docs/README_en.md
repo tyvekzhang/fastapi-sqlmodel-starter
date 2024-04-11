@@ -34,13 +34,13 @@
 2. Clone the code:
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-cd fastapi-sqlmodel-starter
+cd fastapi-sqlmodel-starter/src
 ```
-3. Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc.(Optional)
+3. (Optional)Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc.
 ```shell
 python3 -m venv .env_fss
 ```
-4. Activate the virtual environment:(Optional)
+4. (Optional)Activate the virtual environment:
     - Windows: .env_fss\Scripts\activate
     - macOS or Linux: source .env_fss/bin/activate
 5. Install Poetry and download dependencies:
@@ -71,10 +71,3 @@ We welcome contributions to FastapiSqlmodelStarter! You can participate in the f
 ## License
 
 FastapiSqlmodelStarter is open-sourced under the [MIT License](https://opensource.org/licenses/MIT).
-
-## Contact Us
-
-- GitHub repository: [https://github.com/tyvekzhang/fastapi-sqlmodel-starter](https://github.com/tyvekzhang/fastapi-sqlmodel-starter)
-- Mailing list: [tyvekzhang@gmail.com](mailto:tyvekzhang@gmail.com)
-
-We hope that FastapiSqlmodelStarter will provide convenience and a delightful experience on your journey of Python Web development!

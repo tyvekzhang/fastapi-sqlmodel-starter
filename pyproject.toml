@@ -33,8 +33,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 packages = [
-  { include = "fss"},
-  { include = "tests"},
+  { include = "src"},
 ]
 
 [tool.poetry.dependencies]

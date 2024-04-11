@@ -6,7 +6,7 @@ Quick Start
 2. Clone the code::
 
     git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-    cd fastapi-sqlmodel-starter
+    cd fastapi-sqlmodel-starter/src
 
 3. (Optional)Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc:
 

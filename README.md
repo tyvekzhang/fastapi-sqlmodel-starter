@@ -35,7 +35,7 @@
 2. 克隆代码
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-cd fastapi-sqlmodel-starter
+cd fastapi-sqlmodel-starter/src
 ```
 3. [可选]创建虚拟环境, 本篇以venv为例, 类似的工具还有conda, virtualenv等
 ```shell
@@ -71,11 +71,3 @@ alembic upgrade head
 ## 许可证
 
 FastapiSqlmodelStarter 采用 [MIT 许可证](https://opensource.org/licenses/MIT)开源。
-
-## 联系我们
-
-- GitHub 仓库：[https://github.com/tyvekzhang/fastapi-sqlmodel-starter](https://github.com/tyvekzhang/fastapi-sqlmodel-starter)
-- 邮件列表：[tyvekzhang@gmail.com](mailto:tyvekzhang@gmail.com)
-
-
-希望 FastapiSqlmodelStarter 能为你的 Python Web 开发之旅提供便利和愉悦的体验！
