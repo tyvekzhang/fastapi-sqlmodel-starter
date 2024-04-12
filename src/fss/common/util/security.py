@@ -38,6 +38,11 @@ async def get_payload(token: str):
     return jwt.decode(token, configs.secret_key, algorithms=configs.algorithm)
 
 
+def get_user_id(token: str):
+    payload = jwt.decode(token, configs.secret_key, algorithms=configs.algorithm)
+    return payload["sub"]
+
+
 async def is_valid_token(token: str):
     payload = await get_payload(token)
     exp = payload.get("exp")

@@ -157,10 +157,15 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         if result is None:
             return 0
         db_data = result.scalar_one()
-        for attr, value in data.items():
-            setattr(db_data, attr, value)
+        if isinstance(data, dict):
+            update_data = data
+        else:
+            update_data = data.model_dump(exclude_unset=True)
+        for field in update_data:
+            setattr(db_data, field, update_data[field])
+
         db_session.add(db_data)
-        return self.count_affected_rows(db_data)
+        return db_data
 
     async def update_batch_by_ids(
         self, *, data_list: List[Any], db_session: Any = None
@@ -178,12 +183,10 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
 
     async def delete_by_id(self, *, id: Any, db_session: Any = None) -> int:
         db_session = db_session or self.db.session
-        response = await db_session.execute(
-            select(self.model).where(self.model.id == id)
-        )
+        statement = select(self.model).where(self.model.id == id)
+        response = await db_session.execute(statement)
         data = response.scalar_one()
-        await db_session.delete(data)
-        return 1
+        return await db_session.delete(data)
 
     async def delete_batch_by_ids(
         self, *, ids: List[Any], db_session: Any = None
