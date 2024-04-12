@@ -12,7 +12,7 @@ from fss.common.util import security
 from fss.common.util.security import verify_password
 from fss.starter.system.enum.system import SystemResponseCode, SystemConstantCode
 from fss.starter.system.exception.system import SystemException
-from fss.starter.system.mapper.user_mapper import UserMapper
+from fss.starter.system.mapper.user_mapper import UserMapper, userMapper
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.schema.user_schema import UserQuery, LoginCmd
 from fss.starter.system.service.user_service import UserService
@@ -20,7 +20,7 @@ from fss.starter.system.service.user_service import UserService
 
 class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
     def __init__(self, mapper: UserMapper):
-        super().__init__(mapper)
+        self.mapper = mapper
 
     async def find_by_id(self, id: int) -> Optional[UserQuery]:
         """
@@ -75,4 +75,4 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
 
 
 def get_user_service() -> UserService:
-    return UserServiceImpl(UserMapper(UserDO))
+    return UserServiceImpl(mapper=userMapper)

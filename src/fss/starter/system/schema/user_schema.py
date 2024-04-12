@@ -3,21 +3,39 @@
 from pydantic import BaseModel
 
 
-# UserCreate schema
 class UserCreateCmd(BaseModel):
+    """
+    UserCreate schema
+    """
+
     username: str
     password: str
     nickname: str
 
 
-# UserQuery schema
 class UserQuery(BaseModel):
+    """
+    UserQuery schema
+    """
+
     id: int
     username: str
     nickname: str
 
 
-# Login schema
 class LoginCmd(BaseModel):
+    """
+    Login schema
+    """
+
     username: str
     password: str
+
+
+class UpdateUserCmd(BaseModel):
+    """
+    Update user schema
+    """
+
+    id: int
+    nickname: str
