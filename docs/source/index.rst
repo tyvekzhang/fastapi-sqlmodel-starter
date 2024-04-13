@@ -1,7 +1,7 @@
 FastAPI SQLModel Starter
 ===================================
 
-Welcome to the documentation for Fss project. This project aims to be one of the most user-friendly scaffolding tools for PyWeb.
+Welcome to the documentation for this project. Fss aims to be one of top scaffold in PyWeb.
 
 .. toctree::
    :maxdepth: 2

@@ -8,7 +8,7 @@
    <p>
      <img alt="GitHub License" src="https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter">
      <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter">
-     <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml">
+     <img alt="CI" src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/actions/workflows/ci.yaml/badge.svg">
      <img alt="Codecov" src="https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter">
      <img alt="Read the Docs" src="https://img.shields.io/readthedocs/fastapi-sqlmodel-starter">
    </p>
@@ -31,7 +31,7 @@
 - 数据库迁移, 静态代码扫描, 接口文档等一众特性
 
 ## 快速开始
-1. 首先确保python的版本是3.8及以上的
+1. 首先确保python的版本是3.9及以上的
 2. 克隆代码
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
@@ -57,6 +57,7 @@ alembic upgrade head
    - Windows: python3 fss\apiserver.py
    - macOS 或 Linux: python3 fss/apiserver.py
 8. 访问: http://127.0.0.1:9010/docs
+9. 首先通过注册接口新建用户, 接着进行认证, 一切Ok.
 ## 文档
 - https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/
 ## 贡献

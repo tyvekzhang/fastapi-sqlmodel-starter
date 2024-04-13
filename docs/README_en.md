@@ -8,7 +8,7 @@
    <p>
      <img alt="GitHub License" src="https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter">
      <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter">
-     <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/tyvekzhang/fastapi-sqlmodel-starter/ci.yaml">
+     <img alt="CI" src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/actions/workflows/ci.yaml/badge.svg">
      <img alt="Codecov" src="https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter">
      <img alt="Read the Docs" src="https://img.shields.io/readthedocs/fastapi-sqlmodel-starter">
    </p>
@@ -30,7 +30,7 @@
 - Features such as database migration, static code analysis, API documentation, and more
 
 ## Quick Start
-1. First, ensure that your Python version is 3.8 or above.
+1. First, ensure that your Python version is 3.9 or above.
 2. Clone the code:
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
@@ -56,6 +56,7 @@ alembic upgrade head
    - Windows: python3 fss\apiserver.py
    - macOS or Linux: python3 fss/apiserver.py
 8. Access: http://127.0.0.1:9010/docs
+9. First, create a new user through the **register** interface, and then proceed with authentication, everything is okay.
 
 ## Documentation
 - https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/

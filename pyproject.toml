@@ -6,7 +6,7 @@ requires = [
 
 [tool.poetry]
 name = "fastapi-sqlmodel-starter"
-version = "1.0.0"
+version = "1.0.0-beta.1"
 description = "Fss aims to be one of top scaffold in PyWeb."
 license = "MIT"
 authors = [
@@ -24,7 +24,6 @@ classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -37,7 +36,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 loguru = "^0.7.2"
 fastapi = "^0.110.0"
 fastapi-pagination = "^0.12.21"
@@ -58,6 +57,9 @@ aiomysql = "^0.2.0"
 redis = {extras = ["hiredis"], version = "^5.0.3"}
 eval-type-backport = "^0.1.3"
 diskcache = "^5.6.3"
+pandas = "^2.2.2"
+xlsxwriter = "^3.2.0"
+openpyxl = "^3.1.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.1.1"

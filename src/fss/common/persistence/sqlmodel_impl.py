@@ -41,12 +41,9 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         self, *, data_list: List[Any], db_session: Any = None
     ) -> int:
         db_session = db_session or self.db.session
-        orm_datas = [
-            self.model.model_validate(data)
-            if not isinstance(data, self.model)
-            else data
-            for data in data_list
-        ]
+        orm_datas = []
+        for data in data_list:
+            orm_datas.append(self.model.model_validate(data))
         statement = insert(self.model).values([data.model_dump() for data in orm_datas])
         await db_session.execute(statement)
         return len(data_list)
@@ -134,9 +131,9 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         self,
         *,
         params: Any,
-        query: Any,
-        order_by: Any,
-        sort_order: Any,
+        query: Any = None,
+        order_by: Any = None,
+        sort_order: Any = None,
         db_session: Any = None,
     ) -> List[Any]:
         db_session = db_session or self.db.session
