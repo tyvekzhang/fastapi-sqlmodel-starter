@@ -39,3 +39,13 @@ class UpdateUserCmd(BaseModel):
 
     id: int
     nickname: str
+
+
+class UserExport(BaseModel):
+    """
+    UserExport schema
+    """
+
+    username: str
+    password: str
+    nickname: str

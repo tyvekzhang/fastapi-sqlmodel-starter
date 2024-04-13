@@ -1,7 +1,9 @@
 """User operation controller"""
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_pagination import Params
+from starlette.responses import StreamingResponse
 
 from fss.common.result import result
 from fss.common.result.result import BaseResponse
@@ -22,7 +24,7 @@ user_router = APIRouter()
 
 
 @user_router.post("/register")
-async def create_user(
+async def register_user(
     create_data: UserCreateCmd, user_service: UserService = Depends(get_user_service)
 ) -> BaseResponse[int]:
     """
@@ -62,7 +64,7 @@ async def remove_user(
     id: int,
     user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
-):
+) -> None:
     """
     Remove user
     """
@@ -75,9 +77,45 @@ async def update_user(
     updateUserCmd: UpdateUserCmd,
     user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
-):
+) -> None:
     """
     Update user
     """
     await user_service.update_by_id(data=updateUserCmd)
     return result.success()
+
+
+@user_router.get("/exportTemplate")
+async def export_user_template(
+    user_service: UserService = Depends(get_user_service),
+    current_user: CurrentUser = Depends(get_current_user()),
+) -> StreamingResponse:
+    """
+    Export user template
+    """
+    return await user_service.export_user_template()
+
+
+@user_router.post("/import")
+async def import_user(
+    file: UploadFile,
+    user_service: UserService = Depends(get_user_service),
+    current_user: CurrentUser = Depends(get_current_user()),
+) -> None:
+    """
+    Import user info
+    """
+    await user_service.import_user(file)
+    return result.success()
+
+
+@user_router.get("/export")
+async def export_user(
+    params: Params = Depends(),
+    user_service: UserService = Depends(get_user_service),
+    current_user: CurrentUser = Depends(get_current_user()),
+) -> StreamingResponse:
+    """
+    Export user info
+    """
+    return await user_service.export_user(params)

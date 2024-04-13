@@ -1,7 +1,13 @@
 """User domain service impl"""
 
+import io
 from datetime import timedelta
 from typing import Optional
+
+import pandas as pd
+from fastapi import UploadFile
+from fastapi_pagination import Params
+from starlette.responses import StreamingResponse
 
 from fss.common.cache.cache import get_cache_client, Cache
 from fss.common.config import configs
@@ -9,17 +15,19 @@ from fss.common.enum.enum import TokenTypeEnum
 from fss.common.schema.schema import Token
 from fss.common.service.impl.service_impl import ServiceImpl
 from fss.common.util import security
-from fss.common.util.security import verify_password
+from fss.common.util.excel import export_template
+from fss.common.util.security import verify_password, get_password_hash
 from fss.starter.system.enum.system import SystemResponseCode, SystemConstantCode
 from fss.starter.system.exception.system import SystemException
 from fss.starter.system.mapper.user_mapper import UserMapper, userMapper
 from fss.starter.system.model.user_do import UserDO
-from fss.starter.system.schema.user_schema import UserQuery, LoginCmd
+from fss.starter.system.schema.user_schema import UserQuery, LoginCmd, UserExport
 from fss.starter.system.service.user_service import UserService
 
 
 class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
     def __init__(self, mapper: UserMapper):
+        super(UserServiceImpl, self).__init__(mapper=mapper)
         self.mapper = mapper
 
     async def find_by_id(self, id: int) -> Optional[UserQuery]:
@@ -72,6 +80,41 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
             access_token_expires,
         )
         return token
+
+    async def export_user_template(
+        self,
+    ) -> StreamingResponse:
+        """
+        Export empty user import template
+        """
+        return await export_template(schema=UserExport, file_name="user_template")
+
+    async def import_user(self, file: UploadFile):
+        """
+        Import user data
+        """
+        contents = await file.read()
+        import_df = pd.read_excel(io.BytesIO(contents))
+        user_datas: UserQuery = [
+            user_data for user_data in import_df.to_dict(orient="records")
+        ]
+        user_import_list = []
+        for user_data in user_datas:
+            user_import = UserDO(**user_data)
+            user_import.password = await get_password_hash(user_import.password)
+            user_import_list.append(user_import)
+        await file.close()
+        await self.mapper.insert_batch(data_list=user_import_list)
+
+    async def export_user(self, params: Params) -> StreamingResponse:
+        user_pages = await self.mapper.select_list_page_ordered(params=params)
+        user_items = user_pages.__dict__["items"]
+        user_data = []
+        for user in user_items:
+            user_data.append(UserQuery(**user.model_dump()))
+        return await export_template(
+            schema=UserQuery, file_name="user", data_list=user_data
+        )
 
 
 def get_user_service() -> UserService:
