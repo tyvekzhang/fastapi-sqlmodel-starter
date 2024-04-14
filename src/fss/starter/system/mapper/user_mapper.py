@@ -30,5 +30,16 @@ class UserMapper(SqlModelMapper[UserDO]):
         )
         return user.scalar_one_or_none()
 
+    async def get_user_by_usernames(
+        self, *, usernames: list[str], db_session: Union[AsyncSession, None] = None
+    ) -> Union[list[UserDO], None]:
+        """
+        Query user by usernames
+        """
+        db_session = db_session or self.db.session
+        statement = select(UserDO).where(UserDO.username.in_(usernames))
+        results = await db_session.execute(statement)
+        return results.scalars().all()
+
 
 userMapper = UserMapper(UserDO)

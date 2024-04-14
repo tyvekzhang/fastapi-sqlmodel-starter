@@ -23,9 +23,6 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         self.model = model
         self.db = db
 
-    def get_db_session(self) -> Type[Any]:
-        return self.db
-
     async def insert(
         self,
         *,
@@ -46,25 +43,12 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
             orm_datas.append(self.model.model_validate(data))
         statement = insert(self.model).values([data.model_dump() for data in orm_datas])
         await db_session.execute(statement)
-        return len(data_list)
 
     async def select_by_id(self, *, id: Any, db_session: Any = None) -> Any:
         db_session = db_session or self.db.session
         statement = select(self.model).where(self.model.id == id)
         response = await db_session.execute(statement)
         return response.scalar_one_or_none()
-
-    async def select_by_ids(
-        self, *, ids: List[Any], batch_size: int = 1000, db_session: Any = None
-    ) -> List[Any]:
-        db_session = db_session or self.db.session
-        result_set = []
-        for i in range(0, len(ids), batch_size):
-            batch_ids = ids[i : i + batch_size]
-            statement = select(self.model).where(self.model.id.in_(batch_ids))
-            results = await db_session.exec(statement).all()
-            result_set.extend(results)
-        return result_set
 
     async def select_count(self, *, db_session: Any = None) -> int:
         db_session = db_session or self.db.session
@@ -119,13 +103,12 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         return response.scalars().all()
 
     async def select_list_page(
-        self, *, params: Any, query: Any, db_session: Any = None
+        self, *, params: Any, query: Any = None, db_session: Any = None
     ) -> List[Any]:
         db_session = db_session or self.db.session
         if query is None:
             query = select(self.model)
-        response = await paginate(db_session, query, params)
-        return response
+        return await paginate(db_session, query, params)
 
     async def select_list_page_ordered(
         self,
@@ -176,7 +159,6 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
                     .values(**data.dict(exclude_unset=True))
                 )
                 await db_session.execute(statement)
-        return len(data_list)
 
     async def delete_by_id(self, *, id: Any, db_session: Any = None) -> int:
         db_session = db_session or self.db.session

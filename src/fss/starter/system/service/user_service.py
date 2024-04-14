@@ -1,6 +1,7 @@
 """User domain service interface"""
 
 from abc import ABC, abstractmethod
+from typing import Any, Optional, List
 
 from fastapi import UploadFile
 from fastapi_pagination import Params
@@ -31,4 +32,14 @@ class UserService(Service[UserDO], ABC):
 
     @abstractmethod
     async def export_user(self, params: Params) -> StreamingResponse:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def register(self, data) -> UserDO:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def list_user(
+        self, page: int, size: int, query: Any
+    ) -> Optional[List[UserQuery]]:
         raise NotImplementedError

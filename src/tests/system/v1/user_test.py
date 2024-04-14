@@ -24,6 +24,17 @@ def test_user_register():
     assert response.json()["code"] == 0
 
 
+def test_user_register_error():
+    user_data = {
+        "username": "example_user",
+        "password": "example_password",
+        "nickname": "Example Nickname",
+    }
+    response = client.post(f"{configs.api_version}/user/register", json=user_data)
+    assert response.status_code == 200
+    assert response.json()["code"] == 100
+
+
 @pytest.fixture(scope="class")
 def login():
     response = client.post(
@@ -113,9 +124,37 @@ def test_import_user(login):
     assert response.json()["code"] == 0
 
 
+def test_list_user(login):
+    access_token, user_id = login
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.get(f"{configs.api_version}/user/list", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
+def test_user_count(login):
+    access_token, user_id = login
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.get(f"{configs.api_version}/user/count", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
 def test_remove_user(login):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.delete(f"{configs.api_version}/user/{user_id}", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+    response = client.post(
+        f"{configs.api_version}/user/login",
+        data={"username": "example_user_2", "password": "password"},
+    )
+    assert response.status_code == 200
+    assert response.json()["token_type"] == "bearer"
+    access_token = response.json()["access_token"]
+    user_id = get_user_id(access_token)
     response = client.delete(f"{configs.api_version}/user/{user_id}", headers=headers)
     assert response.status_code == 200
     assert response.json()["code"] == 0

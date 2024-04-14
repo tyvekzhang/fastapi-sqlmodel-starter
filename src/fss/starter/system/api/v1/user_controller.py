@@ -1,5 +1,7 @@
 """User operation controller"""
 
+from typing import Any, List
+
 from fastapi import APIRouter, Depends, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_pagination import Params
@@ -31,7 +33,7 @@ async def register_user(
     User registration
     """
     create_data.password = await get_password_hash(create_data.password)
-    user: UserDO = await user_service.save(data=create_data)
+    user: UserDO = await user_service.register(data=create_data)
     return result.success(data=user.id)
 
 
@@ -119,3 +121,31 @@ async def export_user(
     Export user info
     """
     return await user_service.export_user(params)
+
+
+@user_router.get("/list")
+async def list_user(
+    page: int = 1,
+    size: int = 100,
+    query: Any = None,
+    user_service: UserService = Depends(get_user_service),
+    current_user: CurrentUser = Depends(get_current_user()),
+) -> BaseResponse[List[UserQuery]]:
+    """
+    List user info
+    """
+    results: List[UserQuery] = await user_service.list_user(
+        page=page, size=size, query=query
+    )
+    return result.success(data=results)
+
+
+@user_router.get("/count")
+async def user_count(
+    user_service: UserService = Depends(get_user_service),
+    current_user: CurrentUser = Depends(get_current_user()),
+) -> BaseResponse[int]:
+    """
+    Counting the number of users
+    """
+    return result.success(await user_service.count())
