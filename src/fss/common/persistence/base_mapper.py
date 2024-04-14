@@ -1,7 +1,7 @@
 """BaseMapper defines the implemented functionalities"""
 
 from abc import abstractmethod
-from typing import Any, List, Type
+from typing import Any, List
 
 from fss.common.persistence.mapper import Mapper
 
@@ -14,10 +14,6 @@ class BaseMapper(Mapper):
         return 0
 
     @abstractmethod
-    def get_db_session(self) -> Type[Any]:
-        raise NotImplementedError
-
-    @abstractmethod
     async def insert(self, *, data: Any, db_session: Any) -> int:
         raise NotImplementedError
 
@@ -27,12 +23,6 @@ class BaseMapper(Mapper):
 
     @abstractmethod
     async def select_by_id(self, *, id: Any, db_session: Any) -> Any:
-        raise NotImplementedError
-
-    @abstractmethod
-    async def select_by_ids(
-        self, *, ids: List[Any], batch_size: int, db_session: Any
-    ) -> List[Any]:
         raise NotImplementedError
 
     @abstractmethod

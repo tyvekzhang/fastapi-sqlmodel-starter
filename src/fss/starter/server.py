@@ -53,18 +53,11 @@ async def service_exception_handler(request: Request, exc: ServiceException):
                 JSONResponse, depending on whether a response body is allowed for
                 the given status code.
     """
-    logger.error(
-        f"Exception occurred: {exc} \n"
-        f"Request path: {request.url.path} \n"
-        f"Request method: {request.method} \n"
-        f"Request headers: {request.headers} \n"
-        f"Request body: {await request.body()}"
-    )
     headers = getattr(exc, "headers", None)
     if not is_body_allowed_for_status_code(exc.status_code):
         return Response(status_code=exc.status_code, headers=headers)
     return JSONResponse(
-        {"code": exc.code, "detail": exc.detail},
+        {"code": exc.code, "msg": exc.msg},
         status_code=exc.status_code,
         headers=headers,
     )
@@ -80,13 +73,6 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
                 JSONResponse, depending on whether a response body is allowed for
                 the given status code.
     """
-    logger.error(
-        f"Exception occurred: {exc} \n"
-        f"Request path: {request.url.path} \n"
-        f"Request method: {request.method} \n"
-        f"Request headers: {request.headers} \n"
-        f"Request body: {await request.body()}"
-    )
     return await http_exception_handler(request, exc)
 
 
@@ -98,13 +84,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     :param exc: StarletteHTTPException instance
     :return: A Starlette Response object.
     """
-    logger.error(
-        f"Exception occurred: {exc} \n"
-        f"Request path: {request.url.path} \n"
-        f"Request method: {request.method} \n"
-        f"Request headers: {request.headers} \n"
-        f"Request body: {await request.body()}"
-    )
     return await request_validation_exception_handler(request, exc)
 
 

@@ -14,17 +14,23 @@ HI = "hi"
 HELLO = "hello"
 
 
-# Liveness probe
 @probe_router.get("/liveness")
 def liveness():
+    """
+    Liveness probe
+    """
     return {"code": SystemResponseCode.SUCCESS.code, "msg": HI}
 
 
-# Readiness probe
 @probe_router.get("/readiness")
 async def readiness(user_service: UserService = Depends(get_user_service)):
+    """
+    Readiness probe
+    """
     try:
-        await user_service.find_by_id(USER_ID)
+        await user_service.find_by_id(id=USER_ID)
+        await user_service.remove_batch_by_ids(ids=[USER_ID])
+        await user_service.get_by_id(id=USER_ID)
     except Exception as e:
         logger.error(f"readiness error: {e}")
         return {

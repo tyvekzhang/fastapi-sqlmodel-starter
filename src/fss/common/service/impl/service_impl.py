@@ -39,9 +39,6 @@ class ServiceImpl(Generic[M, T], Service[T]):
     async def get_by_id(self, *, id: T) -> T:
         return await self.mapper.select_by_id(id=id)
 
-    async def get_by_ids(self, *, ids: List[T], batch_size: int = 1000) -> List[Any]:
-        return await self.mapper.select_by_ids(ids=ids, batch_size=batch_size)
-
     async def count(self) -> int:
         return await self.mapper.select_count()
 
@@ -58,7 +55,9 @@ class ServiceImpl(Generic[M, T], Service[T]):
     async def list_page(self, *, params: T, query: T) -> List[T]:
         return await self.mapper.select_list_page(params=params, query=query)
 
-    async def list_page_ordered(self, *, params: T, query: T, sort_order: T) -> List[T]:
+    async def list_page_ordered(
+        self, *, params: T = None, query: T = None, sort_order: T = None
+    ) -> List[T]:
         return await self.mapper.select_list_page_ordered(
             params=params, query=query, sort_order=sort_order
         )

@@ -29,10 +29,6 @@ class Service(Generic[T], ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_by_ids(self, *, ids: List[T], batch_size: int) -> List[Any]:
-        raise NotImplementedError
-
-    @abstractmethod
     async def count(
         self,
     ) -> int:
@@ -53,7 +49,9 @@ class Service(Generic[T], ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def list_page_ordered(self, *, params: T, query: T, sort_order: T) -> List[T]:
+    async def list_page_ordered(
+        self, *, params: T = None, query: T = None, sort_order: T
+    ) -> List[T]:
         raise NotImplementedError
 
     @abstractmethod
