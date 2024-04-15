@@ -13,12 +13,14 @@ from fss.common.schema.schema import Token, CurrentUser
 from fss.common.security.security import get_current_user
 from fss.common.util.security import get_password_hash
 from fss.starter.system.model.user_do import UserDO
+from fss.starter.system.model.user_role_do import UserRoleDO
 from fss.starter.system.schema.user_schema import (
     UserCreateCmd,
     UserQuery,
     LoginCmd,
     UpdateUserCmd,
 )
+from fss.starter.system.service.impl.user_role_service_impl import get_user_role_service
 from fss.starter.system.service.impl.user_service_impl import get_user_service
 from fss.starter.system.service.user_service import UserService
 
@@ -149,3 +151,24 @@ async def user_count(
     Counting the number of users
     """
     return result.success(await user_service.count())
+
+
+@user_router.post("/{user_id}/roles")
+async def user_roles(
+    user_id: int,
+    role_ids: List[int],
+    user_role_service: UserService = Depends(get_user_role_service),
+    current_user: CurrentUser = Depends(get_current_user()),
+) -> BaseResponse[int]:
+    """
+    Assign roles to users
+    """
+    user_role_list = []
+    for i, role_id in enumerate(role_ids):
+        manual_id = user_id + role_id + i
+        user_role_list.append(
+            UserRoleDO(id=manual_id, user_id=user_id, role_id=role_id)
+        )
+    print(user_role_list)
+    await user_role_service.save_batch(data_list=user_role_list)
+    return result.success()
