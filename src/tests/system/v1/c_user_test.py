@@ -140,6 +140,16 @@ def test_user_count(login):
     assert response.json()["code"] == 0
 
 
+def test_user_roles(login):
+    access_token, user_id = login
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.post(
+        f"{configs.api_version}/user/{user_id}/roles", data="[1, 2, 3]", headers=headers
+    )
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
 def test_remove_user(login):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
