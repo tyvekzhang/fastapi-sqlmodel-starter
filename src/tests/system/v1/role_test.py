@@ -8,11 +8,22 @@ from fss.starter.server import app
 client = TestClient(app)
 
 
+def test_user_register():
+    user_data = {
+        "username": "example_user",
+        "password": "example_password",
+        "nickname": "Example Nickname",
+    }
+    response = client.post(f"{configs.api_version}/user/register", json=user_data)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
 @pytest.fixture(scope="class")
 def login():
     response = client.post(
         f"{configs.api_version}/user/login",
-        data={"username": "example_user_2", "password": "password"},
+        data={"username": "example_user", "password": "example_password"},
     )
     assert response.status_code == 200
     assert response.json()["token_type"] == "bearer"
@@ -40,6 +51,24 @@ def test_list_ordered_role(login):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.get(f"{configs.api_version}/role/listOrdered", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
+def test_get_role(login):
+    access_token, user_id = login
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.get(f"{configs.api_version}/role/1", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
+def test_remove_role_by_ids(login):
+    access_token, user_id = login
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.post(
+        f"{configs.api_version}/role/roles", data="[1, 2, 3]", headers=headers
+    )
     assert response.status_code == 200
     assert response.json()["code"] == 0
 

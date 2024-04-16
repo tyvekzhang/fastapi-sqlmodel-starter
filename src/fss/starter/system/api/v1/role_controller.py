@@ -31,7 +31,7 @@ async def create_role(
 
 
 @role_router.get("/listOrdered")
-async def list_role(
+async def list_ordered_role(
     page: int = 1,
     size: int = 100,
     query: Any = None,
@@ -48,13 +48,39 @@ async def list_role(
 
 
 @role_router.get("/pageOrdered")
-async def list_role_ordered(
+async def list_page_ordered_role(
     params: Params = Depends(),
     role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Any:
     """
-    List role info
+    List role info by page
     """
     results = await role_service.list_page_ordered(params=params)
+    return result.success(data=results)
+
+
+@role_router.get("/{id}")
+async def get_role(
+    id: int,
+    role_service: RoleService = Depends(get_role_service),
+    current_user: CurrentUser = Depends(get_current_user()),
+) -> BaseResponse[RoleDO]:
+    """
+    Get role by id
+    """
+    results = await role_service.get_by_id(id=id)
+    return result.success(data=results)
+
+
+@role_router.post("/roles")
+async def remove_role_by_ids(
+    role_ids: list[int],
+    role_service: RoleService = Depends(get_role_service),
+    current_user: CurrentUser = Depends(get_current_user()),
+) -> BaseResponse[int]:
+    """
+    Delete role by ids
+    """
+    results = await role_service.remove_batch_by_ids(ids=role_ids)
     return result.success(data=results)

@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 
-
+from fss.common.cache.redis_manager import RedisManager
 from fss.common.config import configs
 
 
@@ -33,12 +33,21 @@ async def get_cache_client() -> Cache:
     Init redis client or page cache client
     :return:
     """
+
+    from fss.common.cache.redis_cache import RedisCache
+
+    redis_client = await RedisManager.get_instance()
     if configs.enable_redis:
-        from fss.common.cache.redis_cache import RedisCache
-        from fss.common.cache.redis_cache import RedisManager
-
-        redis_client = await RedisManager.get_instance()
         return RedisCache(redis_client)
-    from fss.common.cache.page_cache import PageCache
+    else:
+        from fss.common.cache.page_cache import PageCache
 
-    return PageCache()
+        return PageCache()
+
+    # if configs.enable_redis:
+    #     from fss.common.cache.redis_cache import RedisCache
+    #     redis_client = await RedisManager.get_instance()
+    #     return RedisCache(redis_client)
+    # else:
+    #     from fss.common.cache.page_cache import PageCache
+    #     return PageCache()

@@ -11,13 +11,12 @@ from fastapi.utils import is_body_allowed_for_status_code
 from fastapi_offline import FastAPIOffline
 from jose import JWTError
 from loguru import logger
-from sqlalchemy import NullPool
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse, Response
 
 from fss.common import config
-from fss.common.config import configs
+from fss.common.config import configs, port, workers
 from fss.common.exception.exception import ServiceException
 from fss.common.util.security import is_valid_token
 from fss.middleware.db_session_middleware import SQLAlchemyMiddleware
@@ -38,7 +37,9 @@ app.include_router(system_router, prefix=configs.api_version)
 app.add_middleware(
     SQLAlchemyMiddleware,
     db_url=str(configs.sqlalchemy_database_url),
-    engine_args={"echo": True, "poolclass": NullPool},
+    engine_args={
+        "echo": True,
+    },
 )
 
 
@@ -148,13 +149,11 @@ if configs.backend_cors_origins:
 # Prepare run
 def prepare_run():
     config.init_log()
-    config.init_tz()
-    return config.complete()
 
 
 # Project run
 def run() -> None:
-    port, workers = prepare_run()
+    prepare_run()
     uvicorn.run(
         app="fss.starter.server:app", host="0.0.0.0", port=port, workers=workers
     )

@@ -29,15 +29,13 @@ async def readiness(user_service: UserService = Depends(get_user_service)):
     Readiness probe
     """
     try:
-        await user_service.find_by_id(id=USER_ID)
-        await user_service.remove_batch_by_ids(ids=[USER_ID])
-        await user_service.get_by_id(id=USER_ID)
         cache_client: Cache = await get_cache_client()
-        await cache_client.set("test:key", "test", 10)
-        if not await cache_client.exists("test:key"):
+        await cache_client.set(f"user:{USER_ID}", "ok")
+        res = await cache_client.get(f"user:{USER_ID}")
+        if "ok" != res:
             raise
-        await cache_client.get("test:key")
-        await cache_client.delete("test:key")
+        await cache_client.delete(f"user:{USER_ID}")
+        await user_service.find_by_id(id=USER_ID)
     except Exception as e:
         logger.error(f"readiness error: {e}")
         return {
