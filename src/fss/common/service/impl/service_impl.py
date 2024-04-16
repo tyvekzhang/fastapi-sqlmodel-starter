@@ -46,7 +46,13 @@ class ServiceImpl(Generic[M, T], Service[T]):
         return await self.mapper.select_list(page=page, size=size, query=query)
 
     async def list_ordered(
-        self, *, page: int, size: int, query: T, order_by: T, sort_order: T
+        self,
+        *,
+        page: int,
+        size: int,
+        query: T = None,
+        order_by: T = None,
+        sort_order: T = None,
     ) -> List[T]:
         return await self.mapper.select_list_ordered(
             page=page, size=size, query=query, order_by=order_by, sort_order=sort_order
