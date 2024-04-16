@@ -17,13 +17,6 @@ timestamp_left_shift = sequence_bits + worker_id_bits + process_id_bits
 sequence_mask = -1 ^ (-1 << sequence_bits)
 
 
-def snowflake_to_timestamp(_id):
-    _id = _id >> 22
-    _id += API_EPOCH
-    _id /= 1000
-    return _id
-
-
 def generator(
     worker_id: int = 1,
     process_id: int = os.getpid() % 31,

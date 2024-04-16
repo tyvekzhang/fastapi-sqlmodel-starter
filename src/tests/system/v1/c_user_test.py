@@ -135,7 +135,12 @@ def test_import_user_error(login):
             "username": ["example_user_2"],
             "password": ["password"],
             "nickname": ["nickname"],
-        }
+        },
+        {
+            "username": ["example_user_2"],
+            "password": ["password"],
+            "nickname": ["nickname"],
+        },
     )
     buffer = io.BytesIO()
     df.to_excel(buffer, index=False)

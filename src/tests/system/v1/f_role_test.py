@@ -44,6 +44,24 @@ def test_list_ordered_role(login):
     assert response.json()["code"] == 0
 
 
+def test_get_role(login):
+    access_token, user_id = login
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.get(f"{configs.api_version}/role/1", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
+def test_remove_role_by_ids(login):
+    access_token, user_id = login
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.post(
+        f"{configs.api_version}/role/roles", data="[1, 2, 3]", headers=headers
+    )
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
 def test_page_ordered_role(login):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}

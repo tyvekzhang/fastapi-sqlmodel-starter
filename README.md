@@ -1,6 +1,6 @@
 <div  align="center" style="margin-top: 3%">
    <h1>
-     FastAPI Sqlmodel Starter (Fss)
+     FastAPI SQLModel Starter (Fss)
    </h1>
    <p>
      <img src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/logo.png" alt="logo" style="vertical-align:middle; margin: 0.5%"/>

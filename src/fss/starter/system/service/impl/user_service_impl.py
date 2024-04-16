@@ -121,7 +121,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
             usernames=user_name_list
         )
 
-        if user_list is not None and len(user_list) > 0:
+        if len(user_list) > 0:
             err_msg = ""
             for user in user_list:
                 err_msg += "," + str(user.username)
