@@ -8,11 +8,22 @@ from fss.starter.server import app
 client = TestClient(app)
 
 
+def test_user_register():
+    user_data = {
+        "username": "example_user",
+        "password": "example_password",
+        "nickname": "Example Nickname",
+    }
+    response = client.post(f"{configs.api_version}/user/register", json=user_data)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0
+
+
 @pytest.fixture(scope="class")
 def login():
     response = client.post(
         f"{configs.api_version}/user/login",
-        data={"username": "example_user_2", "password": "password"},
+        data={"username": "example_user", "password": "example_password"},
     )
     assert response.status_code == 200
     assert response.json()["token_type"] == "bearer"

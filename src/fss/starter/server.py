@@ -15,6 +15,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse, Response
 
+from fss.common import config
 from fss.common.config import configs, port, workers
 from fss.common.exception.exception import ServiceException
 from fss.common.util.security import is_valid_token
@@ -145,8 +146,14 @@ if configs.backend_cors_origins:
     )
 
 
+# Prepare run
+def prepare_run():
+    config.init_log()
+
+
 # Project run
 def run() -> None:
+    prepare_run()
     uvicorn.run(
         app="fss.starter.server:app", host="0.0.0.0", port=port, workers=workers
     )

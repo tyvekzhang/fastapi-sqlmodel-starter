@@ -188,3 +188,15 @@ def test_remove_user(login):
     response = client.delete(f"{configs.api_version}/user/{user_id}", headers=headers)
     assert response.status_code == 200
     assert response.json()["code"] == 0
+
+    response = client.post(
+        f"{configs.api_version}/user/login",
+        data={"username": "example_user_2", "password": "password"},
+    )
+    assert response.status_code == 200
+    assert response.json()["token_type"] == "bearer"
+    access_token = response.json()["access_token"]
+    user_id = get_user_id(access_token)
+    response = client.delete(f"{configs.api_version}/user/{user_id}", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["code"] == 0

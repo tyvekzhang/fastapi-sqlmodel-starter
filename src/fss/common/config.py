@@ -46,8 +46,11 @@ class Configs(BaseSettings):
 
 configs = Configs()
 
+
 # Set log
-logger.add(configs.log_file)
+def init_log():
+    logger.add(configs.log_file)
+
 
 # Set timezone
 if os.name == "nt":
