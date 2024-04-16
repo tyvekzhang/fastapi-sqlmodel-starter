@@ -17,24 +17,9 @@ class ServiceImpl(Generic[M, T], Service[T]):
         result = await self.mapper.insert(data=data)
         return result
 
-    async def save_or_update(self, *, data: T) -> bool:
-        if data.id is None:
-            result = await self.mapper.insert(data=data)
-        else:
-            result = await self.update_by_id(data=data)
-        return result
-
     async def save_batch(self, *, data_list: List[T]) -> bool:
         result = await self.mapper.insert_batch(data_list=data_list)
         return result == len(data_list)
-
-    async def save_or_update_batch(self, *, data_list: List[T]) -> bool:
-        if len(data_list) == 0:
-            return False
-        if data_list[0].id is None:
-            return await self.save_batch(data_list=data_list)
-        else:
-            return await self.update_batch_by_ids(data_list=data_list)
 
     async def get_by_id(self, *, id: T) -> T:
         return await self.mapper.select_by_id(id=id)

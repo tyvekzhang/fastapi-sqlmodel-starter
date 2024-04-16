@@ -13,15 +13,7 @@ class Service(Generic[T], ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def save_or_update(self, *, data: T) -> bool:
-        raise NotImplementedError
-
-    @abstractmethod
     async def save_batch(self, *, data_list: List[T]) -> bool:
-        raise NotImplementedError
-
-    @abstractmethod
-    async def save_or_update_batch(self, *, data_list: List[T]) -> bool:
         raise NotImplementedError
 
     @abstractmethod
