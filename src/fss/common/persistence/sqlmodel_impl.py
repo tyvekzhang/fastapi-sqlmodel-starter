@@ -85,7 +85,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         columns = self.model.__table__.columns
         if order_by is None or order_by not in columns:
             order_by = "id"
-        if sort_order == SortEnum.ascending:
+        if sort_order != SortEnum.ascending:
             query = (
                 select(self.model)
                 .offset((page - 1) * size)

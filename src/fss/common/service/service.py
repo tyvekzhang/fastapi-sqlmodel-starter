@@ -40,7 +40,13 @@ class Service(Generic[T], ABC):
 
     @abstractmethod
     async def list_ordered(
-        self, *, page: int, size: int, query: T, order_by: T, sort_order: T
+        self,
+        *,
+        page: int,
+        size: int,
+        query: T = None,
+        order_by: T = None,
+        sort_order: T = None,
     ) -> List[T]:
         raise NotImplementedError
 
@@ -50,7 +56,7 @@ class Service(Generic[T], ABC):
 
     @abstractmethod
     async def list_page_ordered(
-        self, *, params: T = None, query: T = None, sort_order: T
+        self, *, params: T = None, query: T = None, sort_order: T = None
     ) -> List[T]:
         raise NotImplementedError
 
