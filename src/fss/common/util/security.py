@@ -10,7 +10,6 @@ from starlette.responses import JSONResponse
 from fss.common.config import configs
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-DAYS_WITHOUT_LOGIN = 30
 
 
 async def create_token(
@@ -19,7 +18,9 @@ async def create_token(
     if expires_delta:
         expire = datetime.now() + expires_delta
     else:
-        expire = datetime.now() + timedelta(days=DAYS_WITHOUT_LOGIN)
+        expire = datetime.now() + timedelta(
+            minutes=configs.refresh_token_expire_minutes
+        )
     to_encode = {"exp": expire, "sub": str(subject), "type": token_type}
     encoded_jwt = jwt.encode(to_encode, configs.secret_key, algorithm=configs.algorithm)
     return encoded_jwt

@@ -40,7 +40,7 @@ class RedisCache(Cache):
         return await self.redis_client.get(key)
 
     async def set(self, key, value, timeout=None):
-        """Set the value of a key in Redis with an configsal timeout."""
+        """Set the value of a key in Redis with timeout."""
         if timeout:
             await self.redis_client.setex(key, timeout, value)
         else:

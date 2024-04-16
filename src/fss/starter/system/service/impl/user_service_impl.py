@@ -63,10 +63,9 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
             raise SystemException(
                 SystemResponseCode.AUTH_FAILED.code,
                 SystemResponseCode.AUTH_FAILED.msg,
-                status_code=http.HTTPStatus.BAD_REQUEST,
+                status_code=http.HTTPStatus.UNAUTHORIZED,
             )
         access_token_expires = timedelta(minutes=configs.access_token_expire_minutes)
-        refresh_token_expires = timedelta(minutes=configs.refresh_token_expire_minutes)
         access_token = await security.create_token(
             subject=userDO.id,
             expires_delta=access_token_expires,
@@ -74,7 +73,6 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         )
         refresh_token = await security.create_token(
             subject=userDO.id,
-            expires_delta=refresh_token_expires,
             token_type=TokenTypeEnum.refresh,
         )
         token = Token(
@@ -82,7 +80,9 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
             expired_at=int(access_token_expires.total_seconds()),
             token_type="bearer",
             refresh_token=refresh_token,
-            re_expired_at=int(refresh_token_expires.total_seconds()),
+            re_expired_at=int(
+                timedelta(minutes=configs.refresh_token_expire_minutes).total_seconds()
+            ),
         )
         cache_client: Cache = await get_cache_client()
         await cache_client.set(

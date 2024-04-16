@@ -7,12 +7,6 @@ from fss.common.persistence.mapper import Mapper
 
 
 class BaseMapper(Mapper):
-    @staticmethod
-    def count_affected_rows(new_record: Any) -> int:
-        if new_record.id is not None:
-            return 1
-        return 0
-
     @abstractmethod
     async def insert(self, *, data: Any, db_session: Any) -> int:
         raise NotImplementedError

@@ -48,13 +48,13 @@ def login():
     yield access_token, user_id
 
 
-def test_user_login():
+def test_user_login_error():
     response = client.post(
         f"{configs.api_version}/user/login",
-        data={"username": "example_user", "password": "example_password"},
+        data={"username": "example_user", "password": "example_password_error"},
     )
-    assert response.status_code == 200
-    assert response.json()["token_type"] == "bearer"
+    assert response.status_code == 401
+    assert response.json()["code"] != 0
 
 
 def test_user_me():
@@ -122,6 +122,33 @@ def test_import_user(login):
     )
     assert response.status_code == 200
     assert response.json()["code"] == 0
+
+
+def test_import_user_error(login):
+    access_token, user_id = login
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "content_type": "multipart/form-data",
+    }
+    df = pd.DataFrame(
+        {
+            "username": ["example_user_2"],
+            "password": ["password"],
+            "nickname": ["nickname"],
+        }
+    )
+    buffer = io.BytesIO()
+    df.to_excel(buffer, index=False)
+    buffer.seek(0)
+    file = UploadFile(filename="test_users.xlsx", file=buffer)
+
+    response = client.post(
+        f"{configs.api_version}/user/import",
+        headers=headers,
+        files={"file": (file.filename, file.file, file.content_type)},
+    )
+    assert response.status_code == 200
+    assert response.json()["code"] != 0
 
 
 def test_list_user(login):
