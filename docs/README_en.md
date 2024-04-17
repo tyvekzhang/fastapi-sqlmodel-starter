@@ -34,7 +34,7 @@
 2. Clone the code:
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-cd fastapi-sqlmodel-starter/src
+cd fastapi-sqlmodel-starter
 ```
 3. (Optional)Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc.
 ```shell

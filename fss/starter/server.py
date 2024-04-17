@@ -99,7 +99,7 @@ for router in configs.white_list_routes.split(","):
 async def jwt_middleware(request: Request, call_next):
     raw_url_path = request.url.path
     if not raw_url_path.__contains__(configs.api_version) or raw_url_path.__contains__(
-            ".json"
+        ".json"
     ):
         if configs.enable_swagger:
             return await call_next(request)
