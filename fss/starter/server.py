@@ -25,6 +25,7 @@ from fss.starter.system.router.system import system_router
 # FastAPIOffline setting
 app = FastAPIOffline(
     title=configs.app_name,
+    version=configs.version,
     openapi_url=f"{configs.api_version}/openapi.json",
     description=configs.app_desc,
     default_response_model_exclude_unset=True,

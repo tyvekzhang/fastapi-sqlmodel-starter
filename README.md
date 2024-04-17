@@ -35,7 +35,7 @@
 2. 克隆代码
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-cd fastapi-sqlmodel-starter/src
+cd fastapi-sqlmodel-starter
 ```
 3. [可选]创建虚拟环境, 本篇以venv为例, 类似的工具还有conda, virtualenv等
 ```shell

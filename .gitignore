@@ -6,6 +6,5 @@
 *.db
 /dist/
 /.pytest_cache/
-/htmlcov/
-/src/htmlcov/
 .coverage*
+/fss/htmlcov/
