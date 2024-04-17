@@ -10,7 +10,7 @@ from pathlib import Path as path
 from pydantic.v1 import BaseSettings
 
 current_file_path = os.path.abspath(__file__)
-env_directory = path(current_file_path).parent.parent.parent
+env_directory = path(current_file_path).parent.parent
 
 ENV_FILE = os.path.join(env_directory, ".env")
 if not os.path.exists(ENV_FILE):
@@ -21,6 +21,7 @@ class Configs(BaseSettings):
     app_name: str
     app_desc: str
     mode: str
+    version: str
     port: int
     access_token_expire_minutes: int = 60 * 24  # 24 hour
     refresh_token_expire_minutes: int = 60 * 24 * 30  # 30 days

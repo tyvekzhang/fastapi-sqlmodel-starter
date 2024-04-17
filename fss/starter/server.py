@@ -25,6 +25,7 @@ from fss.starter.system.router.system import system_router
 # FastAPIOffline setting
 app = FastAPIOffline(
     title=configs.app_name,
+    version=configs.version,
     openapi_url=f"{configs.api_version}/openapi.json",
     description=configs.app_desc,
     default_response_model_exclude_unset=True,
@@ -98,7 +99,7 @@ for router in configs.white_list_routes.split(","):
 async def jwt_middleware(request: Request, call_next):
     raw_url_path = request.url.path
     if not raw_url_path.__contains__(configs.api_version) or raw_url_path.__contains__(
-        ".json"
+            ".json"
     ):
         if configs.enable_swagger:
             return await call_next(request)

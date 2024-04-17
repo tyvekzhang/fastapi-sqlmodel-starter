@@ -54,7 +54,7 @@ jobs:
           python -m pip install pytest httpx coverage
       - name: Test with pytest
         run: |
-          cd src
+          cd fss
           alembic upgrade head
           coverage run -m pytest
           coverage xml
