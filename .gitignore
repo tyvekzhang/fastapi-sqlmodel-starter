@@ -8,3 +8,4 @@
 /.pytest_cache/
 .coverage*
 /fss/htmlcov/
+/*/build

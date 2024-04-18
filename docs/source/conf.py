@@ -5,11 +5,18 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+import os
+import sys
+from pathlib import Path
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_dir = str(Path(current_dir).parent.parent)
+sys.path.insert(0, project_dir)
 
 project = "fastapi-sqlmodel-starter"
 copyright = "2024, fss group"
-author = "tyvekzhang"
-release = "1.0.0"
+author = "tyvekZhang"
+release = "1.0.0-beta.2"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
