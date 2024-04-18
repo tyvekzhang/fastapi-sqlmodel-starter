@@ -16,6 +16,6 @@ spec:
       containers:
       - name: fss-server
         image: tyvek2zhang/fastapi-sqlmodel-starter:v1.0.0
-        command: ["sh", "-c", "alembic upgrade head && python fss/apiserver.py"]
+        command: ["sh", "-c", "cd fss && alembic upgrade head && python apiserver.py"]
         ports:
         - containerPort: 9010
