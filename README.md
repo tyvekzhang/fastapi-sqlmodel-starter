@@ -3,7 +3,7 @@
      FastAPI SQLModel Starter (Fss)
    </h1>
    <p>
-     <img src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/logo.png" alt="logo" style="vertical-align:middle; margin: 0.5%"/>
+     <img src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/source/_static/img/fss.svg" alt="logo" style="vertical-align:middle; margin: 0.5%"/>
    </p>
    <p>
      <img alt="GitHub License" src="https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter">
@@ -35,7 +35,7 @@
 2. 克隆代码
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-cd fastapi-sqlmodel-starter
+cd fastapi-sqlmodel-starter/fss
 ```
 3. [可选]创建虚拟环境, 本篇以venv为例, 类似的工具还有conda, virtualenv等
 ```shell
@@ -54,8 +54,8 @@ poetry install
 alembic upgrade head
 ```
 7. 启动
-   - Windows: python3 fss\apiserver.py
-   - macOS 或 Linux: python3 fss/apiserver.py
+   - Windows: python3 apiserver.py
+   - macOS 或 Linux: python3 apiserver.py
 8. 访问: http://127.0.0.1:9010/docs
 9. 首先通过注册接口新建用户, 接着进行认证, 一切Ok.
 ## 文档

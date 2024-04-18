@@ -32,7 +32,14 @@ async def register_user(
     create_data: UserCreateCmd, user_service: UserService = Depends(get_user_service)
 ) -> BaseResponse[int]:
     """
-    User registration
+    Registers a new user with the provided credentials.
+
+    Args:
+        create_data: Data required for registration.
+
+        user_service: Service handling user operations.
+    Returns:
+        BaseResponse with new user's ID.
     """
     create_data.password = await get_password_hash(create_data.password)
     user: UserDO = await user_service.register(data=create_data)
@@ -45,7 +52,14 @@ async def get_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[UserQuery]:
     """
-    Query user info
+    Retrieves the profile of the current user.
+
+    Args:
+        user_service: Service handling user operations.
+
+        current_user: Currently authenticated user.
+    Returns:
+        BaseResponse with current user's profile information.
     """
     user: UserQuery = await user_service.find_by_id(id=current_user.user_id)
     return result.success(data=user)
@@ -57,7 +71,14 @@ async def login(
     user_service: UserService = Depends(get_user_service),
 ) -> Token:
     """
-    User login
+    Authenticates user and provides an access token.
+
+    Args:
+        login_form: Login credentials.
+
+        user_service: Service handling user operations.
+    Returns:
+        Token object with access token.
     """
     loginCmd = LoginCmd(username=login_form.username, password=login_form.password)
     return await user_service.login(loginCmd)
@@ -70,7 +91,16 @@ async def remove_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> None:
     """
-    Remove user
+    Endpoint to remove a user by their ID.
+
+    Args:
+        id: User ID to remove.
+
+        user_service: Service handling user operations.
+
+        current_user: Logged-in user performing the operation.
+    Returns:
+        Success result message
     """
     await user_service.remove_by_id(id=id)
     return result.success()
@@ -83,7 +113,16 @@ async def update_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> None:
     """
-    Update user
+    Endpoint to update user information.
+
+    Args:
+        updateUserCmd: Command containing updated user info.
+
+        user_service: Service handling user operations.
+
+        current_user: Logged-in user performing the operation.
+    Returns:
+        Success result message
     """
     await user_service.update_by_id(data=updateUserCmd)
     return result.success()
@@ -95,7 +134,14 @@ async def export_user_template(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> StreamingResponse:
     """
-    Export user template
+    Endpoint to export a template for user information.
+
+    Args:
+        user_service: Service for user operations.
+
+        current_user: Logged-in user requesting the template.
+    Returns:
+        StreamingResponse with user field
     """
     return await user_service.export_user_template()
 
@@ -107,7 +153,16 @@ async def import_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> None:
     """
-    Import user info
+    Endpoint to import user information from a file.
+
+    Args:
+        file: The file containing user information to import.
+
+        user_service: Service handling user operations.
+
+        current_user: Logged-in user performing the import.
+    Returns:
+        Success result message
     """
     await user_service.import_user(file)
     return result.success()
@@ -120,7 +175,16 @@ async def export_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> StreamingResponse:
     """
-    Export user info
+    Endpoint to export user information based on provided parameters.
+
+    Args:
+        params: Filtering and format parameters for export.
+
+        user_service: Service handling user operations.
+
+        current_user: Logged-in user requesting the export.
+    Returns:
+        StreamingResponse with user info
     """
     return await user_service.export_user(params)
 
@@ -134,7 +198,20 @@ async def list_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[List[UserQuery]]:
     """
-    List user info
+    Endpoint to list users with pagination.
+
+    Args:
+        page: The number of the current page.
+
+        size: The number of items per page.
+
+        query: Optional query filtering the user list.
+
+        user_service: Service handling user operations.
+
+        current_user: Logged-in user performing the operation.
+    Returns:
+        BaseResponse with userQuery list.
     """
     results: List[UserQuery] = await user_service.list_user(
         page=page, size=size, query=query
@@ -148,7 +225,14 @@ async def user_count(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[int]:
     """
-    Counting the number of users
+    Endpoint to count the total number of users.
+
+    Args:
+        user_service: Service handling user operations.
+
+        current_user: Logged-in user requesting the count.
+    Returns:
+        BaseResponse with user count.
     """
     return result.success(await user_service.count())
 
@@ -161,7 +245,18 @@ async def user_roles(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[int]:
     """
-    Assign roles to users
+    Endpoint to assign roles to a user.
+
+    Args:
+        user_id: ID of the user to assign roles to.
+
+        role_ids: List of role IDs to assign to the user.
+
+        user_role_service: Service handling user-role associations.
+
+        current_user: Logged-in user performing the role assignment.
+    Returns:
+        Success result message
     """
     user_role_list = []
     for i, role_id in enumerate(role_ids):
@@ -169,6 +264,5 @@ async def user_roles(
         user_role_list.append(
             UserRoleDO(id=manual_id, user_id=user_id, role_id=role_id)
         )
-    print(user_role_list)
     await user_role_service.save_batch(data_list=user_role_list)
     return result.success()

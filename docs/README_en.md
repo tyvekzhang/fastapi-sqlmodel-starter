@@ -3,7 +3,7 @@
      FastAPI SQLModel Starter (Fss)
    </h1>
    <p>
-     <img src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/logo.png" alt="logo" style="vertical-align:middle; margin: 0.5%"/>
+     <img src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/source/_static/img/fss.svg" alt="logo" style="vertical-align:middle; margin: 0.5%"/>
    </p>
    <p>
      <img alt="GitHub License" src="https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter">
@@ -34,7 +34,7 @@
 2. Clone the code:
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-cd fastapi-sqlmodel-starter
+cd fastapi-sqlmodel-starter/fss
 ```
 3. (Optional)Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc.
 ```shell
@@ -53,8 +53,8 @@ poetry install
 alembic upgrade head
 ```
 7. Start the server:
-   - Windows: python3 fss\apiserver.py
-   - macOS or Linux: python3 fss/apiserver.py
+   - Windows: python3 apiserver.py
+   - macOS or Linux: python3 apiserver.py
 8. Access: http://127.0.0.1:9010/docs
 9. First, create a new user through the **register** interface, and then proceed with authentication, everything is okay.
 

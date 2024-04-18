@@ -24,7 +24,16 @@ async def create_role(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[int]:
     """
-    Create role
+    Creates a new role with the provided data.
+
+    Args:
+        create_data: Command with role creation data.
+
+        role_service: Service handling role-related operations.
+
+        current_user: Current user performing the action.
+    Returns:
+        BaseResponse with created role ID.
     """
     role: RoleDO = await role_service.save(data=create_data)
     return result.success(data=role.id)
@@ -39,7 +48,20 @@ async def list_ordered_role(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[List[RoleDO]]:
     """
-    List role info
+    Retrieves a list of roles in an ordered manner.
+
+    Args:
+        page: Page number for listing roles.
+
+        size: The size of the role list per page.
+
+        query: Query parameter for filtering roles.
+
+        role_service: Service handling role-related operations.
+
+        current_user: Current user performing the action.
+    Returns:
+        BaseResponse with list of RoleDO.
     """
     results: List[RoleDO] = await role_service.list_ordered(
         page=page, size=size, query=query, order_by="sort"
@@ -54,7 +76,16 @@ async def list_page_ordered_role(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Any:
     """
-    List role info by page
+    Retrieves paginated roles in an ordered manner.
+
+    Args:
+        params: Pagination and ordering parameters.
+
+        role_service: Service handling role-related operations.
+
+        current_user: Current user performing the action.
+    Returns:
+        BaseResponse with paginated roles.
     """
     results = await role_service.list_page_ordered(params=params)
     return result.success(data=results)
@@ -67,7 +98,16 @@ async def get_role(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[RoleDO]:
     """
-    Get role by id
+    Retrieves a role by its ID.
+
+    Args:
+        id: The unique identifier of the role.
+
+        role_service: Service handling role-related operations.
+
+        current_user: Current user performing the action.
+    Returns:
+        BaseResponse with RoleDO details.
     """
     results = await role_service.get_by_id(id=id)
     return result.success(data=results)
@@ -80,7 +120,16 @@ async def remove_role_by_ids(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[int]:
     """
-    Delete role by ids
+    Deletes roles by a list of IDs.
+
+    Args:
+        role_ids: List of role IDs to delete.
+
+        role_service: Service handling role-related operations.
+
+        current_user: Current user performing the action.
+    Returns:
+        BaseResponse with count of deleted roles.
     """
     results = await role_service.remove_batch_by_ids(ids=role_ids)
     return result.success(data=results)

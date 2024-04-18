@@ -1,7 +1,6 @@
 """Project health probe"""
 
 from fastapi import APIRouter, Depends
-from loguru import logger
 
 from fss.common.cache.cache import get_cache_client, Cache
 from fss.starter.system.enum.system import SystemResponseCode
@@ -10,36 +9,47 @@ from fss.starter.system.service.user_service import UserService
 
 probe_router = APIRouter()
 
-USER_ID = 1
-HI = "hi"
-HELLO = "hello"
-
 
 @probe_router.get("/liveness")
-def liveness():
+async def liveness():
     """
-    Liveness probe
+    Check the system's live status.
+
+    Returns:
+        dict: A status object with a 'code' and a 'msg' indicating liveness.
     """
-    return {"code": SystemResponseCode.SUCCESS.code, "msg": HI}
+    return {"code": SystemResponseCode.SUCCESS.code, "msg": "hi"}
 
 
 @probe_router.get("/readiness")
-async def readiness(user_service: UserService = Depends(get_user_service)):
+async def readiness(
+    user_id: int = 1, user_service: UserService = Depends(get_user_service)
+):
     """
-    Readiness probe
+    Checks system and dependencies' readiness.
+
+    Args:
+        user_id (int, optional): ID for readiness check, defaults to 1.
+
+        user_service (UserService, optional): Service for user-related operations.
+    Returns:
+        dict: Response with 'code' and 'msg' indicating readiness status.
     """
     try:
         cache_client: Cache = await get_cache_client()
-        await cache_client.set(f"user:{USER_ID}", "ok")
-        res = await cache_client.get(f"user:{USER_ID}")
+        cache_key = f"user:{user_id}"
+        await cache_client.set(cache_key, "ok")
+        res = await cache_client.get(cache_key)
+
         if "ok" != res:
-            raise
-        await cache_client.delete(f"user:{USER_ID}")
-        await user_service.find_by_id(id=USER_ID)
+            raise ValueError("Cache read mismatch")
+
+        await cache_client.delete(cache_key)
+        await user_service.find_by_id(id=user_id)
     except Exception as e:
-        logger.error(f"readiness error: {e}")
         return {
             "code": SystemResponseCode.SERVICE_INTERNAL_ERROR.code,
-            "msg": SystemResponseCode.SERVICE_INTERNAL_ERROR.msg,
+            "msg": f"Readiness check failed: {e}",
         }
-    return {"code": SystemResponseCode.SUCCESS.code, "msg": HELLO}
+
+    return {"code": SystemResponseCode.SUCCESS.code, "msg": "hello"}
