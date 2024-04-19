@@ -1,4 +1,5 @@
 """Redis cache implementation"""
+
 from typing import Any
 
 from fss.common.cache.cache import Cache

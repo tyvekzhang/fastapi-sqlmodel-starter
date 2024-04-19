@@ -22,6 +22,14 @@ def generator(
     process_id: int = os.getpid() % 31,
     sleep=lambda x: time.sleep(x),
 ) -> Generator[int, None, None]:
+    """
+    Generates unique snowflake IDs.
+
+    :param worker_id: Worker ID (default: 1)
+    :param process_id: Process ID (default: current process ID modulo 31)
+    :param sleep: Sleep function (default: `time.sleep`)
+    :return: Generator of snowflake IDs
+    """
     assert 0 <= worker_id <= max_worker_id
     assert 0 <= process_id <= max_process_id
 
@@ -55,4 +63,9 @@ def generator(
 
 
 def snowflake_id() -> int:
+    """
+    Returns a unique snowflake ID.
+
+    :return: Snowflake ID
+    """
     return next(generator())

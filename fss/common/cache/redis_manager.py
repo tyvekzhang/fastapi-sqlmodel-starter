@@ -23,7 +23,7 @@ class RedisManager:
                 if cls._connection_pool is None:
                     cls._connection_pool = redis.ConnectionPool.from_url(
                         f"redis://:{configs.cache_pass}@{configs.cache_host}:{configs.cache_port}/{configs.db_num}",
-                        decode_responses=True
+                        decode_responses=True,
                     )
                 if cls._instance is None:
                     cls._instance = await redis.Redis.from_pool(cls._connection_pool)

@@ -15,10 +15,10 @@ from fss.common.config import configs
 from fss.common.enum.enum import TokenTypeEnum
 from fss.common.exception.exception import ServiceException
 from fss.common.schema.schema import Token
+from fss.common.security import security
 from fss.common.service.impl.service_impl import ServiceImpl
-from fss.common.util import security
 from fss.common.util.excel import export_template
-from fss.common.util.security import verify_password, get_password_hash
+from fss.common.security.security import verify_password, get_password_hash
 from fss.starter.system.enum.system import SystemResponseCode, SystemConstantCode
 from fss.starter.system.exception.system import SystemException
 from fss.starter.system.mapper.user_mapper import UserMapper, userMapper

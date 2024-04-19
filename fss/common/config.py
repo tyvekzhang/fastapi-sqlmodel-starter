@@ -1,4 +1,5 @@
 """Configuration in the project"""
+
 import multiprocessing
 import os
 import subprocess
@@ -77,5 +78,9 @@ def server_startup_config() -> tuple[str, int, int]:
     port = configs.port
     workers = configs.workers
     if not isinstance(workers, int):
-        workers = int(workers) if workers.isdigit() else max(multiprocessing.cpu_count() - 2, 1)
+        workers = (
+            int(workers)
+            if workers.isdigit()
+            else max(multiprocessing.cpu_count() - 2, 1)
+        )
     return host, port, workers

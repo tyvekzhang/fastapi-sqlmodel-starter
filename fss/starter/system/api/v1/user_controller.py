@@ -11,7 +11,7 @@ from fss.common.result import result
 from fss.common.result.result import BaseResponse
 from fss.common.schema.schema import Token, CurrentUser
 from fss.common.security.security import get_current_user
-from fss.common.util.security import get_password_hash
+from fss.common.security.security import get_password_hash
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.model.user_role_do import UserRoleDO
 from fss.starter.system.schema.user_schema import (
