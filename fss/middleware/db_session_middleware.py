@@ -10,6 +10,8 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from starlette.requests import Request
 from starlette.types import ASGIApp
 
+from fss.common.config import configs
+from fss.starter.server import app
 
 try:
     from sqlalchemy.ext.asyncio import async_sessionmaker
@@ -133,3 +135,13 @@ class SessionNotInitialisedException(Exception):
         """
 
         super().__init__(detail)
+
+
+# Add SQLAlchemyMiddleware
+app.add_middleware(
+    SQLAlchemyMiddleware,
+    db_url=str(configs.sqlalchemy_database_url),
+    engine_args={
+        "echo": configs.echo_sql,
+    },
+)
