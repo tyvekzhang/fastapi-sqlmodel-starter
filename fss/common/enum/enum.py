@@ -1,4 +1,4 @@
-"""The enumerations used in the project"""
+"""Common enumerations"""
 
 from enum import Enum
 

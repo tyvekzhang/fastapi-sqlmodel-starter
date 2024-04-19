@@ -1,4 +1,4 @@
-"""The exception handler in the project"""
+"""Global exception handler"""
 
 from fastapi import Request
 from fastapi.exception_handlers import (
@@ -14,7 +14,6 @@ from fss.common.exception.exception import ServiceException
 from fss.starter.server import app
 
 
-# Global exception handling
 @app.exception_handler(ServiceException)
 async def service_exception_handler(request: Request, exc: ServiceException):
     """
@@ -53,7 +52,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     """
     Asynchronous handler for RequestValidationError
     :param request: The request instance containing all request details
-    :param exc: StarletteHTTPException instance
+    :param exc: RequestValidationError instance
     :return: A Starlette Response object.
     """
     return await request_validation_exception_handler(request, exc)
