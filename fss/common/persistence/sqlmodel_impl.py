@@ -24,28 +24,28 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         self.db = db
 
     async def insert(
-            self,
-            *,
-            data: Union[ModelType, SchemaType],
-            db_session: Union[AsyncSession, None] = None,
+        self,
+        *,
+        data: Union[ModelType, SchemaType],
+        db_session: Union[AsyncSession, None] = None,
     ) -> Any:
         """
-         Inserts a single row into the database.
+        Inserts a single row into the database.
 
-         Args:
-             data: The data to be inserted, either a Model instance or a Schema dict.
-             db_session: The database session to use. If None, uses the default session.
+        Args:
+            data: The data to be inserted, either a Model instance or a Schema dict.
+            db_session: The database session to use. If None, uses the default session.
 
-         Returns:
-             The inserted row with ID.
-         """
+        Returns:
+            The inserted row with ID.
+        """
         db_session = db_session or self.db.session
         orm_data = self.model.model_validate(data)
         db_session.add(orm_data)
         return orm_data
 
     async def insert_batch(
-            self, *, data_list: List[Any], db_session: Any = None
+        self, *, data_list: List[Any], db_session: Any = None
     ) -> int:
         """
         Inserts multiple rows into the database in a single batch.
@@ -95,8 +95,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         return response.scalar_one()
 
     async def select_list(
-            self, *, page: int = 1, size: int = 100, db_session: Any = None,
-            **kwargs
+        self, *, page: int = 1, size: int = 100, db_session: Any = None, **kwargs
     ) -> List[Any]:
         """
         Retrieves a list of rows, with optional filtering and pagination.
@@ -112,28 +111,26 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         """
         db_session = db_session or self.db.session
         query = select(self.model)
-        if 'filter_by' in kwargs:
-            query = query.filter_by(**kwargs['filter_by'])
-        elif 'filter' in kwargs:
-            query = query.filter(kwargs['filter'])
-        if 'like' in kwargs:
-            for column, value in kwargs['like'].items():
+        if "filter_by" in kwargs:
+            query = query.filter_by(**kwargs["filter_by"])
+        elif "filter" in kwargs:
+            query = query.filter(kwargs["filter"])
+        if "like" in kwargs:
+            for column, value in kwargs["like"].items():
                 query = query.filter(getattr(self.model, column).like(value))
-        query = (
-            query.offset((page - 1) * size).limit(size).order_by(self.model.id)
-        )
+        query = query.offset((page - 1) * size).limit(size).order_by(self.model.id)
         response = await db_session.execute(query)
         return response.scalars().all()
 
     async def select_list_ordered(
-            self,
-            *,
-            page: int = 1,
-            size: int = 100,
-            order_by: Any = None,
-            sort_order: Any = None,
-            db_session: Any = None,
-            **kwargs
+        self,
+        *,
+        page: int = 1,
+        size: int = 100,
+        order_by: Any = None,
+        sort_order: Any = None,
+        db_session: Any = None,
+        **kwargs,
     ) -> List[Any]:
         """
         Retrieve a list of rows, with optional filtering, pagination, and ordering.
@@ -148,30 +145,32 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         """
         db_session = db_session or self.db.session
         query = select(self.model)
-        if 'filter_by' in kwargs:
-            query = query.filter_by(**kwargs['filter_by'])
-        elif 'filter' in kwargs:
-            query = query.filter(kwargs['filter'])
-        if 'like' in kwargs:
-            for column, value in kwargs['like'].items():
+        if "filter_by" in kwargs:
+            query = query.filter_by(**kwargs["filter_by"])
+        elif "filter" in kwargs:
+            query = query.filter(kwargs["filter"])
+        if "like" in kwargs:
+            for column, value in kwargs["like"].items():
                 query = query.filter(getattr(self.model, column).like(value))
         columns = self.model.__table__.columns
         if order_by is None or order_by not in columns:
             order_by = "id"
         if sort_order is None or sort_order == SortEnum.ascending:
             query = (
-                query.offset((page - 1) * size).limit(size).order_by(columns[order_by].asc())
+                query.offset((page - 1) * size)
+                .limit(size)
+                .order_by(columns[order_by].asc())
             )
         else:
             query = (
-                query.offset((page - 1) * size).limit(size).order_by(columns[order_by].des())
+                query.offset((page - 1) * size)
+                .limit(size)
+                .order_by(columns[order_by].des())
             )
         response = await db_session.execute(query)
         return response.scalars().all()
 
-    async def select_page(
-            self, *, params: Any, db_session: Any = None
-    ) -> List[Any]:
+    async def select_page(self, *, params: Any, db_session: Any = None) -> List[Any]:
         """
         Retrieve a page of rows, with optional filtering and pagination.
 
@@ -184,12 +183,12 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         return await paginate(db_session, query, params)
 
     async def select_page_ordered(
-            self,
-            *,
-            params: Any,
-            order_by: Any = None,
-            sort_order: Any = None,
-            db_session: Any = None,
+        self,
+        *,
+        params: Any,
+        order_by: Any = None,
+        sort_order: Any = None,
+        db_session: Any = None,
     ) -> List[Any]:
         """
         Retrieve a page of rows, with optional filtering, pagination, and ordering.
@@ -230,17 +229,17 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         return result.rowcount
 
     async def update_batch_by_ids(
-            self, *, ids: List[Any], data: dict, db_session: Any = None
+        self, *, ids: List[Any], data: dict, db_session: Any = None
     ) -> int:
         """
-         Update multiple rows by their IDs.
+        Update multiple rows by their IDs.
 
-         Parameters:
-             ids : The IDs of the rows to update
-             data : The data to update
-             db_session : The database session to use
-         """
-        async with (db_session or self.db.session) as session:
+        Parameters:
+            ids : The IDs of the rows to update
+            data : The data to update
+            db_session : The database session to use
+        """
+        async with db_session or self.db.session as session:
             statement = update(self.model).where(self.model.id.in_(ids))
             for key, value in data.items():
                 statement = statement.values({key: value})
@@ -261,15 +260,15 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         return result.rowcount
 
     async def delete_batch_by_ids(
-            self, *, ids: List[Any], db_session: Any = None
+        self, *, ids: List[Any], db_session: Any = None
     ) -> int:
         """
-         Delete multiple rows by their IDs.
+        Delete multiple rows by their IDs.
 
-         Parameters:
-             ids : The IDs of the rows to update
-             db_session : The database session to use
-         """
+        Parameters:
+            ids : The IDs of the rows to update
+            db_session : The database session to use
+        """
         db_session = db_session or self.db.session
         statement = delete(self.model).where(self.model.id.in_(ids))
         result = await db_session.execute(statement)

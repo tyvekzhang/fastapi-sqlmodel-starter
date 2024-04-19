@@ -1,6 +1,6 @@
 """User operation controller"""
 
-from typing import Any, List
+from typing import List
 
 from fastapi import APIRouter, Depends, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
@@ -193,7 +193,6 @@ async def export_user(
 async def list_user(
     page: int = 1,
     size: int = 100,
-    query: Any = None,
     user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[List[UserQuery]]:
@@ -213,9 +212,7 @@ async def list_user(
     Returns:
         BaseResponse with userQuery list.
     """
-    results: List[UserQuery] = await user_service.list_user(
-        page=page, size=size, query=query
-    )
+    results: List[UserQuery] = await user_service.list_user(page=page, size=size)
     return result.success(data=results)
 
 

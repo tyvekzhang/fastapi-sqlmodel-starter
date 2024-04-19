@@ -19,41 +19,41 @@ class BaseMapper(ABC):
 
     @abstractmethod
     async def select_list(
-            self, *, page: int, size: int, db_session: Any, **kwargs
+        self, *, page: int, size: int, db_session: Any, **kwargs
     ) -> List[Any]: ...
 
     @abstractmethod
     async def select_list_ordered(
-            self,
-            *,
-            page: int,
-            size: int,
-            order_by: Any,
-            sort_order: Any,
-            db_session: Any,
-            **kwargs
+        self,
+        *,
+        page: int,
+        size: int,
+        order_by: Any,
+        sort_order: Any,
+        db_session: Any,
+        **kwargs,
     ) -> List[Any]: ...
 
     @abstractmethod
-    async def select_page(
-            self, *, params: Any, db_session: Any
-    ) -> List[Any]: ...
+    async def select_page(self, *, params: Any, db_session: Any) -> List[Any]: ...
 
     @abstractmethod
     async def select_page_ordered(
-            self,
-            *,
-            params: Any,
-            order_by: Any,
-            sort_order: Any,
-            db_session: Any,
+        self,
+        *,
+        params: Any,
+        order_by: Any,
+        sort_order: Any,
+        db_session: Any,
     ) -> List[Any]: ...
 
     @abstractmethod
     async def update_by_id(self, *, data: Any, db_session: Any) -> int: ...
 
     @abstractmethod
-    async def update_batch_by_ids(self, *, ids: List[Any], data: dict, db_session: Any = None) -> int: ...
+    async def update_batch_by_ids(
+        self, *, ids: List[Any], data: dict, db_session: Any = None
+    ) -> int: ...
 
     @abstractmethod
     async def delete_by_id(self, *, id: Any, db_session: Any) -> int: ...

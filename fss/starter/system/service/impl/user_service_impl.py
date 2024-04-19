@@ -3,7 +3,7 @@
 import http
 import io
 from datetime import timedelta
-from typing import Optional, List, Any
+from typing import Optional, List
 
 import pandas as pd
 from fastapi import UploadFile
@@ -33,27 +33,42 @@ from fss.starter.system.service.user_service import UserService
 
 
 class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
+    """
+    Implementation of the UserService interface.
+    """
+
     def __init__(self, mapper: UserMapper):
-        super(UserServiceImpl, self).__init__(mapper=mapper)
+        """
+        Initialize the UserServiceImpl instance.
+
+        Args:
+            mapper (UserMapper): The UserMapper instance to use for database operations.
+        """
+        super().__init__(mapper=mapper)
         self.mapper = mapper
 
     async def find_by_id(self, id: int) -> Optional[UserQuery]:
         """
-        Retrieval user through user id
-        :param id: user id
-        :return: user or none
+        Retrieve a user by ID.
+
+        Args:
+            id (int): The user ID to retrieve.
+
+        Returns:
+            Optional[UserQuery]: The user query object if found, None otherwise.
         """
         user_do = await self.mapper.select_by_id(id=id)
-        if user_do:
-            return UserQuery(**user_do.model_dump())
-        else:
-            return None
+        return UserQuery(**user_do.model_dump()) if user_do else None
 
     async def login(self, loginCmd: LoginCmd) -> Token:
         """
-        Do log in
-        :param loginCmd: loginCmd
-        :return: access token and refresh token
+        Perform login and return an access token and refresh token.
+
+        Args:
+            loginCmd (LoginCmd): The login command containing username and password.
+
+        Returns:
+            Token: The access token and refresh token.
         """
         username: str = loginCmd.username
         userDO: UserDO = await self.mapper.get_user_by_username(username=username)
@@ -96,13 +111,16 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         self,
     ) -> StreamingResponse:
         """
-        Export empty user import template
+        Export an empty user import template.
         """
         return await export_template(schema=UserExport, file_name="user_template")
 
     async def import_user(self, file: UploadFile):
         """
-        Import user data
+        Import user data from an Excel file.
+
+        Args:
+            file (UploadFile): The Excel file containing user data.
         """
         contents = await file.read()
         import_df = pd.read_excel(io.BytesIO(contents))
@@ -132,7 +150,16 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         await self.mapper.insert_batch(data_list=user_import_list)
 
     async def export_user(self, params: Params) -> StreamingResponse:
-        user_pages = await self.mapper.select_list_page(params=params)
+        """
+        Export user data to an Excel file.
+
+        Args:
+            params (Params): The query parameters for filtering users.
+
+        Returns:
+            StreamingResponse: The Excel file containing user data.
+        """
+        user_pages = await self.mapper.select_page(params=params)
         user_items = user_pages.__dict__["items"]
         user_data = []
         for user in user_items:
@@ -143,7 +170,13 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
 
     async def register(self, data: UserCreateCmd) -> UserDO:
         """
-        User register
+        Register a new user.
+
+        Args:
+            data (UserCreateCmd): The user creation command containing username and password.
+
+        Returns:
+            UserDO: The newly created user.
         """
         user: UserDO = await self.mapper.get_user_by_username(username=data.username)
         if user is not None:
@@ -153,16 +186,28 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
             )
         return await self.mapper.insert(data=data)
 
-    async def list_user(
-        self, page: int, size: int, query: Any
-    ) -> Optional[List[UserQuery]]:
-        results: List[UserDO] = await self.mapper.select_list(
-            page=page, size=size, query=query
-        )
+    async def list_user(self, page: int, size: int) -> Optional[List[UserQuery]]:
+        """
+        List users with pagination.
+
+        Args:
+            page (int): The page number.
+            size (int): The page size.
+
+        Returns:
+            Optional[List[UserQuery]]: The list of users or None if no users are found.
+        """
+        results: List[UserDO] = await self.mapper.select_list(page=page, size=size)
         if results is None or len(results) == 0:
             return
         return [UserQuery(**user.model_dump()) for user in results]
 
 
 def get_user_service() -> UserService:
+    """
+    Return an instance of the UserService implementation.
+
+    Returns:
+        UserService: An instance of the UserServiceImpl class.
+    """
     return UserServiceImpl(mapper=userMapper)

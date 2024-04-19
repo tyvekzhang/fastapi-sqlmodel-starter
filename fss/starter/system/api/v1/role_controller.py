@@ -40,10 +40,9 @@ async def create_role(
 
 
 @role_router.get("/listOrdered")
-async def list_ordered_role(
+async def retrieve_ordered_role(
     page: int = 1,
     size: int = 100,
-    query: Any = None,
     role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[List[RoleDO]]:
@@ -64,13 +63,13 @@ async def list_ordered_role(
         BaseResponse with list of RoleDO.
     """
     results: List[RoleDO] = await role_service.list_ordered(
-        page=page, size=size, query=query, order_by="sort"
+        page=page, size=size, order_by="sort"
     )
     return result.success(data=results)
 
 
 @role_router.get("/pageOrdered")
-async def list_page_ordered_role(
+async def retrieve_page_ordered_role(
     params: Params = Depends(),
     role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
