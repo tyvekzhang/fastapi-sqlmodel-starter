@@ -43,8 +43,8 @@ push: image
 	docker push $(dockerhubUser)/$(releaseName):$(tag)
 
 docker-compose-start:
-	cd build && \
+	cd deploy && \
 	docker-compose up -d
 
 deploy-k8s:
-	kubectl apply -f build/k8s
+	kubectl apply -f deploy/k8s
