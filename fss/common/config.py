@@ -55,7 +55,8 @@ def init_log():
     logger.add(configs.log_file)
 
 
-init_log()
+if configs.log_file:
+    init_log()
 
 # Set timezone
 if os.name == "nt":
