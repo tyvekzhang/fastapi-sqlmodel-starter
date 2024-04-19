@@ -1,4 +1,4 @@
-"""The exceptions used in the project"""
+"""Customer exceptions"""
 
 import http
 

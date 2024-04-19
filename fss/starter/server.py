@@ -4,8 +4,9 @@ import uvicorn
 from fastapi_offline import FastAPIOffline
 from starlette.middleware.cors import CORSMiddleware
 
-from fss.common.config import configs, init_log, server_config
+from fss.common.config import configs, init_log, server_startup_config
 
+# Offline swagger docs
 app = FastAPIOffline(
     title=configs.app_name,
     version=configs.version,
@@ -14,10 +15,8 @@ app = FastAPIOffline(
     default_response_model_exclude_unset=True,
 )
 
+# Cors processing
 if configs.backend_cors_origins:
-    """
-    Cors processing
-    """
     origins = [origin.strip() for origin in configs.backend_cors_origins.split(",")]
     app.add_middleware(
         CORSMiddleware,
@@ -28,9 +27,9 @@ if configs.backend_cors_origins:
     )
 
 
-def prepare_run():
+def prepare_run() -> tuple[str, int, int]:
     init_log()
-    return server_config()
+    return server_startup_config()
 
 
 def run() -> None:

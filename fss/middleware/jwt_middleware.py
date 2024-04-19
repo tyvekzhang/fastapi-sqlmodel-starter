@@ -8,7 +8,7 @@ from loguru import logger
 from starlette.responses import JSONResponse
 
 from fss.common.config import configs
-from fss.common.util.security import is_valid_token
+from fss.common.security.security import is_valid_token
 from fss.starter.server import app
 
 

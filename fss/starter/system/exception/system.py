@@ -1,3 +1,5 @@
+"""System exception"""
+
 import http
 
 from fss.common.exception.exception import ServiceException

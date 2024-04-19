@@ -7,8 +7,18 @@ from fss.starter.system.service.user_role_service import UserRoleService
 
 
 class UserRoleServiceImpl(ServiceImpl[UserRoleMapper, UserRoleDO], UserRoleService):
+    """
+    Implementation of the UserRoleService interface.
+    """
+
     pass
 
 
 def get_user_role_service() -> UserRoleService:
+    """
+    Return an instance of the UserRoleService implementation.
+
+    Returns:
+        UserRoleService: An instance of the UserRoleServiceImpl class.
+    """
     return UserRoleServiceImpl(mapper=userRoleMapper)

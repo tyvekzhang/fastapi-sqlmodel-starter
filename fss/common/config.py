@@ -1,5 +1,6 @@
 """Configuration in the project"""
 
+import multiprocessing
 import os
 import subprocess
 import time
@@ -40,6 +41,7 @@ class Configs(BaseSettings):
     cache_pass: str
     cache_host: str
     cache_port: str
+    db_num: int
     enable_swagger: bool
     echo_sql: bool
 
@@ -50,7 +52,6 @@ class Configs(BaseSettings):
 configs = Configs()
 
 
-# Set log
 def init_log():
     logger.add(configs.log_file)
 
@@ -68,19 +69,18 @@ else:
     except Exception as e:
         logger.error(f"Error setting timezone: {e}")
 
-# Set firing option
-port = configs.port
-workers = configs.workers
 
-if not isinstance(workers, int):
-    try:
-        workers = int(workers)
-    except ValueError:
-        import multiprocessing
-
-        cpu_count = multiprocessing.cpu_count()
-        workers = max(cpu_count - 2, 1)
-
-
-def server_config():
-    return configs.host, port, workers
+def server_startup_config() -> tuple[str, int, int]:
+    """
+    Server startup config
+    """
+    host = configs.host
+    port = configs.port
+    workers = configs.workers
+    if not isinstance(workers, int):
+        workers = (
+            int(workers)
+            if workers.isdigit()
+            else max(multiprocessing.cpu_count() - 2, 1)
+        )
+    return host, port, workers

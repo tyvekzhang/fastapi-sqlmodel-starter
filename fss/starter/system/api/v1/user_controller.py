@@ -1,6 +1,6 @@
 """User operation controller"""
 
-from typing import Any, List
+from typing import List
 
 from fastapi import APIRouter, Depends, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
@@ -11,7 +11,7 @@ from fss.common.result import result
 from fss.common.result.result import BaseResponse
 from fss.common.schema.schema import Token, CurrentUser
 from fss.common.security.security import get_current_user
-from fss.common.util.security import get_password_hash
+from fss.common.security.security import get_password_hash
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.model.user_role_do import UserRoleDO
 from fss.starter.system.schema.user_schema import (
@@ -193,7 +193,6 @@ async def export_user(
 async def list_user(
     page: int = 1,
     size: int = 100,
-    query: Any = None,
     user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[List[UserQuery]]:
@@ -213,9 +212,7 @@ async def list_user(
     Returns:
         BaseResponse with userQuery list.
     """
-    results: List[UserQuery] = await user_service.list_user(
-        page=page, size=size, query=query
-    )
+    results: List[UserQuery] = await user_service.list_user(page=page, size=size)
     return result.success(data=results)
 
 

@@ -1,7 +1,13 @@
-from pydantic import BaseModel, Field
+"""Common schema"""
+
+from pydantic import BaseModel
 
 
 class Token(BaseModel):
+    """
+    Token schema
+    """
+
     access_token: str
     token_type: str
     expired_at: int
@@ -10,6 +16,8 @@ class Token(BaseModel):
 
 
 class CurrentUser(BaseModel):
+    """
+    CurrentUser schema
+    """
+
     user_id: int
-    roles: set = Field(default_factory=set)
-    authorities: set = Field(default_factory=set)

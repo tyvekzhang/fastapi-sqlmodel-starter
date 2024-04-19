@@ -1,3 +1,5 @@
+"""Excel util"""
+
 import io
 from datetime import datetime
 from typing import List
@@ -12,7 +14,7 @@ async def export_template(
     schema: BaseModel, file_name: str, data_list: List[BaseModel] = None
 ) -> StreamingResponse:
     """
-    Export template or date
+    Export template or template with date
     """
     global excel_writer
     field_names = schema.__fields__
@@ -35,4 +37,5 @@ async def export_template(
     except Exception as e:
         logger.error(f"{e}")
     finally:
-        excel_writer.close()
+        if excel_writer is not None:
+            excel_writer.close()

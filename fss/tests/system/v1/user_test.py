@@ -6,7 +6,7 @@ from fastapi import UploadFile
 from fastapi.testclient import TestClient
 
 from fss.common.config import configs
-from fss.common.util.security import get_user_id
+from fss.common.security.security import get_user_id
 from fss.starter.server import app
 from fss.starter.system.schema.user_schema import UpdateUserCmd
 

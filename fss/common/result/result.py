@@ -1,9 +1,8 @@
 """The results returned by the project"""
 
-from typing import Generic, TypeVar, Any, Optional
+from typing import Generic, TypeVar, Optional, Dict
 
-from fastapi_pagination import Page
-from pydantic import Field, BaseModel
+from pydantic import BaseModel
 
 DataType = TypeVar("DataType")
 T = TypeVar("T")
@@ -18,24 +17,15 @@ class BaseResponse(BaseModel, Generic[T]):
     data: Optional[T] = None
 
 
-class PageBase(Page[T], Generic[T]):
-    previous_page: Optional[int] = Field(
-        default=None, description="Page number of the previous page"
-    )
-    next_page: Optional[int] = Field(
-        default=None, description="Page number of the next page"
-    )
-
-
 def success(
     data: DataType = None,
     msg: Optional[str] = "success",
     code: Optional[int] = DEFAULT_SUCCESS_CODE,
-) -> Any:
+) -> Dict:
     if data is None:
         return {"code": code, "msg": msg}
     return {"code": code, "msg": msg, "data": data}
 
 
-def fail(msg: str, code: int) -> Any:
+def fail(msg: str, code: int) -> Dict:
     return {"code": code, "msg": msg}
