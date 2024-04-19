@@ -22,9 +22,10 @@ class Configs(BaseSettings):
     app_desc: str
     mode: str
     version: str
+    host: str
     port: int
-    access_token_expire_minutes: int = 60 * 24  # 24 hour
-    refresh_token_expire_minutes: int = 60 * 24 * 30  # 30 days
+    access_token_expire_minutes: int = 60 * 24
+    refresh_token_expire_minutes: int = 60 * 24 * 30
     win_tz: str
     linux_tz: str
     workers: Union[str, int]
@@ -40,6 +41,7 @@ class Configs(BaseSettings):
     cache_host: str
     cache_port: str
     enable_swagger: bool
+    echo_sql: bool
 
     class Config:
         env_file = ENV_FILE
@@ -52,6 +54,8 @@ configs = Configs()
 def init_log():
     logger.add(configs.log_file)
 
+
+init_log()
 
 # Set timezone
 if os.name == "nt":
