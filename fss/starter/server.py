@@ -4,7 +4,7 @@ import uvicorn
 from fastapi_offline import FastAPIOffline
 from starlette.middleware.cors import CORSMiddleware
 
-from fss.common.config import configs, port, workers
+from fss.common.config import configs, init_log, server_config
 
 app = FastAPIOffline(
     title=configs.app_name,
@@ -28,7 +28,11 @@ if configs.backend_cors_origins:
     )
 
 
+def prepare_run():
+    init_log()
+    return server_config()
+
+
 def run() -> None:
-    uvicorn.run(
-        app="fss.starter.server:app", host=configs.host, port=port, workers=workers
-    )
+    host, port, workers = prepare_run()
+    uvicorn.run(app="fss.starter.server:app", host=host, port=port, workers=workers)

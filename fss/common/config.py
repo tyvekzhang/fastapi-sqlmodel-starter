@@ -55,9 +55,6 @@ def init_log():
     logger.add(configs.log_file)
 
 
-if configs.log_file:
-    init_log()
-
 # Set timezone
 if os.name == "nt":
     try:
@@ -83,3 +80,7 @@ if not isinstance(workers, int):
 
         cpu_count = multiprocessing.cpu_count()
         workers = max(cpu_count - 2, 1)
+
+
+def server_config():
+    return configs.host, port, workers
