@@ -65,7 +65,7 @@ async def create_token(
     return encoded_jwt
 
 
-async def verify_password(plain_password: str, hashed_password: str) -> bool:
+def verify_password(plain_password: str, hashed_password: str) -> bool:
     match: bool = pwd_context.verify(plain_password, hashed_password)
     return match
 

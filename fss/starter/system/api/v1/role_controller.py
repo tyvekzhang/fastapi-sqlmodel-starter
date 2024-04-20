@@ -1,6 +1,6 @@
 """Role operation controller"""
 
-from typing import Any, List
+from typing import Any, List, Dict
 
 from fastapi import APIRouter, Depends
 from fastapi_pagination import Params
@@ -10,7 +10,7 @@ from fss.common.result.result import BaseResponse
 from fss.common.schema.schema import CurrentUser
 from fss.common.security.security import get_current_user
 from fss.starter.system.model.role_do import RoleDO
-from fss.starter.system.schema.role_schema import RoleCreateCmd
+from fss.starter.system.schema.role_schema import RoleCreateCmd, RoleDeleteCmd
 from fss.starter.system.service.impl.role_service_impl import get_role_service
 from fss.starter.system.service.role_service import RoleService
 
@@ -71,7 +71,7 @@ async def retrieve_page_ordered_role(
     params: Params = Depends(),
     role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
-) -> Any:
+) -> BaseResponse[Any]:
     """
     Retrieves paginated roles in an ordered manner.
 
@@ -106,21 +106,21 @@ async def get_role(
     Returns:
         BaseResponse with RoleDO details.
     """
-    results = await role_service.get_by_id(id=id)
-    return result.success(data=results)
+    role_do: RoleDO = await role_service.get_by_id(id=id)
+    return result.success(data=role_do)
 
 
 @role_router.post("/roles")
 async def remove_role_by_ids(
-    role_ids: list[int],
+    roleDeleteCmd: RoleDeleteCmd,
     role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
-) -> BaseResponse[int]:
+) -> Dict:
     """
-    Deletes roles by a list of IDs.
+    Delete roles by a list of IDs.
 
     Args:
-        role_ids: List of role IDs to delete.
+        roleDeleteCmd: List of role IDs to delete.
 
         role_service: Service handling role-related operations.
 
@@ -128,5 +128,5 @@ async def remove_role_by_ids(
     Returns:
         BaseResponse with count of deleted roles.
     """
-    results = await role_service.remove_batch_by_ids(ids=role_ids)
-    return result.success(data=results)
+    await role_service.remove_batch_by_ids(ids=roleDeleteCmd.role_ids)
+    return result.success()

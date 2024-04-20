@@ -10,94 +10,178 @@ from fss.common.security.security import get_user_id
 from fss.starter.server import app
 from fss.starter.system.schema.user_schema import UpdateUserCmd
 
-client = TestClient(app)
+
+@pytest.fixture
+def client():
+    return TestClient(app)
 
 
-def test_user_register():
-    user_data = {
-        "username": "example_user",
-        "password": "example_password",
-        "nickname": "Example Nickname",
-    }
-    response = client.post(f"{configs.api_version}/user/register", json=user_data)
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
+@pytest.mark.parametrize(
+    "endpoint, test_data, expected_status_code, expected_code",
+    [
+        (
+            "register",
+            {
+                "username": "example_user",
+                "password": "example_password",
+                "nickname": "Example Nickname",
+            },
+            200,
+            0,
+        ),
+        (
+            "register",
+            {
+                "username": "example_user",
+                "password": "example_password",
+                "nickname": "Example Nickname",
+            },
+            200,
+            100,
+        ),
+    ],
+)
+def test_user_register(
+    client, endpoint, test_data, expected_status_code, expected_code
+):
+    response = client.post(f"{configs.api_version}/user/{endpoint}", json=test_data)
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
 
 
-def test_user_register_error():
-    user_data = {
-        "username": "example_user",
-        "password": "example_password",
-        "nickname": "Example Nickname",
-    }
-    response = client.post(f"{configs.api_version}/user/register", json=user_data)
-    assert response.status_code == 200
-    assert response.json()["code"] == 100
-
-
-@pytest.fixture(scope="class")
-def login():
-    response = client.post(
-        f"{configs.api_version}/user/login",
-        data={"username": "example_user", "password": "example_password"},
+@pytest.fixture
+def login(client):
+    endpoint, test_data, expected_status_code, expected_token_type = (
+        "login",
+        {
+            "username": "example_user",
+            "password": "example_password",
+        },
+        200,
+        "bearer",
     )
-    assert response.status_code == 200
-    assert response.json()["token_type"] == "bearer"
+    response = client.post(
+        f"{configs.api_version}/user/{endpoint}",
+        data=test_data,
+    )
+    assert response.status_code == expected_status_code
+    assert response.json()["token_type"] == expected_token_type
     access_token = response.json()["access_token"]
     user_id = get_user_id(access_token)
     yield access_token, user_id
 
 
-def test_user_login_error():
+@pytest.mark.parametrize(
+    "endpoint, test_data, expected_status_code",
+    [
+        (
+            "login",
+            {
+                "username": "example_user",
+                "password": "example_password_error",
+            },
+            401,
+        ),
+        (
+            "login",
+            {
+                "username": "example_user_error",
+                "password": "example_password_error",
+            },
+            401,
+        ),
+    ],
+)
+def test_user_login_error(client, endpoint, test_data, expected_status_code):
     response = client.post(
-        f"{configs.api_version}/user/login",
-        data={"username": "example_user", "password": "example_password_error"},
+        f"{configs.api_version}/user/{endpoint}",
+        data=test_data,
     )
-    assert response.status_code == 401
-    assert response.json()["code"] != 0
+    assert response.status_code == expected_status_code
 
 
-def test_user_me():
-    login_response = client.post(
-        f"{configs.api_version}/user/login",
-        data={"username": "example_user", "password": "example_password"},
-    )
-    assert login_response.status_code == 200
-    access_token = login_response.json()["access_token"]
-    headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/me", headers=headers)
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
-
-
-def test_update_user(login):
+@pytest.mark.parametrize(
+    "endpoint, expected_status_code, expected_code",
+    [
+        (
+            "me",
+            200,
+            0,
+        ),
+    ],
+)
+def test_user_me(login, client, endpoint, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    updateUserCmd = UpdateUserCmd(id=f"{user_id}", nickname="example_nickname")
+    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
+
+
+@pytest.mark.parametrize(
+    "test_data, expected_status_code, expected_code",
+    [
+        (
+            {
+                "nickname": "example_nickname",
+            },
+            200,
+            0,
+        ),
+    ],
+)
+def test_update_user(login, client, test_data, expected_status_code, expected_code):
+    access_token, user_id = login
+    headers = {"Authorization": f"Bearer {access_token}"}
+    updateUserCmd = UpdateUserCmd(id=f"{user_id}", nickname=test_data["nickname"])
     response = client.put(
         f"{configs.api_version}/user",
         json=(updateUserCmd.model_dump()),
         headers=headers,
     )
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
 
 
-def test_export_user_template(login):
+@pytest.mark.parametrize(
+    "endpoint, expected_status_code",
+    [
+        (
+            "exportTemplate",
+            200,
+        ),
+    ],
+)
+def test_export_user_template(login, client, endpoint, expected_status_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/exportTemplate", headers=headers)
-    assert response.status_code == 200
+    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    assert response.status_code == expected_status_code
 
 
-def test_export_user(login):
+@pytest.mark.parametrize(
+    "endpoint, expected_status_code",
+    [
+        (
+            "export",
+            200,
+        ),
+    ],
+)
+def test_export_user(login, client, endpoint, expected_status_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/export", headers=headers)
-    assert response.status_code == 200
+    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    assert response.status_code == expected_status_code
 
 
-def test_import_user(login):
+@pytest.mark.parametrize(
+    "endpoint, expected_status_code, expected_code",
+    [
+        ("import", 200, 0),
+    ],
+)
+def test_import_user(login, client, endpoint, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {
         "Authorization": f"Bearer {access_token}",
@@ -116,15 +200,23 @@ def test_import_user(login):
     file = UploadFile(filename="test_users.xlsx", file=buffer)
 
     response = client.post(
-        f"{configs.api_version}/user/import",
+        f"{configs.api_version}/user/{endpoint}",
         headers=headers,
         files={"file": (file.filename, file.file, file.content_type)},
     )
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
 
 
-def test_import_user_error(login):
+@pytest.mark.parametrize(
+    "endpoint, expected_status_code, expected_code",
+    [
+        ("import", 200, 100),
+    ],
+)
+def test_import_user_error(
+    login, client, endpoint, expected_status_code, expected_code
+):
     access_token, user_id = login
     headers = {
         "Authorization": f"Bearer {access_token}",
@@ -148,48 +240,74 @@ def test_import_user_error(login):
     file = UploadFile(filename="test_users.xlsx", file=buffer)
 
     response = client.post(
-        f"{configs.api_version}/user/import",
+        f"{configs.api_version}/user/{endpoint}",
         headers=headers,
         files={"file": (file.filename, file.file, file.content_type)},
     )
-    assert response.status_code == 200
-    assert response.json()["code"] != 0
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
 
 
-def test_list_user(login):
+@pytest.mark.parametrize(
+    "endpoint, expected_status_code, expected_code",
+    [
+        ("list", 200, 0),
+    ],
+)
+def test_list_user(login, client, endpoint, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/list", headers=headers)
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
+    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
 
 
-def test_user_count(login):
+@pytest.mark.parametrize(
+    "endpoint, expected_status_code, expected_code",
+    [
+        ("count", 200, 0),
+    ],
+)
+def test_user_count(login, client, endpoint, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/count", headers=headers)
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
+    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
 
 
-def test_user_roles(login):
+@pytest.mark.parametrize(
+    "endpoint, test_data, expected_status_code, expected_code",
+    [
+        ("roles", "[1, 2, 3]", 200, 0),
+    ],
+)
+def test_user_roles(
+    login, client, endpoint, test_data, expected_status_code, expected_code
+):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.post(
-        f"{configs.api_version}/user/{user_id}/roles",
-        content="[1, 2, 3]",
+        f"{configs.api_version}/user/{user_id}/{endpoint}",
+        content=test_data,
         headers=headers,
     )
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
 
 
-def test_remove_user(login):
+@pytest.mark.parametrize(
+    "expected_status_code, expected_code",
+    [
+        (200, 0),
+    ],
+)
+def test_remove_user(login, client, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.delete(f"{configs.api_version}/user/{user_id}", headers=headers)
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
+    assert response.status_code == expected_status_code
+    assert response.json()["code"] == expected_code
 
     response = client.post(
         f"{configs.api_version}/user/login",

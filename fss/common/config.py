@@ -60,16 +60,11 @@ def init_log():
 
 # Set timezone
 if os.name == "nt":
-    try:
-        subprocess.run(["tzutil", "/s", configs.win_tz], check=True)
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Error setting timezone: {e}")
+    subprocess.run(["tzutil", "/s", configs.win_tz], check=True)
+
 else:
-    try:
-        os.environ["TZ"] = configs.linux_tz
-        time.tzset()
-    except Exception as e:
-        logger.error(f"Error setting timezone: {e}")
+    os.environ["TZ"] = configs.linux_tz
+    time.tzset()
 
 
 def server_startup_config() -> tuple[str, int, int]:
