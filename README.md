@@ -43,7 +43,7 @@
 
 ## 文档
 - 交互式API文档
-  <img alt="API doc"  src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/maindocs/img/api_doc.png">
+  <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
 - 在线文档: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
 
 ## 快速开始
