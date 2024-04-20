@@ -10,8 +10,13 @@ import sys
 from pathlib import Path
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = str(Path(current_dir).parent)
 project_dir = str(Path(current_dir).parent.parent)
+root_dir = str(Path(current_dir).parent.parent.parent)
+
+sys.path.insert(0, parent_dir)
 sys.path.insert(0, project_dir)
+sys.path.insert(0, root_dir)
 
 project = "fastapi-sqlmodel-starter"
 copyright = "2024, fss group"
