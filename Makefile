@@ -1,4 +1,4 @@
-.PHONY: help install lint test start image push docker-compose-start deploy-k8s clean
+.PHONY: help install lint test start image push docker-compose-start deploy-k8s doc pypi clean
 
 tag = v1.0.0
 releaseName = fastapi-sqlmodel-starter
@@ -17,6 +17,8 @@ help:
 	@echo "  push                  Push Docker image to dockerHub."
 	@echo "  docker-compose-start  Start the project using Docker Compose."
 	@echo "  deploy-k8s            Deploy the project to Kubernetes."
+	@echo "  doc                   Make doc for this project."
+	@echo "  pypi                  Build and publish to pypi."
 	@echo "  clean                 Remove temporary files."
 	@echo "Use 'make <target>' to run a specific command."
 
@@ -52,6 +54,10 @@ docker-compose-start:
 
 deploy-k8s:
 	kubectl apply -f ${deployDir}/k8s
+
+doc:
+	pip install -r docs/requirements.txt; \
+	sphinx-build -M html docs/source/ docs/build/
 
 clean:
 	find . -type f -name '*.pyc' -delete; \

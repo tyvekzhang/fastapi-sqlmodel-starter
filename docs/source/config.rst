@@ -1,5 +1,5 @@
 Default Config
-============
+===============
 
 Project Info
 --------------
@@ -9,7 +9,7 @@ Project Info
     APP_NAME=Fss
     APP_DESC="Fss aims to one of the best scaffolding in the PyWeb field."
     VERSION=1.0.0
-    MODE=dev
+    MODE=prod
     HOST=0.0.0.0
     PORT=9010
     WORKERS=1
