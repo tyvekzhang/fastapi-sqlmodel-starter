@@ -17,10 +17,10 @@ async def export_template(
     Export template or template with date
     """
     global excel_writer
-    field_names = schema.__fields__
+    field_names = schema.model_fields
     user_export_df = pd.DataFrame(columns=field_names)
     if data_list is not None:
-        data_dicts = [item.dict() for item in data_list]
+        data_dicts = [item.model_dump() for item in data_list]
         user_export_df = user_export_df._append(data_dicts, ignore_index=True)
     filename = f"{file_name}_{datetime.now().strftime('%Y%m%d%H%M%S')}.xlsx"
     stream = io.BytesIO()
@@ -36,6 +36,3 @@ async def export_template(
         )
     except Exception as e:
         logger.error(f"{e}")
-    finally:
-        if excel_writer is not None:
-            excel_writer.close()

@@ -60,6 +60,7 @@ diskcache = "^5.6.3"
 pandas = "^2.2.2"
 xlsxwriter = "^3.2.0"
 openpyxl = "^3.1.2"
+slowapi = "^0.1.9"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.1.1"
