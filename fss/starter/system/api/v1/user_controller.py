@@ -1,6 +1,6 @@
 """User operation controller"""
 
-from typing import List
+from typing import List, Dict
 
 from fastapi import APIRouter, Depends, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
@@ -89,7 +89,7 @@ async def remove_user(
     id: int,
     user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
-) -> None:
+) -> Dict:
     """
     Endpoint to remove a user by their ID.
 
@@ -111,7 +111,7 @@ async def update_user(
     updateUserCmd: UpdateUserCmd,
     user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
-) -> None:
+) -> Dict:
     """
     Endpoint to update user information.
 
@@ -151,7 +151,7 @@ async def import_user(
     file: UploadFile,
     user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
-) -> None:
+) -> Dict:
     """
     Endpoint to import user information from a file.
 
@@ -238,7 +238,7 @@ async def user_roles(
     role_ids: List[int],
     user_role_service: UserService = Depends(get_user_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
-) -> BaseResponse[int]:
+) -> Dict:
     """
     Endpoint to assign roles to a user.
 

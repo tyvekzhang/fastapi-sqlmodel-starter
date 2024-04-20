@@ -60,7 +60,8 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         db_session = db_session or self.db.session
         orm_datas = [self.model.model_validate(data) for data in data_list]
         statement = insert(self.model).values([data.model_dump() for data in orm_datas])
-        await db_session.execute(statement)
+        result = await db_session.execute(statement)
+        return result.rowcount
 
     async def select_by_id(self, *, id: Any, db_session: Any = None) -> Any:
         """
@@ -219,11 +220,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         """
         db_session = db_session or self.db.session
         query = update(self.model).where(self.model.id == data.id)
-        values = {}
-        if isinstance(data, dict):
-            values = data
-        else:
-            values = data.model_dump(exclude_unset=True)
+        values = data.model_dump(exclude_unset=True)
         query = query.values(**values)
         result = await db_session.execute(query)
         return result.rowcount

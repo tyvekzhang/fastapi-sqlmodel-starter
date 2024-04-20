@@ -32,9 +32,11 @@ lint:
 	pre-commit run --all-files --verbose --show-diff-on-failure
 
 test:
-	cd $(fssDir) && \
-	alembic upgrade head && \
-	coverage run -m pytest && \
+	cd $(fssDir); \
+	rm -rf migrations/db/fss.db; \
+	rm -rf htmlcov; \
+	alembic upgrade head; \
+	coverage run -m pytest; \
 	coverage html
 
 start:

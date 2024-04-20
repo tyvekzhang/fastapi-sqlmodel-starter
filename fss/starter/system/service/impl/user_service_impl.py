@@ -72,9 +72,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         """
         username: str = loginCmd.username
         userDO: UserDO = await self.mapper.get_user_by_username(username=username)
-        if userDO is None or not await verify_password(
-            loginCmd.password, userDO.password
-        ):
+        if userDO is None or not verify_password(loginCmd.password, userDO.password):
             raise SystemException(
                 SystemResponseCode.AUTH_FAILED.code,
                 SystemResponseCode.AUTH_FAILED.msg,
@@ -198,8 +196,6 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
             Optional[List[UserQuery]]: The list of users or None if no users are found.
         """
         results: List[UserDO] = await self.mapper.select_list(page=page, size=size)
-        if results is None or len(results) == 0:
-            return
         return [UserQuery(**user.model_dump()) for user in results]
 
 

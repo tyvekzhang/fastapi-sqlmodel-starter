@@ -1,8 +1,8 @@
-"""add role and user role table
+"""add_role_and_user_role_table
 
-Revision ID: be65abd0ee39
+Revision ID: aa3b6ded81f6
 Revises: 947dad7dbfdb
-Create Date: 2024-04-15 16:04:01.379522
+Create Date: 2024-04-20 22:46:46.280013
 
 """
 
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "be65abd0ee39"
+revision = "aa3b6ded81f6"
 down_revision = "947dad7dbfdb"
 branch_labels = None
 depends_on = None
@@ -41,6 +41,7 @@ def upgrade():
         sa.Column("create_time", sa.DateTime(), nullable=True),
         sa.Column("update_time", sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("user_id", "role_id", name="uix_user_id_role_id"),
         comment="用户角色关联表",
     )
     op.create_index(
