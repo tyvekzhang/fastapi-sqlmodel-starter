@@ -25,9 +25,27 @@
 
 ## Features
 
-- Out-of-the-box, built-in support for common database caching (Sqlite[default], PostgreSQL, MySQL, file cache[default], Redis)
-- Built-in operations for nearly all single-table actions
-- Features such as database migration, static code analysis, API documentation, and more
+Here is the translation:
+
+* ⚡ Out-of-the-box, zero-dependency middleware implementation
+   - Defaults to SQLite, with flexible switching to PostgreSQL, MySQL databases
+   - Optional file or Redis caching
+* 🚢 Unlock a new Python coding experience for database operations
+* 🚀 Simplify ORM operations, with built-in common single-table operations
+* 🎨 Rich plugin mechanism
+   - Jwt security authentication
+   - Access rate limiting
+   - IP blacklisting
+* 🐋 Comprehensive containerization solutions
+  - Docker
+  - Docker-compose
+  - Kubernetes
+* ✅ Built on GitHub Actions for CI (Continuous Integration) and CD (Continuous Deployment)
+
+## Documentation
+- Interactive API documentation
+  <img alt="API doc"  src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/docs/img/api_doc.png">
+- Online documentation: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
 
 ## Quick Start
 1. First, ensure that your Python version is 3.9 or above.
@@ -58,8 +76,6 @@ alembic upgrade head
 8. Access: http://127.0.0.1:9010/docs
 9. First, create a new user through the **register** interface, and then proceed with authentication, everything is okay.
 
-## Documentation
-- https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/
 ## Contribution
 
 We welcome contributions to FastapiSqlmodelStarter! You can participate in the following ways:

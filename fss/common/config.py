@@ -4,7 +4,6 @@ import multiprocessing
 import os
 import subprocess
 import time
-from typing import Union
 from loguru import logger
 from pathlib import Path as path
 
@@ -21,29 +20,29 @@ if not os.path.exists(ENV_FILE):
 class Configs(BaseSettings):
     app_name: str
     app_desc: str
-    mode: str
     version: str
+    mode: str
     host: str
     port: int
-    access_token_expire_minutes: int = 60 * 24
-    refresh_token_expire_minutes: int = 60 * 24 * 30
+    workers: int
+    api_version: str
+    echo_sql: bool
+    log_file: str
+    enable_swagger: bool
     win_tz: str
     linux_tz: str
-    workers: Union[str, int]
-    backend_cors_origins: str
-    white_list_routes: str
-    algorithm: str
-    secret_key: str
-    log_file: str
-    api_version: str
     sqlalchemy_database_url: str
     enable_redis: bool
-    cache_pass: str
     cache_host: str
-    cache_port: str
+    cache_port: int
+    cache_pass: str
     db_num: int
-    enable_swagger: bool
-    echo_sql: bool
+    algorithm: str
+    secret_key: str
+    access_token_expire_minutes: int
+    refresh_token_expire_minutes: int
+    white_list_routes: str
+    backend_cors_origins: str
     black_ip_list: str
     enable_rate_limit: bool
     global_default_limits: str
