@@ -1,8 +1,10 @@
-.PHONY: help install lint test start image push docker-compose-start deploy-k8s
+.PHONY: help install lint test start image push docker-compose-start deploy-k8s clean
 
 tag = v1.0.0
 releaseName = fastapi-sqlmodel-starter
 dockerhubUser ?= tyvek2zhang
+fssDir = fss
+deployDir = deploy
 
 
 help:
@@ -15,10 +17,11 @@ help:
 	@echo "  push                  Push Docker image to dockerHub."
 	@echo "  docker-compose-start  Start the project using Docker Compose."
 	@echo "  deploy-k8s            Deploy the project to Kubernetes."
+	@echo "  clean                 Remove temporary files."
 	@echo "Use 'make <target>' to run a specific command."
 
 install:
-	cd fss && \
+	cd $(fssDir) && \
 	poetry shell && \
 	poetry install
 
@@ -27,13 +30,14 @@ lint:
 	pre-commit run --all-files --verbose --show-diff-on-failure
 
 test:
-	cd fss && \
+	cd $(fssDir) && \
 	alembic upgrade head && \
 	coverage run -m pytest && \
 	coverage html
 
 start:
-	cd fss && \
+	cd $(fssDir) && \
+	alembic upgrade head && \
 	python apiserver.py
 
 image:
@@ -43,8 +47,19 @@ push: image
 	docker push $(dockerhubUser)/$(releaseName):$(tag)
 
 docker-compose-start:
-	cd deploy && \
+	cd ${deployDir} && \
 	docker-compose up -d
 
 deploy-k8s:
-	kubectl apply -f deploy/k8s
+	kubectl apply -f ${deployDir}/k8s
+
+clean:
+	find . -type f -name '*.pyc' -delete; \
+	find . -type d -name __pycache__ -delete; \
+	rm -rf .pytest_cache; \
+	rm -rf .ruff_cache; \
+	rm -rf poetry.lock; \
+	rm -rf docs/build; \
+	rm -rf $(fssDir)/htmlcov; \
+	rm -rf $(fssDir)/.env_fss; \
+	rm -rf $(fssDir)/.coverage; \

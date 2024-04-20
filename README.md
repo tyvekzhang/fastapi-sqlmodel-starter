@@ -26,12 +26,28 @@
 
 ## 特性
 
-- 开箱即用, 内置常见数据库、缓存([默认]Sqlite, PostgreSQL, MySQL, [默认]文件缓存, Redis)
-- 自带单表的几乎所有操作
-- 数据库迁移, 静态代码扫描, 接口文档等一众特性
+- ⚡ 开箱即用, 实现中间件的零依赖
+   - 默认使用Sqlite, 也可自由切换PostgreSQL、MySQL数据库
+   - 可选文件或Redis缓存
+- 🚢 开启Python代码操作数据库的新体验
+- 🚀 简化ORM操作, 内置单表常见操作
+- 🎨 丰富的插件机制
+   - Jwt安全认证
+   - 访问限流
+   - Ip黑名单
+- 🐋 完备的容器化解决方案
+  - Docker
+  - Docker-compose
+  - Kubernetes
+- ✅ 基于GitHub Actions的CI (持续集成) 和 CD (持续交付)
+
+## 文档
+- 交互式API文档
+  <img alt="API doc"  src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/maindocs/img/api_doc.png">
+- 在线文档: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
 
 ## 快速开始
-1. 首先确保python的版本是3.9及以上的
+1. 首先确保python版本为3.9及以上
 2. 克隆代码
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
@@ -57,14 +73,13 @@ alembic upgrade head
    - Windows: python3 apiserver.py
    - macOS 或 Linux: python3 apiserver.py
 8. 访问: http://127.0.0.1:9010/docs
-9. 首先通过注册接口新建用户, 接着进行认证, 一切Ok.
-## 文档
-- https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/
+> 成功访问后需要创建用户并认证
+
 ## 贡献
 
 欢迎为 FastapiSqlmodelStarter 做出贡献！你可以通过以下方式参与：
 
-- 提交 Bug 或功能需求到 [Issue 追踪器](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/issues)
+- 提交 Bug 或功能需求到 [Issue清单](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/issues)
 - 提交代码改进的 Pull Request
 - 编写和改进文档
 - 分享你使用 FastapiSqlmodelStarter 的经验和想法
