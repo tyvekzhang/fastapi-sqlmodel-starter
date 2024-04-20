@@ -44,7 +44,7 @@ Here is the translation:
 
 ## Documentation
 - Interactive API documentation
-  <img alt="API doc"  src="https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/docs/img/api_doc.png">
+  <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
 - Online documentation: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
 
 ## Quick Start
@@ -74,7 +74,7 @@ alembic upgrade head
    - Windows: python3 apiserver.py
    - macOS or Linux: python3 apiserver.py
 8. Access: http://127.0.0.1:9010/docs
-9. First, create a new user through the **register** interface, and then proceed with authentication, everything is okay.
+> After successful access, you need to create a user and authenticate.
 
 ## Contribution
 
