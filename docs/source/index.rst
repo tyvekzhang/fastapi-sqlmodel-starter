@@ -24,9 +24,11 @@ Welcome to the documentation for this project. Fss aims to be one of top scaffol
     :target: https://fastapi-sqlmodel-starter.readthedocs.io/
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents
 
    usage
    config
    api
+   changelog
+   faq
