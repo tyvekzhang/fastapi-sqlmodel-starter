@@ -61,6 +61,10 @@ doc:
 	pip install -r docs/requirements.txt; \
 	sphinx-build -M html docs/source/ docs/build/
 
+pypi:
+	poetry build; \
+	poetry publish
+
 clean:
 	find . -type f -name '*.pyc' -delete; \
 	find . -type d -name __pycache__ -delete; \
