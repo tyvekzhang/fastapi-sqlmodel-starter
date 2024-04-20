@@ -45,4 +45,4 @@ Quick Start
 
    http://127.0.0.1:9010/docs
 
-9. First, create a new user through the **register** interface, and then proceed with authentication, everything is okay.
+9. First, create a new user through the register interface. Then, proceed with authentication.
