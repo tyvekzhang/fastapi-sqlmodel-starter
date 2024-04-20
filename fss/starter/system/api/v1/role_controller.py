@@ -54,8 +54,6 @@ async def retrieve_ordered_role(
 
         size: The size of the role list per page.
 
-        query: Query parameter for filtering roles.
-
         role_service: Service handling role-related operations.
 
         current_user: Current user performing the action.

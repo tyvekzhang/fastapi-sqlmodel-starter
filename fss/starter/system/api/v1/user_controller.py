@@ -204,8 +204,6 @@ async def list_user(
 
         size: The number of items per page.
 
-        query: Optional query filtering the user list.
-
         user_service: Service handling user operations.
 
         current_user: Logged-in user performing the operation.

@@ -44,6 +44,9 @@ class Configs(BaseSettings):
     db_num: int
     enable_swagger: bool
     echo_sql: bool
+    black_ip_list: str
+    enable_rate_limit: bool
+    global_default_limits: str
 
     class Config:
         env_file = ENV_FILE
