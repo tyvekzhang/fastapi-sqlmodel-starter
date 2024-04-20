@@ -61,6 +61,7 @@ pandas = "^2.2.2"
 xlsxwriter = "^3.2.0"
 openpyxl = "^3.1.2"
 slowapi = "^0.1.9"
+sphinx-rtd-theme = "^2.0.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.1.1"
@@ -69,7 +70,6 @@ coverage = "^7.4.4"
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "^7.2.6"
-sphinx-rtd-theme = "^2.0.0"
 
 [tool.poetry.scripts]
 [[tool.poetry.source]]
