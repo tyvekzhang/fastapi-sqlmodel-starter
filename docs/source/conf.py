@@ -22,6 +22,7 @@ release = "1.0.0-beta.2"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    "sphinx.ext.duration",
     "sphinx.ext.autodoc",
 ]
 

@@ -1,9 +1,6 @@
 API
 ===
 
-System
-~~~~~~~~~~~
-
 Probe
 ------
 .. automodule:: fss.starter.system.api.v1.probe_controller
