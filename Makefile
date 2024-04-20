@@ -58,6 +58,7 @@ clean:
 	find . -type d -name __pycache__ -delete; \
 	rm -rf .pytest_cache; \
 	rm -rf .ruff_cache; \
+	rm -rf dist; \
 	rm -rf poetry.lock; \
 	rm -rf docs/build; \
 	rm -rf $(fssDir)/htmlcov; \
