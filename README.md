@@ -81,10 +81,22 @@ git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
 cd fastapi-sqlmodel-starter
 ```
 2. 安装 Poetry并下载依赖
-```shell
-conda install poetry -y
-poetry install
-```
+- 通过虚拟环境安装
+  ```shell
+  conda install poetry -y
+  poetry install
+  ```
+- 或者通过pip安装, 首先设置镜像源
+  ```shell
+  mkdir -p ~/.pip
+  cat > ~/.pip/pip.conf << EOF
+  [global]
+  trusted-host = mirrors.aliyun.com
+  index-url = http://mirrors.aliyun.com/pypi/simple/
+  EOF
+  pip install poetry
+  poetry install
+  ```
 3. 数据库迁移
 ```shell
 cd fss && alembic upgrade head

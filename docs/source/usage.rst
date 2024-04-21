@@ -4,7 +4,7 @@ Quick Start
 .. _setting-up-a-conda-virtual-environment:
 
 Setting up a Conda Virtual Environment
-=====================================
+---------------------------------------
 
 > This part is optional, but may be useful for new Python learners.
 
@@ -27,7 +27,7 @@ Once you have conda, you can create an FSS environment with Python 3.11 (or grea
 .. _Quick Start:
 
 Quick Start
-===========
+------------
 
 1. **Clone the code**:
 
@@ -41,6 +41,11 @@ Quick Start
 .. code-block:: shell
 
     conda install poetry -y
+    poetry install
+Or
+.. code-block:: shell
+
+    pip install poetry
     poetry install
 
 3. **Database migration**:
