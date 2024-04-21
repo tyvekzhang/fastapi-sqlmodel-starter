@@ -6,7 +6,8 @@ Quick Start
 Setting up a Conda Virtual Environment
 ---------------------------------------
 
-> This part is optional, but may be useful for new Python learners.
+.. note::
+This part is optional, but may be useful for new Python learners.
 
 Typically, it's beneficial to install and run Python packages in a `virtual environment`_, especially when you have multiple versions of Python or use multiple packages. This can prevent issues during upgrades, conflicts between packages with different requirements, and installation problems due to multiple Python versions.
 
@@ -36,13 +37,14 @@ Quick Start
     git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
     cd fastapi-sqlmodel-starter
 
-2. **Install Poetry and download dependencies**:
+2. **Install Poetry and download dependencies with conda**:
 
 .. code-block:: shell
 
     conda install poetry -y
     poetry install
-Or
+3. **Or install Poetry and download dependencies via pip**:
+
 .. code-block:: shell
 
     pip install poetry

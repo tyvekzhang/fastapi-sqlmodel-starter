@@ -71,27 +71,28 @@ conda activate fss_py311
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
 cd fastapi-sqlmodel-starter
 ```
-2. Install Poetry and download dependencies
+2. Install Poetry and download dependencies with conda
 ```shell
-conda install poetry -y or pip install poetry
+conda install poetry -y
 poetry install
 ```
-Or
+3. Or install poetry and download dependencies with pip
 ```shell
 pip install poetry
 poetry install
 ```
-3. Database migration
+4. Database migration
 ```shell
 cd fss && alembic upgrade head
 ```
-4. Start the server
+5. Start the server
 ```shell
 python apiserver.py
 ```
-5. Interactive documentation address: http://127.0.0.1:9010/docs
-6. Congratulations, you've successfully started the server! You need to create a user and authenticate before accessing the API.
-7. You can stop the server at any time by pressing CTRL+C.
+6. Interactive documentation address: http://127.0.0.1:9010/docs
+7. Congratulations, you've successfully started the server! You need to create a user and authenticate before
+   accessing the API.
+8. You can stop the server at any time by pressing CTRL+C.
 
 ## Contribution
 
