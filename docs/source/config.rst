@@ -16,7 +16,7 @@ Project Info
     API_VERSION=/api/v1
     ECHO_SQL=True
     ENABLE_SWAGGER=True
-    LOG_FILE=/var/log/fss/log.txt
+    LOG_FILE=../log/fss/log.txt
 
 Time Zone
 ---------

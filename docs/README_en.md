@@ -47,34 +47,46 @@ Here is the translation:
   <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
 - Online documentation: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
 
+## Setting up a Conda Virtual Environment
+> This part is optional, but may be useful for new Python learners.
+
+Typically, it's beneficial to install and run Python packages in a [virtual environment](https://docs.python.org/3/glossary.html#term-virtual-environment), especially when you have multiple versions of Python or use multiple packages. This can prevent issues during upgrades, conflicts between packages with different requirements, and installation problems due to multiple Python versions.
+
+One choice for managing packages and environments is [conda](https://conda.io/en/latest/). A quick way to get conda is to install Miniconda: you can download it from [here](https://conda.io/en/latest/miniconda.html) and find installation instructions [here](https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation). For example, on Linux, you would run:
+```shell
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+Once you have conda, you can create an FSS environment with Python 3.11 (or greater than 3.9)
+```shell
+conda create -n fss_py311 python==3.11 -y
+```
+Then activate the virtual environment
+```shell
+conda activate fss_py311
+```
 ## Quick Start
-1. First, ensure that your Python version is 3.9 or above.
-2. Clone the code:
+1. Clone the code
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-cd fastapi-sqlmodel-starter/fss
+cd fastapi-sqlmodel-starter
 ```
-3. (Optional)Create a virtual environment, this example uses venv, similar tools include conda, virtualenv, etc.
+2. Install Poetry and download dependencies
 ```shell
-python3 -m venv .env_fss
-```
-4. (Optional)Activate the virtual environment:
-    - Windows: .env_fss\Scripts\activate
-    - macOS or Linux: source .env_fss/bin/activate
-5. Install Poetry and download dependencies:
-```shell
-pip install poetry -i https://pypi.tuna.tsinghua.edu.cn/simple
+conda install poetry -y
 poetry install
 ```
-6. Db migration
+3. Database migration
 ```shell
-alembic upgrade head
+cd fss && alembic upgrade head
 ```
-7. Start the server:
-   - Windows: python3 apiserver.py
-   - macOS or Linux: python3 apiserver.py
-8. Access: http://127.0.0.1:9010/docs
-> After successful access, you need to create a user and authenticate.
+4. Start the server
+```shell
+python apiserver.py
+```
+5. Interactive documentation address: http://127.0.0.1:9010/docs
+6. Congratulations, you've successfully started the server! You need to create a user and authenticate before accessing the API.
+7. You can stop the server at any time by pressing CTRL+C.
 
 ## Contribution
 
