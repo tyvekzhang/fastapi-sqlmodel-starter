@@ -19,5 +19,5 @@ class BaseRole(SQLModel):
 
 
 class RoleDO(ModelExt, BaseRole, BaseModel, table=True):
-    __tablename__ = "system_role"
+    __tablename__ = "sys_role"
     __table_args__ = {"comment": "角色信息表"}

@@ -22,5 +22,5 @@ class BaseUser(SQLModel):
 
 
 class UserDO(ModelExt, BaseUser, BaseModel, table=True):
-    __tablename__ = "system_user"
+    __tablename__ = "sys_user"
     __table_args__ = {"comment": "用户信息表"}
