@@ -73,7 +73,12 @@ cd fastapi-sqlmodel-starter
 ```
 2. Install Poetry and download dependencies
 ```shell
-conda install poetry -y
+conda install poetry -y or pip install poetry
+poetry install
+```
+Or
+```shell
+pip install poetry
 poetry install
 ```
 3. Database migration
