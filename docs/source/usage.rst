@@ -11,7 +11,8 @@ This part is optional, but may be useful for new Python learners.
 
 Typically, it's beneficial to install and run Python packages in a `virtual environment`_, especially when you have multiple versions of Python or use multiple packages. This can prevent issues during upgrades, conflicts between packages with different requirements, and installation problems due to multiple Python versions.
 
-One choice for managing packages and environments is `conda`_. A quick way to get conda is to install Miniconda: you can download it from `here`_ and find installation instructions `here`_. For example, on Linux, you would run:
+One choice for managing packages and environments is `conda`_. A quick way to get conda is to install Miniconda: you
+can download it from `here`_ and find installation instructions `there`_. For example, on Linux, you would run:
 
 .. code-block:: shell
 
@@ -71,4 +72,4 @@ Quick Start
 .. _virtual environment: https://docs.python.org/3/glossary.html#term-virtual-environment
 .. _conda: https://conda.io/en/latest/
 .. _here: https://conda.io/en/latest/miniconda.html
-.. _here: https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation
+.. _there: https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation

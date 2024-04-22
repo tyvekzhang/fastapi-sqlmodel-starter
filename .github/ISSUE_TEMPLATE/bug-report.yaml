@@ -1,4 +1,4 @@
-name: Bug Report
+name: "🕷️ Bug report"
 description: Report a bug encountered while operating Fastapi sqlmodel starter
 labels: kind/bug
 body:
