@@ -30,7 +30,7 @@ Here is the translation:
 * ⚡ Out-of-the-box, zero-dependency middleware implementation
    - Defaults to SQLite, with flexible switching to PostgreSQL, MySQL databases
    - Optional file or Redis caching
-* 🚢 Unlock a new Python coding experience for database operations
+* 🚢 Unlock a new Python coding experience for database table operations
 * 🚀 Simplify ORM operations, with built-in common single-table operations
 * 🎨 Rich plugin mechanism
    - Jwt security authentication
