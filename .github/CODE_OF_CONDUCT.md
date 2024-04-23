@@ -78,6 +78,3 @@ available at https://www.contributor-covenant.org/version/1/4/code-of-conduct.ht
 
 For answers to common questions about this code of conduct, see
 https://www.contributor-covenant.org/faq
-
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting
-the **Fastapi sqlmodel starter Code of Conduct Committee** via <tyvekzhang@gmail.com>.

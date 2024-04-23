@@ -74,5 +74,6 @@ clean:
 	rm -rf poetry.lock; \
 	rm -rf docs/build; \
 	rm -rf $(fssDir)/htmlcov; \
+	rm -rf $(fssDir)/migrations/db/fss.db; \
 	rm -rf $(fssDir)/.env_fss; \
 	rm -rf $(fssDir)/.coverage; \
