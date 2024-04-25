@@ -58,12 +58,7 @@ pandas = "^2.2.2"
 xlsxwriter = "^3.2.0"
 openpyxl = "^3.1.2"
 slowapi = "^0.1.9"
-
-[tool.poetry.group.pg.dependencies]
 asyncpg = "^0.29.0"
-redis = {extras = ["hiredis"], version = "^5.0.3"}
-
-[tool.poetry.group.mysql.dependencies]
 aiomysql = "^0.2.0"
 redis = {extras = ["hiredis"], version = "^5.0.3"}
 
