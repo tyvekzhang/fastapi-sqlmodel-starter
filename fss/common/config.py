@@ -8,6 +8,7 @@ from loguru import logger
 from pathlib import Path as path
 
 from pydantic.v1 import BaseSettings
+from typing import Tuple
 
 current_file_path = os.path.abspath(__file__)
 env_directory = path(current_file_path).parent.parent
@@ -67,7 +68,7 @@ else:
     time.tzset()
 
 
-def server_startup_config() -> tuple[str, int, int]:
+def server_startup_config() -> Tuple[str, int, int]:
     """
     Server startup config
     """
