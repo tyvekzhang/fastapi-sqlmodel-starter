@@ -3,6 +3,7 @@
 import uvicorn
 from fastapi_offline import FastAPIOffline
 from starlette.middleware.cors import CORSMiddleware
+from typing import Tuple
 
 from fss.common.config import configs, init_log, server_startup_config
 
@@ -27,7 +28,7 @@ if configs.backend_cors_origins:
     )
 
 
-def prepare_run() -> tuple[str, int, int]:
+def prepare_run() -> Tuple[str, int, int]:
     init_log()
     return server_startup_config()
 

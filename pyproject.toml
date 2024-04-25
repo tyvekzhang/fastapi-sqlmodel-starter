@@ -6,7 +6,7 @@ requires = [
 
 [tool.poetry]
 name = "fastapi-sqlmodel-starter"
-version = "1.0.3"
+version = "1.0.4"
 description = "Fss aims to be one of top scaffold in PyWeb."
 license = "MIT"
 authors = [
@@ -51,16 +51,21 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = "^1.7.4"
 alembic = "^1.13.1"
 sqlalchemy-utils = "^0.41.2"
-asyncpg = "^0.29.0"
 aiosqlite = "^0.20.0"
-aiomysql = "^0.2.0"
-redis = {extras = ["hiredis"], version = "^5.0.3"}
 eval-type-backport = "^0.1.3"
 diskcache = "^5.6.3"
 pandas = "^2.2.2"
 xlsxwriter = "^3.2.0"
 openpyxl = "^3.1.2"
 slowapi = "^0.1.9"
+
+[tool.poetry.group.pg.dependencies]
+asyncpg = "^0.29.0"
+redis = {extras = ["hiredis"], version = "^5.0.3"}
+
+[tool.poetry.group.mysql.dependencies]
+aiomysql = "^0.2.0"
+redis = {extras = ["hiredis"], version = "^5.0.3"}
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.1.1"
