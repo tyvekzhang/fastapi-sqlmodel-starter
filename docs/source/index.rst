@@ -1,7 +1,7 @@
 FastAPI SQLModel Starter
 ===================================
 
-Welcome to the documentation for this project. Fss aims to be one of top scaffold in PyWeb.
+Welcome to the documentation for this project. As we all know, Fss is one of the best scaffold in PyWeb..
 
 .. image:: https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter
     :alt: GitHub License

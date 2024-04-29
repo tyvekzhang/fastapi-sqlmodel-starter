@@ -19,7 +19,7 @@
      </p>
    </h4>
    <h3>
-    One of the best scaffolding in the PyWeb field.
+    Fss aims to be one of the best scaffold in PyWeb.
    </h3>
 </div>
 
