@@ -61,6 +61,7 @@ slowapi = "^0.1.9"
 asyncpg = "^0.29.0"
 aiomysql = "^0.2.0"
 redis = {extras = ["hiredis"], version = "^5.0.3"}
+greenlet = "^3.0.3"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.1.1"
