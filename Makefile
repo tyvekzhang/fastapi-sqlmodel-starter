@@ -6,7 +6,6 @@ dockerhubUser = tyvek2zhang
 fssDir = fss
 deployDir = deploy
 
-
 help:
 	@echo "Available make targets:"
 	@echo "  install               Install project dependencies using poetry."
@@ -44,7 +43,20 @@ start:
 	alembic upgrade head && \
 	python apiserver.py
 
-image:
+clean:
+	find . -type f -name '*.pyc' -delete; \
+	find . -type d -name __pycache__ -delete; \
+	rm -rf .pytest_cache; \
+	rm -rf .ruff_cache; \
+	rm -rf dist; \
+	rm -rf poetry.lock; \
+	rm -rf docs/build; \
+	rm -rf $(fssDir)/htmlcov; \
+	rm -rf $(fssDir)/migrations/db/fss.db; \
+	rm -rf $(fssDir)/.env_fss; \
+	rm -rf $(fssDir)/.coverage; \
+
+image: clean
 	docker build -t $(dockerhubUser)/$(releaseName):$(tag) .
 
 push: image
@@ -64,16 +76,3 @@ doc:
 pypi:
 	poetry build; \
 	poetry publish
-
-clean:
-	find . -type f -name '*.pyc' -delete; \
-	find . -type d -name __pycache__ -delete; \
-	rm -rf .pytest_cache; \
-	rm -rf .ruff_cache; \
-	rm -rf dist; \
-	rm -rf poetry.lock; \
-	rm -rf docs/build; \
-	rm -rf $(fssDir)/htmlcov; \
-	rm -rf $(fssDir)/migrations/db/fss.db; \
-	rm -rf $(fssDir)/.env_fss; \
-	rm -rf $(fssDir)/.coverage; \
