@@ -9,4 +9,4 @@
 .coverage*
 /fss/htmlcov/
 /*/build
-/log/
+log/
