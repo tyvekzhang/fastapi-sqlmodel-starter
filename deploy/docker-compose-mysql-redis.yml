@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # The mysql database.
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "fss123#456"
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+      --max_allowed_packet=128M;
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql8/data:/var/lib/mysql
+
+  # The redis cache.
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      # Mount the redis data directory to the container.
+      - ./volumes/redis/data:/data
+    # Set the redis password when startup redis server.
+    command: redis-server --requirepass fss123#456
+    ports:
+      - "6379:6379"
+
+  # The Fss server
+  fss_server:
+    container_name: fss_server
+    image: tyvek2zhang/fastapi-sqlmodel-starter:v1.0.0
+    restart: always
+    command: "sh -c 'cd fss && alembic upgrade head && python apiserver.py'"
+    depends_on:
+      - db
+      - redis
+    ports:
+      - 9010:9010
+    volumes:
+      - ./volumes/app/log:/app/log
