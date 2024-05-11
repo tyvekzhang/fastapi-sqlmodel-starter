@@ -2,7 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fss-server
+  name: fss-server-deployment
+  labels:
+    app: fss-server
 spec:
   replicas: 1
   selector:
@@ -15,7 +17,7 @@ spec:
     spec:
       containers:
       - name: fss-server
-        image: tyvek2zhang/fastapi-sqlmodel-starter:v1.0.0
+        image: tyvek2zhang/fss:v1.0.0
         command: ["sh", "-c", "cd fss && alembic upgrade head && python apiserver.py"]
         ports:
         - containerPort: 9010
