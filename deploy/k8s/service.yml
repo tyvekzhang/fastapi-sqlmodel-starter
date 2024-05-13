@@ -4,7 +4,6 @@ kind: Service
 metadata:
   name: fss-server-service
 spec:
-  type: NodePort
   selector:
     app: fss-server
   ports:

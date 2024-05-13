@@ -42,9 +42,9 @@
 - ✅ 基于GitHub Actions的CI (持续集成) 和 CD (持续交付)
 
 ## 文档
+- 在线文档: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
 - 交互式API文档
   <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
-- 在线文档: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
 
 ## 设置一个conda的虚拟环境
 > 这部分是可选的，但可能对新学 Python 的用户有用。
