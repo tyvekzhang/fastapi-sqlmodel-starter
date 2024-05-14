@@ -49,8 +49,8 @@
 ## 设置一个conda的虚拟环境
 > 这部分是可选的，但可能对新学 Python 的用户有用。
 
-通常来说，在[虚拟环境](https://docs.python.org/3/glossary.html#term-virtual-environment)中安装和运行Python包非常有用，尤其是当你安装了多个版本的Python或使用多个包时。这可以防止升级时出现的问题、不同需求的包之间的冲突、由于有多个Python版本可用而导致的安装问题等等。
-管理包和环境的一个选择是使用[conda](https://conda.io/en/latest/)。获取conda的一个快速方式是安装Miniconda：你可以在[这里](https://conda.io/en/latest/miniconda.html)下载它，并在[这里](https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation)找到安装说明。例如，在Linux上你会运行：
+通常来说, [虚拟环境](https://docs.python.org/3/glossary.html#term-virtual-environment)可以解决包冲突和多版本Python等问题, [conda](https://conda.io/en/latest/)是管理包和环境的一种选择. 在Linux上,可以从[这里](https://conda.io/en/latest/miniconda.html)下载Miniconda,
+并按照说明进行安装。
 ```shell
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
