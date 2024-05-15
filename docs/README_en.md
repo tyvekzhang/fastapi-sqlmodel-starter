@@ -50,9 +50,9 @@ Here is the translation:
 ## Setting up a Conda Virtual Environment
 > This part is optional, but may be useful for new Python learners.
 
-Typically, it's beneficial to install and run Python packages in a [virtual environment](https://docs.python.org/3/glossary.html#term-virtual-environment), especially when you have multiple versions of Python or use multiple packages. This can prevent issues during upgrades, conflicts between packages with different requirements, and installation problems due to multiple Python versions.
+Here is the translation of the given text to English:
 
-One choice for managing packages and environments is [conda](https://conda.io/en/latest/). A quick way to get conda is to install Miniconda: you can download it from [here](https://conda.io/en/latest/miniconda.html) and find installation instructions [here](https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation). For example, on Linux, you would run:
+Typically, [virtual environments](https://docs.python.org/3/glossary.html#term-virtual-environment) can solve issues like package conflicts and multiple versions of Python. [Conda](https://conda.io/en/latest/) is a choice for managing packages and environments. On Linux, you can download Miniconda from [here](https://conda.io/en/latest/miniconda.html) and follow the instructions for installation.
 ```shell
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
