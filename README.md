@@ -26,16 +26,16 @@
 
 ## 特性
 
-- ⚡ 开箱即用, 实现中间件的零依赖
-   - 默认使用Sqlite, 也可自由切换PostgreSQL、MySQL数据库
-   - 可选文件或Redis缓存
-- 🚢 开启Python代码操作数据库表的新体验
-- 🚀 简化ORM操作, 内置单表常见操作
-- 🎨 丰富的插件机制
+- ⚡ 开箱即用, 完全实现中间件零依赖
+   - 默认使用Sqlite, 也可自由切换PostgreSQL、MySQL
+   - 默认使用文件缓存, 支持切换为Redis
+- 🚢 开启Python操作数据库表结构的新体验
+- 🚀 内置单表常见操作, 简化ORM操作
+- 🎨 丰富插件机制
    - Jwt安全认证
    - 访问限流
    - Ip黑名单
-- 🐋 完备的容器化解决方案
+- 🐋 完备容器化解决方案
   - Docker
   - Docker-compose
   - Kubernetes
