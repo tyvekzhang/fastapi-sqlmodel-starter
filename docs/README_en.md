@@ -24,23 +24,20 @@
 </div>
 
 ## Features
-
-Here is the translation:
-
-* ⚡ Out-of-the-box, zero-dependency middleware implementation
-   - Defaults to SQLite, with flexible switching to PostgreSQL, MySQL databases
-   - Optional file or Redis caching
-* 🚢 Unlock a new Python coding experience for database table operations
-* 🚀 Simplify ORM operations, with built-in common single-table operations
-* 🎨 Rich plugin mechanism
-   - Jwt security authentication
+- ⚡ Out-of-the-box, completely middleware-free
+   - Uses SQLite by default, but can freely switch to PostgreSQL or MySQL
+   - Uses file caching by default, supports switching to Redis
+- 🚢 Embark on a new experience for Python database table structure operations
+- 🚀 Built-in common single-table operations, simplifying ORM operations
+- 🎨 Rich plugin mechanism
+   - JWT security authentication
    - Access rate limiting
-   - IP blacklisting
-* 🐋 Comprehensive containerization solutions
+   - IP blacklist
+- 🐋 Comprehensive containerization solution
   - Docker
   - Docker-compose
   - Kubernetes
-* ✅ Built on GitHub Actions for CI (Continuous Integration) and CD (Continuous Deployment)
+- ✅ CI (Continuous Integration) and CD (Continuous Delivery) based on GitHub Actions
 
 ## Documentation
 - Interactive API documentation
