@@ -40,9 +40,10 @@
 - ✅ CI (Continuous Integration) and CD (Continuous Delivery) based on GitHub Actions
 
 ## Documentation
+- Online documentation: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
 - Interactive API documentation
   <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
-- Online documentation: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
+
 
 ## Setting up a Conda Virtual Environment
 > This part is optional, but may be useful for new Python learners.
