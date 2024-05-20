@@ -66,11 +66,11 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
 conda config --set show_channel_urls yes
 ```
-现在创建带有Python 3.11(>=3.9)的Fss虚拟环境
+创建带有Python 3.11(>=3.9)的Fss虚拟环境
 ```shell
 conda create -n fss_py311 python==3.11 -y
 ```
-然后激活虚拟环境
+激活虚拟环境
 ```shell
 conda activate fss_py311
 ```
