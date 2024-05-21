@@ -43,7 +43,7 @@
 
 ## 文档
 - 在线文档: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
-- 交互式API文档
+- 交互式API文档示意
   <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
 
 ## 设置一个conda的虚拟环境
@@ -86,7 +86,7 @@ cd fastapi-sqlmodel-starter
   conda install poetry -y
   poetry install
   ```
-- 或者通过pip安装, 首先设置镜像源
+- 或者通过pip安装, 首先要设置镜像源
   ```shell
   mkdir -p ~/.pip
   cat > ~/.pip/pip.conf << EOF
@@ -94,6 +94,7 @@ cd fastapi-sqlmodel-starter
   trusted-host = mirrors.aliyun.com
   index-url = http://mirrors.aliyun.com/pypi/simple/
   EOF
+
   pip install poetry
   poetry install
   ```
@@ -106,17 +107,8 @@ cd fss && alembic upgrade head
 python apiserver.py
 ```
 5. 交互式文档地址: http://127.0.0.1:9010/docs
-6. 恭喜你, 启动成功. 接口访问前需要创建用户, 并进行认证
+6. 恭喜你, 运行成功. 接口访问前需创建用户, 并进行认证
 7. 可以随时按CTRL+C停止运行
-
-## 贡献
-
-欢迎为 FastapiSqlmodelStarter 做出贡献！你可以通过以下方式参与：
-
-- 提交 Bug 或功能需求到 [Issue清单](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/issues)
-- 提交代码改进的 Pull Request
-- 编写和改进文档
-- 分享你使用 FastapiSqlmodelStarter 的经验和想法
 
 ## 许可证
 
