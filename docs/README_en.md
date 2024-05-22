@@ -41,7 +41,7 @@
 
 ## Documentation
 - Online documentation: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
-- Interactive API documentation
+- Interactive API documentation demonstration
   <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
 
 
