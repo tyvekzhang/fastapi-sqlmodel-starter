@@ -41,21 +41,19 @@
 
 ## Documentation
 - Online documentation: [Read the docs](https://fastapi-sqlmodel-starter.readthedocs.io/en/latest/)
-- Interactive API documentation
+- Interactive API documentation demonstration
   <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
 
 
 ## Setting up a Conda Virtual Environment
 > This part is optional, but may be useful for new Python learners.
 
-Here is the translation of the given text to English:
-
 Typically, [virtual environments](https://docs.python.org/3/glossary.html#term-virtual-environment) can solve issues like package conflicts and multiple versions of Python. [Conda](https://conda.io/en/latest/) is a choice for managing packages and environments. On Linux, you can download Miniconda from [here](https://conda.io/en/latest/miniconda.html) and follow the instructions for installation.
 ```shell
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 ```
-Once you have conda, you can create an FSS environment with Python 3.11 (or greater than 3.9)
+Create an FSS environment with Python 3.11 (or greater than 3.9)
 ```shell
 conda create -n fss_py311 python==3.11 -y
 ```
@@ -91,15 +89,6 @@ python apiserver.py
 7. Congratulations, you've successfully started the server! You need to create a user and authenticate before
    accessing the API.
 8. You can stop the server at any time by pressing CTRL+C.
-
-## Contribution
-
-We welcome contributions to FastapiSqlmodelStarter! You can participate in the following ways:
-
-- Submit bugs or feature requests to the [Issue Tracker](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/issues)
-- Submit Pull Requests for code improvements
-- Write and improve documentation
-- Share your experiences and ideas using FastapiSqlmodelStarter
 
 ## License
 
