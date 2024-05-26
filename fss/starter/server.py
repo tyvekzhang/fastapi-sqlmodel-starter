@@ -16,7 +16,7 @@ app = FastAPIOffline(
     default_response_model_exclude_unset=True,
 )
 
-# Cors processing
+# Cors middleware
 if configs.backend_cors_origins:
     origins = [origin.strip() for origin in configs.backend_cors_origins.split(",")]
     app.add_middleware(
@@ -28,11 +28,17 @@ if configs.backend_cors_origins:
     )
 
 
-def prepare_run() -> Tuple[str, int, int]:
+def prepare() -> Tuple[str, int, int]:
+    """
+    Init log and extract server start option
+    """
     init_log()
     return server_startup_config()
 
 
 def run() -> None:
-    host, port, workers = prepare_run()
+    """
+    Server start
+    """
+    host, port, workers = prepare()
     uvicorn.run(app="fss.starter.server:app", host=host, port=port, workers=workers)
