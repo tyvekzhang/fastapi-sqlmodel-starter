@@ -14,8 +14,8 @@ def client():
 @pytest.mark.parametrize(
     "endpoint,expected_json",
     [
-        ("liveness", {"code": 0, "msg": "hi"}),
-        ("readiness", {"code": 0, "msg": "hello"}),
+        ("liveness", {"code": 0, "msg": "Hi"}),
+        ("readiness", {"code": 0, "msg": "Hello"}),
     ],
 )
 def test_probe(client, endpoint, expected_json):

@@ -18,7 +18,7 @@ async def liveness():
     Returns:
         dict: A status object with a 'code' and a 'msg' indicating liveness.
     """
-    return {"code": SystemResponseCode.SUCCESS.code, "msg": "hi"}
+    return {"code": SystemResponseCode.SUCCESS.code, "msg": "Hi"}
 
 
 @probe_router.get("/readiness")
@@ -38,10 +38,10 @@ async def readiness(
     try:
         cache_client: Cache = await get_cache_client()
         cache_key = f"user:{user_id}"
-        await cache_client.set(cache_key, "ok")
+        await cache_client.set(cache_key, "Ok")
         res = await cache_client.get(cache_key)
 
-        if "ok" != res:
+        if "Ok" != res:
             raise ValueError("Cache read mismatch")
 
         await cache_client.delete(cache_key)
@@ -52,4 +52,4 @@ async def readiness(
             "msg": f"Readiness check failed: {e}",
         }
 
-    return {"code": SystemResponseCode.SUCCESS.code, "msg": "hello"}
+    return {"code": SystemResponseCode.SUCCESS.code, "msg": "Hello"}
