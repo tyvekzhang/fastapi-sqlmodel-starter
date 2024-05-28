@@ -29,20 +29,21 @@ user_router = APIRouter()
 
 @user_router.post("/register")
 async def register_user(
-    create_data: UserCreateCmd, user_service: UserService = Depends(get_user_service)
+    user_create_cmd: UserCreateCmd,
+    user_service: UserService = Depends(get_user_service),
 ) -> BaseResponse[int]:
     """
     Registers a new user with the provided credentials.
 
     Args:
-        create_data: Data required for registration.
+        user_create_cmd: Data required for registration.
 
         user_service: Service handling user operations.
     Returns:
         BaseResponse with new user's ID.
     """
-    create_data.password = await get_password_hash(create_data.password)
-    user: UserDO = await user_service.register(data=create_data)
+    user_create_cmd.password = await get_password_hash(user_create_cmd.password)
+    user: UserDO = await user_service.register(data=user_create_cmd)
     return result.success(data=user.id)
 
 
