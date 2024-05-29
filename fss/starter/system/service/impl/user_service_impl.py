@@ -176,6 +176,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         Returns:
             UserDO: The newly created user.
         """
+        data.password = await get_password_hash(data.password)
         user: UserDO = await self.mapper.get_user_by_username(username=data.username)
         if user is not None:
             raise ServiceException(
