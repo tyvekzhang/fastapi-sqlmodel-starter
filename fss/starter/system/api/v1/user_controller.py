@@ -11,7 +11,6 @@ from fss.common.result import result
 from fss.common.result.result import BaseResponse
 from fss.common.schema.schema import Token, CurrentUser
 from fss.common.security.security import get_current_user
-from fss.common.security.security import get_password_hash
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.model.user_role_do import UserRoleDO
 from fss.starter.system.schema.user_schema import (
@@ -29,20 +28,20 @@ user_router = APIRouter()
 
 @user_router.post("/register")
 async def register_user(
-    create_data: UserCreateCmd, user_service: UserService = Depends(get_user_service)
+    user_create_cmd: UserCreateCmd,
+    user_service: UserService = Depends(get_user_service),
 ) -> BaseResponse[int]:
     """
     Registers a new user with the provided credentials.
 
     Args:
-        create_data: Data required for registration.
+        user_create_cmd: Data required for registration.
 
         user_service: Service handling user operations.
     Returns:
         BaseResponse with new user's ID.
     """
-    create_data.password = await get_password_hash(create_data.password)
-    user: UserDO = await user_service.register(data=create_data)
+    user: UserDO = await user_service.register(data=user_create_cmd)
     return result.success(data=user.id)
 
 
