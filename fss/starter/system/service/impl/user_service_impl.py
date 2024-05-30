@@ -200,11 +200,12 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         return [UserQuery(**user.model_dump()) for user in results]
 
 
-def get_user_service() -> UserService:
+def get_user_service(service_name: str = None) -> UserService:
     """
     Return an instance of the UserService implementation.
 
     Returns:
         UserService: An instance of the UserServiceImpl class.
     """
-    return UserServiceImpl(mapper=userMapper)
+    if service_name is None:
+        return UserServiceImpl(mapper=userMapper)

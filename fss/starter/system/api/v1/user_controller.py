@@ -24,20 +24,19 @@ from fss.starter.system.service.impl.user_service_impl import get_user_service
 from fss.starter.system.service.user_service import UserService
 
 user_router = APIRouter()
+user_service: UserService = get_user_service(service_name=None)
 
 
 @user_router.post("/register")
 async def register_user(
     user_create_cmd: UserCreateCmd,
-    user_service: UserService = Depends(get_user_service),
 ) -> BaseResponse[int]:
     """
-    Registers a new user with the provided credentials.
+    Registers a new user.
 
     Args:
         user_create_cmd: Data required for registration.
 
-        user_service: Service handling user operations.
     Returns:
         BaseResponse with new user's ID.
     """
@@ -47,16 +46,14 @@ async def register_user(
 
 @user_router.get("/me")
 async def get_user(
-    user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[UserQuery]:
     """
     Retrieves the profile of the current user.
 
     Args:
-        user_service: Service handling user operations.
-
         current_user: Currently authenticated user.
+
     Returns:
         BaseResponse with current user's profile information.
     """
@@ -67,7 +64,6 @@ async def get_user(
 @user_router.post("/login")
 async def login(
     login_form: OAuth2PasswordRequestForm = Depends(),
-    user_service: UserService = Depends(get_user_service),
 ) -> Token:
     """
     Authenticates user and provides an access token.
@@ -75,7 +71,6 @@ async def login(
     Args:
         login_form: Login credentials.
 
-        user_service: Service handling user operations.
     Returns:
         Token object with access token.
     """
@@ -86,7 +81,6 @@ async def login(
 @user_router.delete("/{id}")
 async def remove_user(
     id: int,
-    user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
@@ -94,10 +88,8 @@ async def remove_user(
 
     Args:
         id: User ID to remove.
-
-        user_service: Service handling user operations.
-
         current_user: Logged-in user performing the operation.
+
     Returns:
         Success result message
     """
@@ -108,7 +100,6 @@ async def remove_user(
 @user_router.put("/")
 async def update_user(
     updateUserCmd: UpdateUserCmd,
-    user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
@@ -116,10 +107,8 @@ async def update_user(
 
     Args:
         updateUserCmd: Command containing updated user info.
-
-        user_service: Service handling user operations.
-
         current_user: Logged-in user performing the operation.
+
     Returns:
         Success result message
     """
@@ -129,16 +118,14 @@ async def update_user(
 
 @user_router.get("/exportTemplate")
 async def export_user_template(
-    user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> StreamingResponse:
     """
     Endpoint to export a template for user information.
 
     Args:
-        user_service: Service for user operations.
-
         current_user: Logged-in user requesting the template.
+
     Returns:
         StreamingResponse with user field
     """
@@ -148,7 +135,6 @@ async def export_user_template(
 @user_router.post("/import")
 async def import_user(
     file: UploadFile,
-    user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
@@ -156,8 +142,6 @@ async def import_user(
 
     Args:
         file: The file containing user information to import.
-
-        user_service: Service handling user operations.
 
         current_user: Logged-in user performing the import.
     Returns:
@@ -170,7 +154,6 @@ async def import_user(
 @user_router.get("/export")
 async def export_user(
     params: Params = Depends(),
-    user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> StreamingResponse:
     """
@@ -179,9 +162,8 @@ async def export_user(
     Args:
         params: Filtering and format parameters for export.
 
-        user_service: Service handling user operations.
-
         current_user: Logged-in user requesting the export.
+
     Returns:
         StreamingResponse with user info
     """
@@ -192,7 +174,6 @@ async def export_user(
 async def list_user(
     page: int = 1,
     size: int = 100,
-    user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[List[UserQuery]]:
     """
@@ -203,9 +184,8 @@ async def list_user(
 
         size: The number of items per page.
 
-        user_service: Service handling user operations.
-
         current_user: Logged-in user performing the operation.
+
     Returns:
         BaseResponse with userQuery list.
     """
@@ -215,16 +195,14 @@ async def list_user(
 
 @user_router.get("/count")
 async def user_count(
-    user_service: UserService = Depends(get_user_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[int]:
     """
     Endpoint to count the total number of users.
 
     Args:
-        user_service: Service handling user operations.
-
         current_user: Logged-in user requesting the count.
+
     Returns:
         BaseResponse with user count.
     """
