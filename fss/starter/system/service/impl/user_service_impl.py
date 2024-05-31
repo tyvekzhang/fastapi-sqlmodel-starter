@@ -21,7 +21,7 @@ from fss.common.util.excel import export_template
 from fss.common.security.security import verify_password, get_password_hash
 from fss.starter.system.enum.system import SystemResponseCode, SystemConstantCode
 from fss.starter.system.exception.system import SystemException
-from fss.starter.system.mapper.user_mapper import UserMapper, userMapper
+from fss.starter.system.mapper.user_mapper import UserMapper
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.schema.user_schema import (
     UserQuery,
@@ -198,14 +198,3 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         """
         results: List[UserDO] = await self.mapper.select_list(page=page, size=size)
         return [UserQuery(**user.model_dump()) for user in results]
-
-
-def get_user_service(service_name: str = None) -> UserService:
-    """
-    Return an instance of the UserService implementation.
-
-    Returns:
-        UserService: An instance of the UserServiceImpl class.
-    """
-    if service_name is None:
-        return UserServiceImpl(mapper=userMapper)

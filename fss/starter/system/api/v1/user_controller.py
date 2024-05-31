@@ -11,6 +11,7 @@ from fss.common.result import result
 from fss.common.result.result import BaseResponse
 from fss.common.schema.schema import Token, CurrentUser
 from fss.common.security.security import get_current_user
+from fss.starter.system.factory.service_factory import get_user_service
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.model.user_role_do import UserRoleDO
 from fss.starter.system.schema.user_schema import (
@@ -20,11 +21,10 @@ from fss.starter.system.schema.user_schema import (
     UpdateUserCmd,
 )
 from fss.starter.system.service.impl.user_role_service_impl import get_user_role_service
-from fss.starter.system.service.impl.user_service_impl import get_user_service
 from fss.starter.system.service.user_service import UserService
 
 user_router = APIRouter()
-user_service: UserService = get_user_service(service_name=None)
+user_service: UserService = get_user_service()
 
 
 @user_router.post("/register")
