@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from fss.common.cache.cache import get_cache_client, Cache
 from fss.starter.system.enum.system import SystemResponseCode
-from fss.starter.system.service.impl.user_service_impl import get_user_service
+from fss.starter.system.factory.service_factory import get_user_service
 from fss.starter.system.service.user_service import UserService
 
 probe_router = APIRouter()
