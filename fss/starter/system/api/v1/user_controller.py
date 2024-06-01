@@ -84,7 +84,7 @@ async def remove_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
-    Endpoint to remove a user by their ID.
+    Remove a user by their ID.
 
     Args:
         id: User ID to remove.
@@ -103,7 +103,7 @@ async def update_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
-    Endpoint to update user information.
+    Update user information.
 
     Args:
         updateUserCmd: Command containing updated user info.
@@ -121,7 +121,7 @@ async def export_user_template(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> StreamingResponse:
     """
-    Endpoint to export a template for user information.
+    Export a template for user information.
 
     Args:
         current_user: Logged-in user requesting the template.
@@ -138,7 +138,7 @@ async def import_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
-    Endpoint to import user information from a file.
+    Import user information from a file.
 
     Args:
         file: The file containing user information to import.
@@ -157,7 +157,7 @@ async def export_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> StreamingResponse:
     """
-    Endpoint to export user information based on provided parameters.
+    Export user information based on provided parameters.
 
     Args:
         params: Filtering and format parameters for export.
@@ -177,7 +177,7 @@ async def list_user(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[List[UserQuery]]:
     """
-    Endpoint to list users with pagination.
+    List users with pagination.
 
     Args:
         page: The number of the current page.
@@ -198,7 +198,7 @@ async def user_count(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[int]:
     """
-    Endpoint to count the total number of users.
+    Count the total number of users.
 
     Args:
         current_user: Logged-in user requesting the count.
@@ -217,7 +217,7 @@ async def user_roles(
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
-    Endpoint to assign roles to a user.
+    Assign roles to a user.
 
     Args:
         user_id: ID of the user to assign roles to.
