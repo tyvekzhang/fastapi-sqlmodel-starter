@@ -1,6 +1,6 @@
 """Role domain service impl"""
 
-from fss.starter.system.mapper.role_mapper import RoleMapper, roleMapper
+from fss.starter.system.mapper.role_mapper import RoleMapper
 
 from fss.common.service.impl.service_impl import ServiceImpl
 from fss.starter.system.model.role_do import RoleDO
@@ -21,13 +21,3 @@ class RoleServiceImpl(ServiceImpl[RoleMapper, RoleDO], RoleService):
         """
         super(RoleServiceImpl, self).__init__(mapper=mapper)
         self.mapper = mapper
-
-
-def get_role_service() -> RoleService:
-    """
-    Return an instance of the RoleService implementation.
-
-    Returns:
-        RoleService: An instance of the RoleServiceImpl class.
-    """
-    return RoleServiceImpl(mapper=roleMapper)

@@ -1,4 +1,4 @@
-"""BaseMapper defines the implemented functionalities"""
+"""BaseMapper defines the database operations to be implemented"""
 
 from abc import ABC, abstractmethod
 from typing import Any, List
