@@ -9,18 +9,18 @@ from fss.common.result import result
 from fss.common.result.result import BaseResponse
 from fss.common.schema.schema import CurrentUser
 from fss.common.security.security import get_current_user
+from fss.starter.system.factory.service_factory import get_role_service
 from fss.starter.system.model.role_do import RoleDO
 from fss.starter.system.schema.role_schema import RoleCreateCmd, RoleDeleteCmd
-from fss.starter.system.service.impl.role_service_impl import get_role_service
 from fss.starter.system.service.role_service import RoleService
 
 role_router = APIRouter()
+role_service: RoleService = get_role_service()
 
 
 @role_router.post("/")
 async def create_role(
     create_data: RoleCreateCmd,
-    role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[int]:
     """
@@ -28,10 +28,8 @@ async def create_role(
 
     Args:
         create_data: Command with role creation data.
-
-        role_service: Service handling role-related operations.
-
         current_user: Current user performing the action.
+
     Returns:
         BaseResponse with created role ID.
     """
@@ -43,7 +41,6 @@ async def create_role(
 async def retrieve_ordered_role(
     page: int = 1,
     size: int = 100,
-    role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[List[RoleDO]]:
     """
@@ -51,12 +48,9 @@ async def retrieve_ordered_role(
 
     Args:
         page: Page number for listing roles.
-
         size: The size of the role list per page.
-
-        role_service: Service handling role-related operations.
-
         current_user: Current user performing the action.
+
     Returns:
         BaseResponse with list of RoleDO.
     """
@@ -69,7 +63,6 @@ async def retrieve_ordered_role(
 @role_router.get("/pageOrdered")
 async def retrieve_page_ordered_role(
     params: Params = Depends(),
-    role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[Any]:
     """
@@ -77,10 +70,8 @@ async def retrieve_page_ordered_role(
 
     Args:
         params: Pagination and ordering parameters.
-
-        role_service: Service handling role-related operations.
-
         current_user: Current user performing the action.
+
     Returns:
         BaseResponse with paginated roles.
     """
@@ -91,7 +82,6 @@ async def retrieve_page_ordered_role(
 @role_router.get("/{id}")
 async def get_role(
     id: int,
-    role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[RoleDO]:
     """
@@ -99,10 +89,8 @@ async def get_role(
 
     Args:
         id: The unique identifier of the role.
-
-        role_service: Service handling role-related operations.
-
         current_user: Current user performing the action.
+
     Returns:
         BaseResponse with RoleDO details.
     """
@@ -113,7 +101,6 @@ async def get_role(
 @role_router.post("/roles")
 async def remove_role_by_ids(
     roleDeleteCmd: RoleDeleteCmd,
-    role_service: RoleService = Depends(get_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
@@ -121,10 +108,8 @@ async def remove_role_by_ids(
 
     Args:
         roleDeleteCmd: List of role IDs to delete.
-
-        role_service: Service handling role-related operations.
-
         current_user: Current user performing the action.
+
     Returns:
         BaseResponse with count of deleted roles.
     """
