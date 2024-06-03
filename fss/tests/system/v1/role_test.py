@@ -87,7 +87,7 @@ def test_create_role(
 @pytest.mark.parametrize(
     "endpoint, expected_status_code, expected_code",
     [
-        ("listOrdered", 200, 0),
+        ("rolesOrdered", 200, 0),
     ],
 )
 def test_list_ordered_role(
@@ -131,22 +131,6 @@ def test_remove_role_by_ids(
     response = client.post(
         f"{configs.api_version}/role/{endpoint}", json=test_dada, headers=headers
     )
-    assert response.status_code == expected_status_code
-    assert response.json()["code"] == expected_code
-
-
-@pytest.mark.parametrize(
-    "endpoint, expected_status_code, expected_code",
-    [
-        ("pageOrdered", 200, 0),
-    ],
-)
-def test_page_ordered_role(
-    login, client, endpoint, expected_status_code, expected_code
-):
-    access_token, user_id = login
-    headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/role/{endpoint}", headers=headers)
     assert response.status_code == expected_status_code
     assert response.json()["code"] == expected_code
 

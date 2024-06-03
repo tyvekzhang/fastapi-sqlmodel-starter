@@ -263,20 +263,6 @@ def test_list_user(login, client, endpoint, expected_status_code, expected_code)
 
 
 @pytest.mark.parametrize(
-    "endpoint, expected_status_code, expected_code",
-    [
-        ("count", 200, 0),
-    ],
-)
-def test_user_count(login, client, endpoint, expected_status_code, expected_code):
-    access_token, user_id = login
-    headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
-    assert response.status_code == expected_status_code
-    assert response.json()["code"] == expected_code
-
-
-@pytest.mark.parametrize(
     "endpoint, test_data, expected_status_code, expected_code",
     [
         ("roles", "[1, 2, 3]", 200, 0),

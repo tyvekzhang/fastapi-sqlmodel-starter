@@ -15,23 +15,20 @@ class ServiceImpl(Generic[M, T], Service[T]):
     def __init__(self, mapper: Type[M]):
         self.mapper = mapper
 
-    async def save(self, *, data: T) -> T:
-        return await self.mapper.insert(data=data)
+    async def save(self, *, record: T) -> T:
+        return await self.mapper.insert_record(record=record)
 
-    async def save_batch(self, *, data_list: List[T]) -> bool:
-        await self.mapper.insert_batch(data_list=data_list)
+    async def batch_save(self, *, records: List[T]) -> bool:
+        await self.mapper.batch_insert_records(records=records)
         return True
 
-    async def get_by_id(self, *, id: T) -> T:
-        return await self.mapper.select_by_id(id=id)
+    async def retrieve_by_id(self, *, id: T) -> T:
+        return await self.mapper.select_record_by_id(id=id)
 
-    async def count(self) -> int:
-        return await self.mapper.select_count()
+    async def retrieve_records(self, *, page: int, size: int, **kwargs) -> List[T]:
+        return await self.mapper.select_records(page=page, size=size, **kwargs)
 
-    async def list(self, *, page: int, size: int, **kwargs) -> List[T]:
-        return await self.mapper.select_list(page=page, size=size, **kwargs)
-
-    async def list_ordered(
+    async def retrieve_ordered_records(
         self,
         *,
         page: int,
@@ -40,18 +37,12 @@ class ServiceImpl(Generic[M, T], Service[T]):
         sort_order: T = None,
         **kwargs,
     ) -> List[T]:
-        return await self.mapper.select_list_ordered(
+        return await self.mapper.select_ordered_records(
             page=page, size=size, order_by=order_by, sort_order=sort_order, **kwargs
         )
 
-    async def list_page(self, *, params: T) -> List[T]:
-        return await self.mapper.select_page(params=params)
-
-    async def list_page_ordered(self, *, params: T = None) -> List[T]:
-        return await self.mapper.select_page_ordered(params=params)
-
-    async def update_by_id(self, *, data: T) -> bool:
-        affect_row: int = await self.mapper.update_by_id(data=data)
+    async def edit_by_id(self, *, record: T) -> bool:
+        affect_row: int = await self.mapper.update_record_by_id(record=record)
         if affect_row != 1:
             raise SystemException(
                 SystemResponseCode.PARAMETER_ERROR.code,
@@ -59,10 +50,12 @@ class ServiceImpl(Generic[M, T], Service[T]):
             )
         return True
 
-    async def update_batch_by_ids(
-        self, *, ids: List[Any], data: dict, db_session: Any = None
+    async def batch_edit_by_ids(
+        self, *, ids: List[Any], record: dict, db_session: Any = None
     ) -> bool:
-        affect_row: int = await self.mapper.update_batch_by_ids(ids=ids, data=data)
+        affect_row: int = await self.mapper.batch_update_records_by_ids(
+            ids=ids, record=record
+        )
         if len(ids) != affect_row:
             raise SystemException(
                 SystemResponseCode.PARAMETER_ERROR.code,
@@ -71,7 +64,7 @@ class ServiceImpl(Generic[M, T], Service[T]):
         return True
 
     async def remove_by_id(self, *, id: T) -> bool:
-        affect_row: int = await self.mapper.delete_by_id(id=id)
+        affect_row: int = await self.mapper.delete_record_by_id(id=id)
         if affect_row != 1:
             raise SystemException(
                 SystemResponseCode.PARAMETER_ERROR.code,
@@ -80,7 +73,7 @@ class ServiceImpl(Generic[M, T], Service[T]):
         return True
 
     async def remove_batch_by_ids(self, *, ids: List[Any]) -> bool:
-        affect_row: int = await self.mapper.delete_batch_by_ids(ids=ids)
+        affect_row: int = await self.mapper.batch_delete_records_by_ids(ids=ids)
         if len(ids) != affect_row:
             raise SystemException(
                 SystemResponseCode.PARAMETER_ERROR.code,

@@ -6,24 +6,23 @@ from typing import Any, List
 
 class BaseMapper(ABC):
     @abstractmethod
-    async def insert(self, *, data: Any, db_session: Any) -> Any: ...
+    async def insert_record(self, *, record: Any, db_session: Any) -> Any: ...
 
     @abstractmethod
-    async def insert_batch(self, *, data_list: List[Any], db_session: Any) -> int: ...
+    async def batch_insert_records(
+        self, *, records: List[Any], db_session: Any
+    ) -> int: ...
 
     @abstractmethod
-    async def select_by_id(self, *, id: Any, db_session: Any) -> Any: ...
+    async def select_record_by_id(self, *, id: Any, db_session: Any) -> Any: ...
 
     @abstractmethod
-    async def select_count(self, *, db_session: Any) -> int: ...
-
-    @abstractmethod
-    async def select_list(
+    async def select_records(
         self, *, page: int, size: int, db_session: Any, **kwargs
     ) -> List[Any]: ...
 
     @abstractmethod
-    async def select_list_ordered(
+    async def select_ordered_records(
         self,
         *,
         page: int,
@@ -35,28 +34,17 @@ class BaseMapper(ABC):
     ) -> List[Any]: ...
 
     @abstractmethod
-    async def select_page(self, *, params: Any, db_session: Any) -> List[Any]: ...
+    async def update_record_by_id(self, *, record: Any, db_session: Any) -> int: ...
 
     @abstractmethod
-    async def select_page_ordered(
-        self,
-        *,
-        params: Any,
-        order_by: Any,
-        sort_order: Any,
-        db_session: Any,
-    ) -> List[Any]: ...
-
-    @abstractmethod
-    async def update_by_id(self, *, data: Any, db_session: Any) -> int: ...
-
-    @abstractmethod
-    async def update_batch_by_ids(
-        self, *, ids: List[Any], data: dict, db_session: Any = None
+    async def batch_update_records_by_ids(
+        self, *, ids: List[Any], record: dict, db_session: Any = None
     ) -> int: ...
 
     @abstractmethod
-    async def delete_by_id(self, *, id: Any, db_session: Any) -> int: ...
+    async def delete_record_by_id(self, *, id: Any, db_session: Any) -> int: ...
 
     @abstractmethod
-    async def delete_batch_by_ids(self, *, ids: List[Any], db_session: Any) -> int: ...
+    async def batch_delete_records_by_ids(
+        self, *, ids: List[Any], db_session: Any
+    ) -> int: ...
