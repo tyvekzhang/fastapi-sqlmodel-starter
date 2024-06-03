@@ -57,7 +57,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         Returns:
             Optional[UserQuery]: The user query object if found, None otherwise.
         """
-        user_do = await self.mapper.select_by_id(id=id)
+        user_do = await self.mapper.select_record_by_id(id=id)
         return UserQuery(**user_do.model_dump()) if user_do else None
 
     async def login(self, loginCmd: LoginCmd) -> Token:
@@ -115,20 +115,20 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
 
     async def import_user(self, file: UploadFile):
         """
-        Import user data from an Excel file.
+        Import user record from an Excel file.
 
         Args:
-            file (UploadFile): The Excel file containing user data.
+            file (UploadFile): The Excel file containing user record.
         """
         contents = await file.read()
         import_df = pd.read_excel(io.BytesIO(contents))
-        user_datas: UserQuery = [
-            user_data for user_data in import_df.to_dict(orient="records")
+        user_records: UserQuery = [
+            user_record for user_record in import_df.to_dict(orient="records")
         ]
         user_import_list = []
         user_name_list = []
-        for user_data in user_datas:
-            user_import = UserDO(**user_data)
+        for user_record in user_records:
+            user_import = UserDO(**user_record)
             user_import.password = await get_password_hash(user_import.password)
             user_import_list.append(user_import)
             user_name_list.append(user_import.username)
@@ -145,47 +145,48 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
                 SystemResponseCode.USER_NAME_EXISTS.code,
                 SystemResponseCode.USER_NAME_EXISTS.msg + err_msg,
             )
-        await self.mapper.insert_batch(data_list=user_import_list)
+        await self.mapper.batch_insert_records(records=user_import_list)
 
     async def export_user(self, params: Params) -> StreamingResponse:
         """
-        Export user data to an Excel file.
+        Export user record to an Excel file.
 
         Args:
             params (Params): The query parameters for filtering users.
 
         Returns:
-            StreamingResponse: The Excel file containing user data.
+            StreamingResponse: The Excel file containing user record.
         """
-        user_pages = await self.mapper.select_page(params=params)
-        user_items = user_pages.__dict__["items"]
-        user_data = []
-        for user in user_items:
-            user_data.append(UserQuery(**user.model_dump()))
+        user_pages, _ = await self.mapper.select_records(
+            page=params.page, size=params.size
+        )
+        records = []
+        for user in user_pages:
+            records.append(UserQuery(**user.model_dump()))
         return await export_template(
-            schema=UserQuery, file_name="user", data_list=user_data
+            schema=UserQuery, file_name="user", records=records
         )
 
-    async def register(self, data: UserCreateCmd) -> UserDO:
+    async def register(self, record: UserCreateCmd) -> UserDO:
         """
         Register a new user.
 
         Args:
-            data (UserCreateCmd): The user creation command containing username and password.
+            record (UserCreateCmd): The user creation command containing username and password.
 
         Returns:
             UserDO: The newly created user.
         """
-        data.password = await get_password_hash(data.password)
-        user: UserDO = await self.mapper.get_user_by_username(username=data.username)
+        record.password = await get_password_hash(record.password)
+        user: UserDO = await self.mapper.get_user_by_username(username=record.username)
         if user is not None:
             raise ServiceException(
                 SystemResponseCode.USER_NAME_EXISTS.code,
                 SystemResponseCode.USER_NAME_EXISTS.msg,
             )
-        return await self.mapper.insert(data=data)
+        return await self.mapper.insert_record(record=record)
 
-    async def list_user(self, page: int, size: int) -> Optional[List[UserQuery]]:
+    async def retrieve_user(self, page: int, size: int) -> Optional[List[UserQuery]]:
         """
         List users with pagination.
 
@@ -196,5 +197,5 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         Returns:
             Optional[List[UserQuery]]: The list of users or None if no users are found.
         """
-        results: List[UserDO] = await self.mapper.select_list(page=page, size=size)
+        results, _ = await self.mapper.select_records(page=page, size=size)
         return [UserQuery(**user.model_dump()) for user in results]

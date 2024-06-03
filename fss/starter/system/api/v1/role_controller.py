@@ -1,9 +1,8 @@
 """Role operation controller"""
 
-from typing import Any, List, Dict
+from typing import List, Dict
 
 from fastapi import APIRouter, Depends
-from fastapi_pagination import Params
 
 from fss.common.result import result
 from fss.common.result.result import BaseResponse
@@ -20,25 +19,25 @@ role_service: RoleService = get_role_service()
 
 @role_router.post("/")
 async def create_role(
-    create_data: RoleCreateCmd,
+    role_create_cmd: RoleCreateCmd,
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> BaseResponse[int]:
     """
     Creates a new role with the provided data.
 
     Args:
-        create_data: Command with role creation data.
+        role_create_cmd: Command with role creation data.
         current_user: Current user performing the action.
 
     Returns:
         BaseResponse with created role ID.
     """
-    role: RoleDO = await role_service.save(data=create_data)
+    role: RoleDO = await role_service.save(record=role_create_cmd)
     return result.success(data=role.id)
 
 
-@role_router.get("/listOrdered")
-async def retrieve_ordered_role(
+@role_router.get("/rolesOrdered")
+async def retrieve_ordered_roles(
     page: int = 1,
     size: int = 100,
     current_user: CurrentUser = Depends(get_current_user()),
@@ -54,28 +53,9 @@ async def retrieve_ordered_role(
     Returns:
         BaseResponse with list of RoleDO.
     """
-    results: List[RoleDO] = await role_service.list_ordered(
+    results, _ = await role_service.retrieve_ordered_records(
         page=page, size=size, order_by="sort"
     )
-    return result.success(data=results)
-
-
-@role_router.get("/pageOrdered")
-async def retrieve_page_ordered_role(
-    params: Params = Depends(),
-    current_user: CurrentUser = Depends(get_current_user()),
-) -> BaseResponse[Any]:
-    """
-    Retrieves paginated roles in an ordered manner.
-
-    Args:
-        params: Pagination and ordering parameters.
-        current_user: Current user performing the action.
-
-    Returns:
-        BaseResponse with paginated roles.
-    """
-    results = await role_service.list_page_ordered(params=params)
     return result.success(data=results)
 
 
@@ -94,7 +74,7 @@ async def get_role(
     Returns:
         BaseResponse with RoleDO details.
     """
-    role_do: RoleDO = await role_service.get_by_id(id=id)
+    role_do: RoleDO = await role_service.retrieve_by_id(id=id)
     return result.success(data=role_do)
 
 

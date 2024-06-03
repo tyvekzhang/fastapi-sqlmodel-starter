@@ -40,7 +40,7 @@ async def register_user(
     Returns:
         BaseResponse with new user's ID.
     """
-    user: UserDO = await user_service.register(data=user_create_cmd)
+    user: UserDO = await user_service.register(record=user_create_cmd)
     return result.success(data=user.id)
 
 
@@ -112,7 +112,7 @@ async def update_user(
     Returns:
         Success result message
     """
-    await user_service.update_by_id(data=updateUserCmd)
+    await user_service.edit_by_id(record=updateUserCmd)
     return result.success()
 
 
@@ -189,24 +189,8 @@ async def list_user(
     Returns:
         BaseResponse with userQuery list.
     """
-    results: List[UserQuery] = await user_service.list_user(page=page, size=size)
+    results: List[UserQuery] = await user_service.retrieve_user(page=page, size=size)
     return result.success(data=results)
-
-
-@user_router.get("/count")
-async def user_count(
-    current_user: CurrentUser = Depends(get_current_user()),
-) -> BaseResponse[int]:
-    """
-    Count the total number of users.
-
-    Args:
-        current_user: Logged-in user requesting the count.
-
-    Returns:
-        BaseResponse with user count.
-    """
-    return result.success(await user_service.count())
 
 
 @user_router.post("/{user_id}/roles")
@@ -236,5 +220,5 @@ async def user_roles(
         user_role_list.append(
             UserRoleDO(id=manual_id, user_id=user_id, role_id=role_id)
         )
-    await user_role_service.save_batch(data_list=user_role_list)
+    await user_role_service.batch_save(records=user_role_list)
     return result.success()
