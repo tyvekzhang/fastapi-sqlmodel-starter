@@ -1,6 +1,7 @@
 """User domain schema"""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from sqlmodel import Field
 
 
 class UserCreateCmd(BaseModel):
@@ -8,9 +9,16 @@ class UserCreateCmd(BaseModel):
     UserCreate schema
     """
 
-    username: str
-    password: str
-    nickname: str
+    username: str = Field(..., min_length=2, max_length=32)
+    password: str = Field(..., min_length=6, max_length=64)
+    nickname: str = Field(..., min_length=2, max_length=32)
+
+    @field_validator("password")
+    def password_complexity(cls, value):
+        """
+        Add your verification rules here
+        """
+        return value
 
 
 class UserQuery(BaseModel):
