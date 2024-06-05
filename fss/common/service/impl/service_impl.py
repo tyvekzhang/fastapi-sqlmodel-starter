@@ -72,7 +72,7 @@ class ServiceImpl(Generic[M, T], Service[T]):
             )
         return True
 
-    async def remove_batch_by_ids(self, *, ids: List[Any]) -> bool:
+    async def batch_remove_by_ids(self, *, ids: List[Any]) -> bool:
         affect_row: int = await self.mapper.batch_delete_records_by_ids(ids=ids)
         if len(ids) != affect_row:
             raise SystemException(
