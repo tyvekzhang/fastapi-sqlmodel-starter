@@ -1,6 +1,6 @@
 .PHONY: help install lint test start image push docker-compose-start deploy-k8s doc pypi clean
 
-tag ?= v1.0.0
+tag ?= v1.1.0
 releaseName = fastapi-sqlmodel-starter
 dockerhubUser = tyvek2zhang
 fssDir = fss

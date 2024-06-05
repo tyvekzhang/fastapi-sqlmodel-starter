@@ -93,5 +93,5 @@ async def remove_role_by_ids(
     Returns:
         BaseResponse with count of deleted roles.
     """
-    await role_service.remove_batch_by_ids(ids=roleDeleteCmd.role_ids)
+    await role_service.batch_remove_by_ids(ids=roleDeleteCmd.role_ids)
     return result.success()
