@@ -177,13 +177,13 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         Returns:
             UserDO: The newly created user.
         """
-        record.password = await get_password_hash(record.password)
         user: UserDO = await self.mapper.get_user_by_username(username=record.username)
         if user is not None:
             raise ServiceException(
                 SystemResponseCode.USER_NAME_EXISTS.code,
                 SystemResponseCode.USER_NAME_EXISTS.msg,
             )
+        record.password = await get_password_hash(record.password)
         return await self.mapper.insert_record(record=record)
 
     async def retrieve_user(self, page: int, size: int) -> Optional[List[UserQuery]]:
