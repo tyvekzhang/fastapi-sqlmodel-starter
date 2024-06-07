@@ -18,7 +18,7 @@ def client():
             "register",
             {
                 "username": "example_user",
-                "password": "example_password",
+                "password": "Example_password_1",
                 "nickname": "Example Nickname",
             },
             200,
@@ -40,7 +40,7 @@ def login(client):
         "login",
         {
             "username": "example_user",
-            "password": "example_password",
+            "password": "Example_password_1",
         },
         200,
         "bearer",
