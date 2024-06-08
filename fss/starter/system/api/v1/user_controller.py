@@ -40,8 +40,25 @@ async def register_user(
     Returns:
         BaseResponse with new user's ID.
     """
-    user: UserDO = await user_service.register(record=user_create_cmd)
+    user: UserDO = await user_service.register(user_create_cmd=user_create_cmd)
     return result.success(data=user.id)
+
+
+@user_router.post("/login")
+async def login(
+    login_form: OAuth2PasswordRequestForm = Depends(),
+) -> Token:
+    """
+    Authenticates user and provides an access token.
+
+    Args:
+        login_form: Login credentials.
+
+    Returns:
+        Token object with access token.
+    """
+    login_cmd = LoginCmd(username=login_form.username, password=login_form.password)
+    return await user_service.login(login_cmd=login_cmd)
 
 
 @user_router.get("/me")
@@ -59,23 +76,6 @@ async def get_user(
     """
     user: UserQuery = await user_service.find_by_id(id=current_user.user_id)
     return result.success(data=user)
-
-
-@user_router.post("/login")
-async def login(
-    login_form: OAuth2PasswordRequestForm = Depends(),
-) -> Token:
-    """
-    Authenticates user and provides an access token.
-
-    Args:
-        login_form: Login credentials.
-
-    Returns:
-        Token object with access token.
-    """
-    loginCmd = LoginCmd(username=login_form.username, password=login_form.password)
-    return await user_service.login(loginCmd)
 
 
 @user_router.delete("/{id}")

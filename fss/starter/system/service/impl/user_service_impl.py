@@ -60,46 +60,50 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         user_do = await self.mapper.select_record_by_id(id=id)
         return UserQuery(**user_do.model_dump()) if user_do else None
 
-    async def login(self, loginCmd: LoginCmd) -> Token:
+    async def login(self, login_cmd: LoginCmd) -> Token:
         """
         Perform login and return an access token and refresh token.
 
         Args:
-            loginCmd (LoginCmd): The login command containing username and password.
+            login_cmd (LoginCmd): The login command containing username and password.
 
         Returns:
             Token: The access token and refresh token.
         """
-        username: str = loginCmd.username
-        userDO: UserDO = await self.mapper.get_user_by_username(username=username)
-        if userDO is None or not verify_password(loginCmd.password, userDO.password):
+        # verify username and password
+        username: str = login_cmd.username
+        user_do: UserDO = await self.mapper.get_user_by_username(username=username)
+        if user_do is None or not verify_password(login_cmd.password, user_do.password):
             raise SystemException(
                 SystemResponseCode.AUTH_FAILED.code,
                 SystemResponseCode.AUTH_FAILED.msg,
                 status_code=http.HTTPStatus.UNAUTHORIZED,
             )
+        # generate access token
         access_token_expires = timedelta(minutes=configs.access_token_expire_minutes)
         access_token = await security.create_token(
-            subject=userDO.id,
+            subject=user_do.id,
             expires_delta=access_token_expires,
             token_type=TokenTypeEnum.access,
         )
+        # generate refresh token
         refresh_token = await security.create_token(
-            subject=userDO.id,
+            subject=user_do.id,
             token_type=TokenTypeEnum.refresh,
         )
         token = Token(
             access_token=access_token,
             expired_at=int(access_token_expires.total_seconds()),
-            token_type="bearer",
+            token_type=TokenTypeEnum.bearer,
             refresh_token=refresh_token,
             re_expired_at=int(
                 timedelta(minutes=configs.refresh_token_expire_minutes).total_seconds()
             ),
         )
+        # cache token info
         cache_client: Cache = await get_cache_client()
         await cache_client.set(
-            f"{SystemConstantCode.USER_KEY.msg}{userDO.id}",
+            f"{SystemConstantCode.USER_KEY.msg}{user_do.id}",
             access_token,
             access_token_expires,
         )
@@ -167,24 +171,28 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
             schema=UserQuery, file_name="user", records=records
         )
 
-    async def register(self, record: UserCreateCmd) -> UserDO:
+    async def register(self, user_create_cmd: UserCreateCmd) -> UserDO:
         """
         Register a new user.
 
         Args:
-            record (UserCreateCmd): The user creation command containing username and password.
+            user_create_cmd (UserCreateCmd): The user creation command containing username and password.
 
         Returns:
             UserDO: The newly created user.
         """
-        user: UserDO = await self.mapper.get_user_by_username(username=record.username)
+        # user name duplicate verification
+        user: UserDO = await self.mapper.get_user_by_username(
+            username=user_create_cmd.username
+        )
         if user is not None:
             raise ServiceException(
                 SystemResponseCode.USER_NAME_EXISTS.code,
                 SystemResponseCode.USER_NAME_EXISTS.msg,
             )
-        record.password = await get_password_hash(record.password)
-        return await self.mapper.insert_record(record=record)
+        # generate hash password
+        user_create_cmd.password = await get_password_hash(user_create_cmd.password)
+        return await self.mapper.insert_record(record=user_create_cmd)
 
     async def retrieve_user(self, page: int, size: int) -> Optional[List[UserQuery]]:
         """
