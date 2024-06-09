@@ -1,6 +1,7 @@
 """User domain schema"""
 
 import re
+from typing import Optional, Dict, Any
 
 from pydantic import BaseModel, field_validator
 from sqlmodel import Field
@@ -68,3 +69,12 @@ class UserExport(BaseModel):
     username: str
     password: str
     nickname: str
+
+
+class UserFilterParams(BaseModel):
+    """
+    UserFilterParams schema
+    """
+
+    filter_by: Optional[Dict[str, Any]] = None
+    like: Optional[Dict[str, str]] = None

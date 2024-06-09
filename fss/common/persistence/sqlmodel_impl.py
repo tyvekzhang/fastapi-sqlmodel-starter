@@ -101,11 +101,11 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         """
         db_session = db_session or self.db.session
         query = select(self.model)
-        if "filter_by" in kwargs:
+        if "filter_by" in kwargs and kwargs["filter_by"] is not None:
             query = query.filter_by(**kwargs["filter_by"])
-        elif "filter" in kwargs:
+        elif "filter" in kwargs and kwargs["filter"] is not None:
             query = query.filter(kwargs["filter"])
-        if "like" in kwargs:
+        if "like" in kwargs and kwargs["like"] is not None:
             for column, value in kwargs["like"].items():
                 query = query.filter(getattr(self.model, column).like(value))
 
