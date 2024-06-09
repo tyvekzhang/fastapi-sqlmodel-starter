@@ -110,12 +110,15 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         return token
 
     async def export_user_template(
-        self,
+        self, file_name: str = "user_template"
     ) -> StreamingResponse:
         """
         Export an empty user import template.
+
+        Args:
+            file_name: File name for export
         """
-        return await export_template(schema=UserExport, file_name="user_template")
+        return await export_template(schema=UserExport, file_name=file_name)
 
     async def import_user(self, file: UploadFile):
         """
@@ -126,37 +129,43 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         """
         contents = await file.read()
         import_df = pd.read_excel(io.BytesIO(contents))
-        user_records: UserQuery = [
-            user_record for user_record in import_df.to_dict(orient="records")
-        ]
+        user_records = import_df.to_dict(orient="records")
+        if len(user_records) == 0:
+            return
+
         user_import_list = []
         user_name_list = []
+
         for user_record in user_records:
             user_import = UserDO(**user_record)
             user_import.password = await get_password_hash(user_import.password)
             user_import_list.append(user_import)
             user_name_list.append(user_import.username)
         await file.close()
-        user_list: List[UserDO] = await self.mapper.get_user_by_usernames(
+
+        # Check if any usernames already exist
+        existing_users: List[UserDO] = await self.mapper.get_user_by_usernames(
             usernames=user_name_list
         )
 
-        if len(user_list) > 0:
-            err_msg = ""
-            for user in user_list:
-                err_msg += "," + str(user.username)
+        if existing_users:
+            existing_usernames = [user.username for user in existing_users]
+            err_msg = ",".join(existing_usernames)
             raise SystemException(
                 SystemResponseCode.USER_NAME_EXISTS.code,
-                SystemResponseCode.USER_NAME_EXISTS.msg + err_msg,
+                f"{SystemResponseCode.USER_NAME_EXISTS.msg}{err_msg}",
             )
         await self.mapper.batch_insert_records(records=user_import_list)
 
-    async def export_user(self, params: Params) -> StreamingResponse:
+    async def export_user(
+        self, params: Params, file_name: str = "user"
+    ) -> StreamingResponse:
         """
         Export user record to an Excel file.
 
         Args:
             params (Params): The query parameters for filtering users.
+            file_name: File name for export
 
         Returns:
             StreamingResponse: The Excel file containing user record.
@@ -168,7 +177,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         for user in user_pages:
             records.append(UserQuery(**user.model_dump()))
         return await export_template(
-            schema=UserQuery, file_name="user", records=records
+            schema=UserQuery, file_name=file_name, records=records
         )
 
     async def register(self, user_create_cmd: UserCreateCmd) -> UserDO:
@@ -194,7 +203,9 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         user_create_cmd.password = await get_password_hash(user_create_cmd.password)
         return await self.mapper.insert_record(record=user_create_cmd)
 
-    async def retrieve_user(self, page: int, size: int) -> Optional[List[UserQuery]]:
+    async def retrieve_user(
+        self, page: int, size: int, **kwargs
+    ) -> Optional[List[UserQuery]]:
         """
         List users with pagination.
 
@@ -205,5 +216,5 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         Returns:
             Optional[List[UserQuery]]: The list of users or None if no users are found.
         """
-        results, _ = await self.mapper.select_records(page=page, size=size)
+        results, _ = await self.mapper.select_records(page=page, size=size, **kwargs)
         return [UserQuery(**user.model_dump()) for user in results]

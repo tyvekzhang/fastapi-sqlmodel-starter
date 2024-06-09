@@ -257,7 +257,12 @@ def test_import_user_error(
 def test_list_user(login, client, endpoint, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    response = client.get(
+        f"{configs.api_version}/user/"
+        f"{endpoint}?filter_by=%7B%22nickname%22%3A%20%22string%22%7D&like=%7B%22username%22%3A%20"
+        f"%22str%25%22%7D",
+        headers=headers,
+    )
     assert response.status_code == expected_status_code
     assert response.json()["code"] == expected_code
 

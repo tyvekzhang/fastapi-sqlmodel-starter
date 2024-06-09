@@ -41,8 +41,8 @@ class ServiceImpl(Generic[M, T], Service[T]):
             page=page, size=size, order_by=order_by, sort_order=sort_order, **kwargs
         )
 
-    async def edit_by_id(self, *, record: T) -> bool:
-        affect_row: int = await self.mapper.update_record_by_id(record=record)
+    async def modify_by_id(self, *, update_user_cmd: T) -> bool:
+        affect_row: int = await self.mapper.update_record_by_id(record=update_user_cmd)
         if affect_row != 1:
             raise SystemException(
                 SystemResponseCode.PARAMETER_ERROR.code,
@@ -50,7 +50,7 @@ class ServiceImpl(Generic[M, T], Service[T]):
             )
         return True
 
-    async def batch_edit_by_ids(
+    async def batch_modify_by_ids(
         self, *, ids: List[Any], record: dict, db_session: Any = None
     ) -> bool:
         affect_row: int = await self.mapper.batch_update_records_by_ids(
