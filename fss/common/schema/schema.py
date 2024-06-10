@@ -21,3 +21,13 @@ class CurrentUser(BaseModel):
     """
 
     user_id: int
+
+
+class BasePage(BaseModel):
+    """
+    Paging schema
+    """
+
+    page: int = 1
+    size: int = 10
+    count: bool = False

@@ -1,9 +1,8 @@
 """User operation controller"""
 
-import json
-from typing import List, Dict, Optional
+from typing import List, Dict
 
-from fastapi import APIRouter, Depends, UploadFile, Query
+from fastapi import APIRouter, Depends, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_pagination import Params
 from starlette.responses import StreamingResponse
@@ -20,6 +19,7 @@ from fss.starter.system.schema.user_schema import (
     UserQuery,
     LoginCmd,
     UpdateUserCmd,
+    UserFilterParams,
 )
 from fss.starter.system.service.impl.user_role_service_impl import get_user_role_service
 from fss.starter.system.service.user_service import UserService
@@ -171,44 +171,28 @@ async def export_user(
     return await user_service.export_user(params=params)
 
 
-@user_router.get("/list")
+@user_router.post("/list")
 async def list_user(
-    page: int = Query(1, description="The number of the current page."),
-    size: int = Query(100, description="The number of items per page."),
-    filter_by: Optional[str] = Query(
-        None,
-        description="Filter criteria in JSON format.",
-        example={"nickname": "string"},
-    ),
-    like: Optional[str] = Query(
-        None,
-        description="Like criteria in JSON format.",
-        example={"username": "str%"},
-    ),
+    userFilterParams: UserFilterParams,
     current_user: CurrentUser = Depends(get_current_user),
 ) -> BaseResponse:
     """
     List users with pagination.
 
     Args:
-        page: The number of the current page.
-
-        size: The number of items per page.
-
-        filter_by: Filter criteria in JSON format.
-
-        like: Like criteria in JSON format.
+        userFilterParams: param to filter user data
 
         current_user: Logged-in user performing the operation.
 
     Returns:
         BaseResponse with userQuery list.
     """
-    filter_by_dict = json.loads(filter_by) if filter_by else None
-    like_dict = json.loads(like) if like else None
 
     records: List[UserQuery] = await user_service.retrieve_user(
-        page=page, size=size, filter_by=filter_by_dict, like=like_dict
+        page=userFilterParams.page,
+        size=userFilterParams.size,
+        filter_by=userFilterParams.filter_by,
+        like=userFilterParams.like,
     )
     return BaseResponse(data=records)
 

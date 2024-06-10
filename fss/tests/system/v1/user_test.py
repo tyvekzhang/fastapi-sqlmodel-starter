@@ -249,18 +249,24 @@ def test_import_user_error(
 
 
 @pytest.mark.parametrize(
-    "endpoint, expected_status_code, expected_code",
+    "endpoint, test_data, expected_status_code, expected_code",
     [
-        ("list", 200, 0),
+        (
+            "list",
+            {"page": 1, "size": 10, "count": False, "filter_by": {}, "like": {}},
+            200,
+            0,
+        ),
     ],
 )
-def test_list_user(login, client, endpoint, expected_status_code, expected_code):
+def test_list_user(
+    login, client, endpoint, test_data, expected_status_code, expected_code
+):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(
-        f"{configs.api_version}/user/"
-        f"{endpoint}?filter_by=%7B%22nickname%22%3A%20%22string%22%7D&like=%7B%22username%22%3A%20"
-        f"%22str%25%22%7D",
+    response = client.post(
+        f"{configs.api_version}/user/" f"{endpoint}",
+        json=test_data,
         headers=headers,
     )
     assert response.status_code == expected_status_code
