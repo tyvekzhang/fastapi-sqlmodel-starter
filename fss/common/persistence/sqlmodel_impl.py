@@ -101,17 +101,16 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         """
         db_session = db_session or self.db.session
         query = select(self.model)
-        if "filter_by" in kwargs and kwargs["filter_by"] is not None:
+        if "filter_by" in kwargs and kwargs["filter_by"]:
             query = query.filter_by(**kwargs["filter_by"])
-        elif "filter" in kwargs and kwargs["filter"] is not None:
-            query = query.filter(kwargs["filter"])
-        if "like" in kwargs and kwargs["like"] is not None:
+        if "like" in kwargs and kwargs["like"]:
             for column, value in kwargs["like"].items():
                 query = query.filter(getattr(self.model, column).like(value))
-
-        count_query = select(func.count()).select_from(query.subquery())
-        total_count_result = await db_session.execute(count_query)
-        total_count = total_count_result.scalar()
+        total_count = 0
+        if "count" in kwargs and kwargs["count"]:
+            count_query = select(func.count()).select_from(query.subquery())
+            total_count_result = await db_session.execute(count_query)
+            total_count = total_count_result.scalar()
 
         paginated_query = query.offset((page - 1) * size).limit(size)
         exec_response = await db_session.execute(paginated_query)
@@ -147,8 +146,6 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         query = select(self.model)
         if "filter_by" in kwargs:
             query = query.filter_by(**kwargs["filter_by"])
-        elif "filter" in kwargs:
-            query = query.filter(kwargs["filter"])
         if "like" in kwargs:
             for column, value in kwargs["like"].items():
                 query = query.filter(getattr(self.model, column).like(value))
@@ -167,9 +164,11 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
                 .limit(size)
                 .order_by(columns[order_by].des())
             )
-        count_query = select(func.count()).select_from(query.subquery())
-        total_count_result = await db_session.execute(count_query)
-        total_count = total_count_result.scalar()
+        total_count = 0
+        if "count" in kwargs and kwargs["count"]:
+            count_query = select(func.count()).select_from(query.subquery())
+            total_count_result = await db_session.execute(count_query)
+            total_count = total_count_result.scalar()
 
         exec_response = await db_session.execute(query)
         records = exec_response.scalars().all()

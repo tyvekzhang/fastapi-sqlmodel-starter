@@ -6,6 +6,8 @@ from typing import Optional, Dict, Any
 from pydantic import BaseModel, field_validator
 from sqlmodel import Field
 
+from fss.common.schema.schema import BasePage
+
 
 class UserCreateCmd(BaseModel):
     """
@@ -71,7 +73,7 @@ class UserExport(BaseModel):
     nickname: str
 
 
-class UserFilterParams(BaseModel):
+class UserFilterParams(BasePage):
     """
     UserFilterParams schema
     """
