@@ -81,6 +81,24 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         exec_response = await db_session.execute(statement)
         return exec_response.scalar_one_or_none()
 
+    async def select_records_by_ids(
+        self, *, ids: List[Any], db_session: Any = None
+    ) -> List[Any]:
+        """
+        Select records by a list of ID.
+
+        Args:
+            ids: The IDs of the records to retrieve.
+            db_session: The database session to use. If None, uses the default session.
+
+        Returns:
+            The retrieved records, or None if not found.
+        """
+        db_session = db_session or self.db.session
+        statement = select(self.model).where(self.model.id.in_(ids))
+        exec_response = await db_session.execute(statement)
+        return exec_response.scalars().all()
+
     async def select_records(
         self, *, page: int = 1, size: int = 100, db_session: Any = None, **kwargs
     ) -> Tuple[

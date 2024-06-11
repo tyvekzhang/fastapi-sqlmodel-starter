@@ -13,7 +13,6 @@ from fss.common.schema.schema import Token, CurrentUser
 from fss.common.security.security import get_current_user
 from fss.starter.system.factory.service_factory import get_user_service
 from fss.starter.system.model.user_do import UserDO
-from fss.starter.system.model.user_role_do import UserRoleDO
 from fss.starter.system.schema.user_schema import (
     UserCreateCmd,
     UserQuery,
@@ -22,6 +21,7 @@ from fss.starter.system.schema.user_schema import (
     UserFilterParams,
 )
 from fss.starter.system.service.impl.user_role_service_impl import get_user_role_service
+from fss.starter.system.service.user_role_service import UserRoleService
 from fss.starter.system.service.user_service import UserService
 
 user_router = APIRouter()
@@ -201,7 +201,7 @@ async def list_user(
 async def user_roles(
     user_id: int,
     role_ids: List[int],
-    user_role_service: UserService = Depends(get_user_role_service),
+    user_role_service: UserRoleService = Depends(get_user_role_service),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
@@ -209,17 +209,14 @@ async def user_roles(
 
     Args:
         user_id: ID of the user to assign roles to.
+
         role_ids: List of role IDs to assign to the user.
+
         user_role_service: Service handling user-role associations.
+
         current_user: Logged-in user performing the role assignment.
     Returns:
         Success result message
     """
-    user_role_list = []
-    for i, role_id in enumerate(role_ids):
-        manual_id = user_id + role_id + i
-        user_role_list.append(
-            UserRoleDO(id=manual_id, user_id=user_id, role_id=role_id)
-        )
-    await user_role_service.batch_save(records=user_role_list)
+    await user_role_service.assign_roles(user_id=user_id, role_ids=role_ids)
     return result.success()

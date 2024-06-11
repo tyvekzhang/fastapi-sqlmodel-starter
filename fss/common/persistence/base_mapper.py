@@ -17,6 +17,11 @@ class BaseMapper(ABC):
     async def select_record_by_id(self, *, id: Any, db_session: Any) -> Any: ...
 
     @abstractmethod
+    async def select_records_by_ids(
+        self, *, ids: List[Any], db_session: Any
+    ) -> List[Any]: ...
+
+    @abstractmethod
     async def select_records(
         self, *, page: int, size: int, db_session: Any, **kwargs
     ) -> List[Any]: ...
