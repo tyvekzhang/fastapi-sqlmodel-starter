@@ -6,7 +6,7 @@ requires = [
 
 [tool.poetry]
 name = "fastapi-sqlmodel-starter"
-version = "1.1.0"
+version = "1.1.1"
 description = "Fss aims to be one of the best scaffold in PyWeb."
 license = "MIT"
 authors = [
