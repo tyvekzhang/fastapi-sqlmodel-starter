@@ -62,10 +62,13 @@ def generator(
         )
 
 
+global_generator = generator()
+
+
 def snowflake_id() -> int:
     """
     Returns a unique snowflake ID.
 
     :return: Snowflake ID
     """
-    return next(generator())
+    return next(global_generator)
