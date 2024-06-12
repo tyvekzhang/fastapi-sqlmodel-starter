@@ -80,18 +80,18 @@ async def get_role(
 
 @role_router.post("/roles")
 async def remove_role_by_ids(
-    roleDeleteCmd: RoleDeleteCmd,
+    role_delete_Cmd: RoleDeleteCmd,
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
     Delete roles by a list of IDs.
 
     Args:
-        roleDeleteCmd: List of role IDs to delete.
+        role_delete_Cmd: List of role IDs to delete.
         current_user: Current user performing the action.
 
     Returns:
         BaseResponse with count of deleted roles.
     """
-    await role_service.batch_remove_by_ids(ids=roleDeleteCmd.role_ids)
+    await role_service.batch_remove_by_ids(ids=role_delete_Cmd.role_ids)
     return result.success()
