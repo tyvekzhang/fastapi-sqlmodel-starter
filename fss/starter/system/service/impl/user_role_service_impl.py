@@ -3,7 +3,7 @@
 from typing import List
 
 from fss.common.service.impl.service_impl import ServiceImpl
-from fss.starter.system.mapper.user_role_mapper import UserRoleMapper, userRoleMapper
+from fss.starter.system.mapper.user_role_mapper import UserRoleMapper
 from fss.starter.system.model.user_role_do import UserRoleDO
 from fss.starter.system.service.user_role_service import UserRoleService
 
@@ -33,13 +33,3 @@ class UserRoleServiceImpl(ServiceImpl[UserRoleMapper, UserRoleDO], UserRoleServi
             UserRoleDO(user_id=user_id, role_id=role_id) for role_id in role_ids
         ]
         await self.mapper.batch_insert_records(records=user_roles)
-
-
-def get_user_role_service() -> UserRoleService:
-    """
-    Return an instance of the UserRoleService implementation.
-
-    Returns:
-        UserRoleService: An instance of the UserRoleServiceImpl class.
-    """
-    return UserRoleServiceImpl(mapper=userRoleMapper)

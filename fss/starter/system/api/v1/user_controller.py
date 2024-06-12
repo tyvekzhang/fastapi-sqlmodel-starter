@@ -11,7 +11,10 @@ from fss.common.result import result
 from fss.common.result.result import BaseResponse
 from fss.common.schema.schema import Token, CurrentUser
 from fss.common.security.security import get_current_user
-from fss.starter.system.factory.service_factory import get_user_service
+from fss.starter.system.factory.service_factory import (
+    get_user_service,
+    get_user_role_service,
+)
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.schema.user_schema import (
     UserCreateCmd,
@@ -20,7 +23,6 @@ from fss.starter.system.schema.user_schema import (
     UpdateUserCmd,
     UserFilterParams,
 )
-from fss.starter.system.service.impl.user_role_service_impl import get_user_role_service
 from fss.starter.system.service.user_role_service import UserRoleService
 from fss.starter.system.service.user_service import UserService
 
