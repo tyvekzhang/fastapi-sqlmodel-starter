@@ -32,7 +32,7 @@ services:
   # The Fss server
   fss_server:
     container_name: fss_server
-    image: tyvek2zhang/fastapi-sqlmodel-starter:v1.0.0
+    image: tyvek2zhang/fastapi-sqlmodel-starter:1.1.1
     restart: always
     command: "sh -c 'cd fss && alembic upgrade head && python apiserver.py'"
     depends_on:
