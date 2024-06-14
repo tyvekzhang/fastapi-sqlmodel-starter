@@ -38,6 +38,7 @@ async def register_user(
     Registers a new user.
 
     Args:
+
         user_create_cmd: Data required for registration.
 
     Returns:
@@ -55,6 +56,7 @@ async def login(
     Authenticates user and provides an access token.
 
     Args:
+
         login_form: Login credentials.
 
     Returns:

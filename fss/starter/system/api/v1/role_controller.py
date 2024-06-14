@@ -26,9 +26,10 @@ async def create_role(
     Creates a new role with the provided data.
 
     Args:
-        role_create_cmd: Command with role creation data.
-        current_user: Current user performing the action.
 
+        role_create_cmd: Command with role creation data.
+
+        current_user: Current user performing the action.
     Returns:
         BaseResponse with created role ID.
     """

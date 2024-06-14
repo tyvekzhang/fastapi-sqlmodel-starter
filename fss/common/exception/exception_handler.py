@@ -1,5 +1,7 @@
 """Global exception handler"""
 
+import http
+
 from fastapi import Request
 from fastapi.exception_handlers import (
     http_exception_handler,
@@ -12,6 +14,27 @@ from starlette.responses import JSONResponse, Response
 
 from fss.common.exception.exception import ServiceException
 from fss.starter.server import app
+from fss.starter.system.enum.system import SystemResponseCode
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """
+    Asynchronous Exception handler
+    :param request: The request instance containing all request details
+    :param exc: Exception instance
+    :return: A JSON Response object that could be a basic Response or a
+                JSONResponse, depending on whether a response body is allowed for
+                the given status code.
+    """
+    status_code = http.HTTPStatus.INTERNAL_SERVER_ERROR
+    headers = getattr(exc, "headers", None)
+    if not is_body_allowed_for_status_code(status_code):
+        return Response(status_code=status_code, headers=headers)
+    return JSONResponse(
+        {"code": SystemResponseCode.SERVICE_INTERNAL_ERROR.code, "msg": str(exc)},
+        status_code=status_code,
+    )
 
 
 @app.exception_handler(ServiceException)
