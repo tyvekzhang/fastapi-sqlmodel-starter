@@ -25,6 +25,9 @@ class ServiceImpl(Generic[M, T], Service[T]):
     async def retrieve_by_id(self, *, id: T) -> T:
         return await self.mapper.select_record_by_id(id=id)
 
+    async def retrieve_by_ids(self, *, ids: List[T]) -> List[T]:
+        return await self.mapper.select_record_by_ids(ids=ids)
+
     async def retrieve_records(self, *, page: int, size: int, **kwargs) -> List[T]:
         return await self.mapper.select_records(page=page, size=size, **kwargs)
 

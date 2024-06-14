@@ -17,6 +17,9 @@ class Service(Generic[T], ABC):
     async def retrieve_by_id(self, *, id: T) -> T: ...
 
     @abstractmethod
+    async def retrieve_by_ids(self, *, ids: List[T]) -> List[T]: ...
+
+    @abstractmethod
     async def retrieve_records(self, *, page: int, size: int, **kwargs) -> List[T]: ...
 
     @abstractmethod
