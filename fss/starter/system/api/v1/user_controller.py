@@ -202,7 +202,7 @@ async def list_user(
 
 
 @user_router.post("/{user_id}/roles")
-async def user_roles(
+async def assign_user_roles(
     user_id: int,
     role_ids: List[int],
     user_role_service: UserRoleService = Depends(get_user_role_service),

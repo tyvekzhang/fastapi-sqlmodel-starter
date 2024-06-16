@@ -2,7 +2,7 @@
 
 from typing import List, Dict
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from fss.common.result import result
 from fss.common.result.result import BaseResponse
@@ -10,7 +10,7 @@ from fss.common.schema.schema import CurrentUser
 from fss.common.security.security import get_current_user
 from fss.starter.system.factory.service_factory import get_role_service
 from fss.starter.system.model.role_do import RoleDO
-from fss.starter.system.schema.role_schema import RoleCreateCmd, RoleDeleteCmd
+from fss.starter.system.schema.role_schema import RoleCreateCmd
 from fss.starter.system.service.role_service import RoleService
 
 role_router = APIRouter()
@@ -79,20 +79,22 @@ async def get_role(
     return result.success(data=role_do)
 
 
-@role_router.post("/roles")
+@role_router.delete("/roles")
 async def remove_role_by_ids(
-    role_delete_Cmd: RoleDeleteCmd,
+    role_ids: List[int] = Query(...),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
     Delete roles by a list of IDs.
 
     Args:
-        role_delete_Cmd: List of role IDs to delete.
+
+        role_ids: List of role IDs to delete.
+
         current_user: Current user performing the action.
 
     Returns:
         BaseResponse with count of deleted roles.
     """
-    await role_service.batch_remove_by_ids(ids=role_delete_Cmd.role_ids)
+    await role_service.batch_remove_by_ids(ids=role_ids)
     return result.success()

@@ -81,7 +81,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         exec_response = await db_session.execute(statement)
         return exec_response.scalar_one_or_none()
 
-    async def select_records_by_ids(
+    async def select_record_by_ids(
         self, *, ids: List[Any], db_session: Any = None
     ) -> List[Any]:
         """
