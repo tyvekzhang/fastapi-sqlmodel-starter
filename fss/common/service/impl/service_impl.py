@@ -26,7 +26,7 @@ class ServiceImpl(Generic[M, T], Service[T]):
         return await self.mapper.select_record_by_id(id=id)
 
     async def retrieve_by_ids(self, *, ids: List[T]) -> List[T]:
-        return await self.mapper.select_records_by_ids(ids=ids)
+        return await self.mapper.select_record_by_ids(ids=ids)
 
     async def retrieve_records(self, *, page: int, size: int, **kwargs) -> List[T]:
         return await self.mapper.select_records(page=page, size=size, **kwargs)
@@ -79,7 +79,7 @@ class ServiceImpl(Generic[M, T], Service[T]):
         affect_row: int = await self.mapper.batch_delete_records_by_ids(ids=ids)
         if len(ids) != affect_row:
             raise SystemException(
-                SystemResponseCode.PARAMETER_ERROR.code,
-                SystemResponseCode.PARAMETER_ERROR.msg,
+                SystemResponseCode.DELETE_PARAMETER_ERROR.code,
+                SystemResponseCode.DELETE_PARAMETER_ERROR.msg,
             )
         return True

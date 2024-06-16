@@ -115,21 +115,23 @@ def test_get_role(login, client, user_id, expected_status_code, expected_code):
 
 
 @pytest.mark.parametrize(
-    "endpoint, test_dada, expected_status_code, expected_code",
+    "endpoint, test_data, expected_status_code, expected_code",
     [
         ("roles", {"role_ids": [304456628861931520]}, 200, 0),
-        ("roles", {"role_ids": [1]}, 200, 400),
+        ("roles", {"role_ids": [1]}, 200, 403),
     ],
 )
 def test_remove_role_by_ids(
-    login, client, endpoint, test_dada, expected_status_code, expected_code
+    login, client, endpoint, test_data, expected_status_code, expected_code
 ):
     access_token, user_id = login
     headers = {
         "Authorization": f"Bearer {access_token}",
     }
-    response = client.post(
-        f"{configs.api_version}/role/{endpoint}", json=test_dada, headers=headers
+    response = client.delete(
+        f"{configs.api_version}/role/{endpoint}",
+        params=test_data,
+        headers=headers,
     )
     assert response.status_code == expected_status_code
     assert response.json()["code"] == expected_code
