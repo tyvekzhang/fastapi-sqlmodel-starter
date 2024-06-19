@@ -49,6 +49,7 @@ clean:
 	rm -rf .pytest_cache; \
 	rm -rf .ruff_cache; \
 	rm -rf dist; \
+	rm -rf log; \
 	rm -rf poetry.lock; \
 	rm -rf docs/build; \
 	rm -rf $(fssDir)/htmlcov; \
