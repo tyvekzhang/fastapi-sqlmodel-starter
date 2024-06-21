@@ -46,34 +46,9 @@
 - 交互式API文档示意
   <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
 
-## 设置一个conda的虚拟环境
-> 这部分是可选的，但可能对新学 Python 的用户有用。
+## 设置一个虚拟环境
+> 这部分是可选的，但可能对新学 Python 的用户有用。[虚拟环境设置](docs/VIRTUAL_ENV.md)
 
-通常来说, [虚拟环境](https://docs.python.org/3/glossary.html#term-virtual-environment)可以解决包冲突和多版本Python等问题, [conda](https://conda.io/en/latest/)是管理包和环境的一种选择. 在Linux上,可以从[这里](https://conda.io/en/latest/miniconda.html)下载Miniconda,
-并按照说明进行安装。
-```shell
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-```
-设置镜像源
-```shell
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/menpo/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
-conda config --set show_channel_urls yes
-```
-创建带有Python 3.11(>=3.9)的Fss虚拟环境
-```shell
-conda create -n fss_py311 python==3.11 -y
-```
-激活虚拟环境
-```shell
-conda activate fss_py311
-```
 ## 快速开始
 1. 克隆代码
 ```shell
@@ -81,21 +56,14 @@ git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
 cd fastapi-sqlmodel-starter
 ```
 2. 安装 Poetry并下载依赖
-- 通过虚拟环境安装
+- 通过conda虚拟环境安装, 如果安装了conda的话
   ```shell
   conda install poetry -y
   poetry install
   ```
-- 或者通过pip安装, 首先要设置镜像源
+- 或者通过pip安装
   ```shell
-  mkdir -p ~/.pip
-  cat > ~/.pip/pip.conf << EOF
-  [global]
-  trusted-host = mirrors.aliyun.com
-  index-url = http://mirrors.aliyun.com/pypi/simple/
-  EOF
-
-  pip install poetry
+  pip install poetry -i https://mirrors.aliyun.com/pypi/simple/
   poetry install
   ```
 3. 数据库迁移
