@@ -46,21 +46,8 @@
 
 
 ## Setting up a Conda Virtual Environment
-> This part is optional, but may be useful for new Python learners.
+> This part is optional, but may be useful for new Python learners. [Virtual Environment Setup](docs/VIRTUAL_ENV_en.md)
 
-Typically, [virtual environments](https://docs.python.org/3/glossary.html#term-virtual-environment) can solve issues like package conflicts and multiple versions of Python. [Conda](https://conda.io/en/latest/) is a choice for managing packages and environments. On Linux, you can download Miniconda from [here](https://conda.io/en/latest/miniconda.html) and follow the instructions for installation.
-```shell
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-```
-Create an FSS environment with Python 3.11 (or greater than 3.9)
-```shell
-conda create -n fss_py311 python==3.11 -y
-```
-Then activate the virtual environment
-```shell
-conda activate fss_py311
-```
 ## Quick Start
 1. Clone the code
 ```shell
