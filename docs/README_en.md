@@ -46,7 +46,7 @@
 
 
 ## Setting up a Conda Virtual Environment
-> This part is optional, but may be useful for new Python learners. [Virtual Environment Setup](docs/VIRTUAL_ENV_en.md)
+> This part is optional, but may be useful for new Python learners. [Virtual Environment Setup](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/docs/VIRTUAL_ENV_en.md)
 
 ## Quick Start
 1. Clone the code
