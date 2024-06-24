@@ -47,7 +47,7 @@
   <img alt="API doc"  src="https://raw.githubusercontent.com/tyvekzhang/fastapi-sqlmodel-starter/main/docs/img/api_doc.png">
 
 ## 设置一个虚拟环境
-> 这部分是可选的，但可能对新学 Python 的用户有用。[虚拟环境设置](docs/VIRTUAL_ENV.md)
+> 这部分是可选的，但可能对新学 Python 的用户有用。[虚拟环境设置](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/docs/VIRTUAL_ENV.md)
 
 ## 快速开始
 1. 克隆代码
