@@ -52,7 +52,7 @@
 ## 快速开始
 1. 克隆代码
 ```shell
-git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
+git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter.git
 cd fastapi-sqlmodel-starter
 ```
 2. 安装 Poetry并下载依赖
