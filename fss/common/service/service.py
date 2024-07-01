@@ -1,7 +1,7 @@
 """Abstract Service used in the project"""
 
 from abc import ABC, abstractmethod
-from typing import Any, List, TypeVar, Generic
+from typing import Any, List, TypeVar, Generic, Tuple
 
 T = TypeVar("T", bound=Any)
 
@@ -20,12 +20,20 @@ class Service(Generic[T], ABC):
     async def retrieve_by_ids(self, *, ids: List[T]) -> List[T]: ...
 
     @abstractmethod
-    async def retrieve_records(self, *, page: int, size: int, **kwargs) -> List[T]: ...
+    async def retrieve_records(
+        self, *, page: int, size: int, **kwargs
+    ) -> Tuple[
+        List[Any],
+        int,
+    ]: ...
 
     @abstractmethod
     async def retrieve_ordered_records(
         self, *, page: int, size: int, order_by: T, sort_order: T, **kwargs
-    ) -> List[T]: ...
+    ) -> Tuple[
+        List[Any],
+        int,
+    ]: ...
 
     @abstractmethod
     async def modify_by_id(self, *, update_user_cmd: T) -> bool: ...
