@@ -1,7 +1,7 @@
 """BaseMapper defines the database operations to be implemented"""
 
 from abc import ABC, abstractmethod
-from typing import Any, List
+from typing import Any, List, Tuple
 
 
 class BaseMapper(ABC):
@@ -24,7 +24,10 @@ class BaseMapper(ABC):
     @abstractmethod
     async def select_records(
         self, *, page: int, size: int, db_session: Any, **kwargs
-    ) -> List[Any]: ...
+    ) -> Tuple[
+        List[Any],
+        int,
+    ]: ...
 
     @abstractmethod
     async def select_ordered_records(
@@ -36,7 +39,10 @@ class BaseMapper(ABC):
         sort_order: Any,
         db_session: Any,
         **kwargs,
-    ) -> List[Any]: ...
+    ) -> Tuple[
+        List[Any],
+        int,
+    ]: ...
 
     @abstractmethod
     async def update_record_by_id(self, *, record: Any, db_session: Any) -> int: ...

@@ -1,6 +1,6 @@
 """Common service impl"""
 
-from typing import Any, TypeVar, List, Generic, Type
+from typing import Any, TypeVar, List, Generic, Type, Tuple
 
 from fss.common.persistence.base_mapper import BaseMapper
 from fss.common.service.service import Service
@@ -28,7 +28,12 @@ class ServiceImpl(Generic[M, T], Service[T]):
     async def retrieve_by_ids(self, *, ids: List[T]) -> List[T]:
         return await self.mapper.select_records_by_ids(ids=ids)
 
-    async def retrieve_records(self, *, page: int, size: int, **kwargs) -> List[T]:
+    async def retrieve_records(
+        self, *, page: int, size: int, **kwargs
+    ) -> Tuple[
+        List[Any],
+        int,
+    ]:
         return await self.mapper.select_records(page=page, size=size, **kwargs)
 
     async def retrieve_ordered_records(
@@ -39,7 +44,10 @@ class ServiceImpl(Generic[M, T], Service[T]):
         order_by: T = None,
         sort_order: T = None,
         **kwargs,
-    ) -> List[T]:
+    ) -> Tuple[
+        List[Any],
+        int,
+    ]:
         return await self.mapper.select_ordered_records(
             page=page, size=size, order_by=order_by, sort_order=sort_order, **kwargs
         )
