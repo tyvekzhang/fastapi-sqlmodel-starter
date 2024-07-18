@@ -51,7 +51,7 @@
 ## Quick Start
 1. Clone the code
 ```shell
-git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
+git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter.git
 cd fastapi-sqlmodel-starter
 ```
 2. Install Poetry and download dependencies with conda
