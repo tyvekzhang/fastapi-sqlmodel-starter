@@ -1,2 +1,0 @@
-Greetings, {{ name }}!
-This is template 2.
