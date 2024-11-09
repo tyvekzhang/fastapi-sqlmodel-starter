@@ -8,7 +8,7 @@ from sqlmodel import SQLModel, select, insert, update, delete
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from fss.common.enum.enum import SortEnum
-from fss.common.persistence.base_mapper import BaseMapper
+from fss.common.persistence.mapper_base import MapperBase
 from fss.middleware.db_session_middleware import db
 
 ModelType = TypeVar("ModelType", bound=SQLModel)
@@ -16,12 +16,12 @@ SchemaType = TypeVar("SchemaType", bound=BaseModel)
 T = TypeVar("T", bound=SQLModel)
 
 
-class SqlModelMapper(Generic[ModelType], BaseMapper):
+class SqlModelMapperBase(Generic[ModelType], MapperBase):
     def __init__(self, model: Type[ModelType]):
         self.model = model
         self.db = db
 
-    async def insert_record(
+    async def insert(
         self,
         *,
         record: Union[ModelType, SchemaType],
@@ -42,9 +42,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         db_session.add(orm_record)
         return orm_record
 
-    async def batch_insert_records(
-        self, *, records: List[Any], db_session: Any = None
-    ) -> int:
+    async def batch_insert(self, *, records: List[Any], db_session: Any = None) -> int:
         """
         Inserts multiple records into the database in a single batch.
 
@@ -63,7 +61,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         exec_response = await db_session.execute(statement)
         return exec_response.rowcount
 
-    async def select_record_by_id(
+    async def select_by_id(
         self, *, id: Any, db_session: Any = None
     ) -> Union[ModelType, SchemaType]:
         """
@@ -81,7 +79,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         exec_response = await db_session.execute(statement)
         return exec_response.scalar_one_or_none()
 
-    async def select_records_by_ids(
+    async def select_by_ids(
         self, *, ids: List[Any], db_session: Any = None
     ) -> List[Any]:
         """
@@ -99,7 +97,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         exec_response = await db_session.execute(statement)
         return exec_response.scalars().all()
 
-    async def select_records(
+    async def select_pagination(
         self, *, page: int = 1, size: int = 100, db_session: Any = None, **kwargs
     ) -> Tuple[
         List[Any],
@@ -124,6 +122,15 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         if "like" in kwargs and kwargs["like"]:
             for column, value in kwargs["like"].items():
                 query = query.filter(getattr(self.model, column).like(value))
+        if "between" in kwargs and kwargs["between"]:
+            for column, (start, end) in kwargs["between"].items():
+                query = query.filter(getattr(self.model, column).between(start, end))
+        if "greater_than" in kwargs and kwargs["greater_than"]:
+            for column, value in kwargs["greater_than"].items():
+                query = query.filter(getattr(self.model, column) > value)
+        if "less_than" in kwargs and kwargs["less_than"]:
+            for column, value in kwargs["less_than"].items():
+                query = query.filter(getattr(self.model, column) < value)
         count_query = query
         total_count = 0
         if "count" in kwargs and kwargs["count"]:
@@ -137,7 +144,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
 
         return records, total_count
 
-    async def select_ordered_records(
+    async def select_ordered_pagination(
         self,
         *,
         page: int = 1,
@@ -168,6 +175,15 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         if "like" in kwargs and kwargs["like"]:
             for column, value in kwargs["like"].items():
                 query = query.filter(getattr(self.model, column).like(value))
+        if "between" in kwargs and kwargs["between"]:
+            for column, (start, end) in kwargs["between"].items():
+                query = query.filter(getattr(self.model, column).between(start, end))
+        if "greater_than" in kwargs and kwargs["greater_than"]:
+            for column, value in kwargs["greater_than"].items():
+                query = query.filter(getattr(self.model, column) > value)
+        if "less_than" in kwargs and kwargs["less_than"]:
+            for column, value in kwargs["less_than"].items():
+                query = query.filter(getattr(self.model, column) < value)
         count_query = query
         columns = self.model.__table__.columns
         if order_by is None or order_by not in columns:
@@ -194,7 +210,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         records = exec_response.scalars().all()
         return records, total_count
 
-    async def update_record_by_id(self, *, record: Any, db_session: Any = None) -> int:
+    async def update_by_id(self, *, record: Any, db_session: Any = None) -> int:
         """
         Update a single record by its ID.
 
@@ -209,7 +225,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         exec_response = await db_session.execute(update_query)
         return exec_response.rowcount
 
-    async def batch_update_records_by_ids(
+    async def batch_update_by_ids(
         self, *, ids: List[Any], record: dict, db_session: Any = None
     ) -> int:
         """
@@ -227,7 +243,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         exec_response = await db_session.execute(statement)
         return exec_response.rowcount
 
-    async def delete_record_by_id(self, *, id: Any, db_session: Any = None) -> int:
+    async def delete_by_id(self, *, id: Any, db_session: Any = None) -> int:
         """
         Delete a single record by its ID.
 
@@ -240,7 +256,7 @@ class SqlModelMapper(Generic[ModelType], BaseMapper):
         exec_response = await db_session.execute(statement)
         return exec_response.rowcount
 
-    async def batch_delete_records_by_ids(
+    async def batch_delete_by_ids(
         self, *, ids: List[Any], db_session: Any = None
     ) -> int:
         """

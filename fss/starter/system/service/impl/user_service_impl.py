@@ -16,7 +16,7 @@ from fss.common.enum.enum import TokenTypeEnum
 from fss.common.exception.exception import ServiceException
 from fss.common.schema.schema import Token
 from fss.common.security import security
-from fss.common.service.impl.service_impl import ServiceImpl
+from fss.common.service.impl.service_base_impl import ServiceBaseImpl
 from fss.common.util.excel import export_template
 from fss.common.security.security import verify_password, get_password_hash
 from fss.starter.system.enum.system import SystemResponseCode, SystemConstantCode
@@ -32,7 +32,7 @@ from fss.starter.system.schema.user_schema import (
 from fss.starter.system.service.user_service import UserService
 
 
-class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
+class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
     """
     Implementation of the UserService interface.
     """
@@ -57,7 +57,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         Returns:
             Optional[UserQuery]: The user query object if found, None otherwise.
         """
-        user_do = await self.mapper.select_record_by_id(id=id)
+        user_do = await self.mapper.select_by_id(id=id)
         return UserQuery(**user_do.model_dump()) if user_do else None
 
     async def login(self, login_cmd: LoginCmd) -> Token:
@@ -155,7 +155,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
                 SystemResponseCode.USER_NAME_EXISTS.code,
                 f"{SystemResponseCode.USER_NAME_EXISTS.msg}{err_msg}",
             )
-        await self.mapper.batch_insert_records(records=user_import_list)
+        await self.mapper.batch_insert(records=user_import_list)
 
     async def export_user(
         self, params: Params, file_name: str = "user"
@@ -170,7 +170,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         Returns:
             StreamingResponse: The Excel file containing user record.
         """
-        user_pages, _ = await self.mapper.select_records(
+        user_pages, _ = await self.mapper.select_pagination(
             page=params.page, size=params.size
         )
         records = []
@@ -201,7 +201,7 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
             )
         # generate hash password
         user_create_cmd.password = await get_password_hash(user_create_cmd.password)
-        return await self.mapper.insert_record(record=user_create_cmd)
+        return await self.mapper.insert(record=user_create_cmd)
 
     async def retrieve_user(
         self, page: int, size: int, **kwargs
@@ -216,5 +216,5 @@ class UserServiceImpl(ServiceImpl[UserMapper, UserDO], UserService):
         Returns:
             Optional[List[UserQuery]]: The list of users or None if no users are found.
         """
-        results, _ = await self.mapper.select_records(page=page, size=size, **kwargs)
+        results, _ = await self.mapper.select_pagination(page=page, size=size, **kwargs)
         return [UserQuery(**user.model_dump()) for user in results]

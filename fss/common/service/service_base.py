@@ -6,7 +6,7 @@ from typing import Any, List, TypeVar, Generic, Tuple
 T = TypeVar("T", bound=Any)
 
 
-class Service(Generic[T], ABC):
+class ServiceBase(Generic[T], ABC):
     @abstractmethod
     async def save(self, *, record: T) -> T: ...
 

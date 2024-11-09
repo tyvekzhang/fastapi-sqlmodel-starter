@@ -3,11 +3,11 @@
 from abc import ABC
 from typing import List
 
-from fss.common.service.service import Service
+from fss.common.service.service_base import ServiceBase
 from fss.starter.system.model.user_role_do import UserRoleDO
 
 
-class UserRoleService(Service[UserRoleDO], ABC):
+class UserRoleService(ServiceBase[UserRoleDO], ABC):
     async def assign_roles(
         self,
         *,

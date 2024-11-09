@@ -2,12 +2,12 @@
 
 from fss.starter.system.mapper.role_mapper import RoleMapper
 
-from fss.common.service.impl.service_impl import ServiceImpl
+from fss.common.service.impl.service_base_impl import ServiceBaseImpl
 from fss.starter.system.model.role_do import RoleDO
 from fss.starter.system.service.role_service import RoleService
 
 
-class RoleServiceImpl(ServiceImpl[RoleMapper, RoleDO], RoleService):
+class RoleServiceImpl(ServiceBaseImpl[RoleMapper, RoleDO], RoleService):
     """
     Implementation of the RoleService interface.
     """

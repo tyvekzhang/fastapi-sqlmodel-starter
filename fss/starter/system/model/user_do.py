@@ -4,7 +4,7 @@ from typing import Optional
 
 from sqlmodel import Field, Column, String, SQLModel
 
-from fss.common.persistence.base_model import ModelExt, BaseModel
+from fss.common.persistence.model_base import ModelExt, ModelBase
 
 
 class BaseUser(SQLModel):
@@ -21,6 +21,6 @@ class BaseUser(SQLModel):
     )
 
 
-class UserDO(ModelExt, BaseUser, BaseModel, table=True):
+class UserDO(ModelExt, BaseUser, ModelBase, table=True):
     __tablename__ = "sys_user"
     __table_args__ = {"comment": "用户信息表"}

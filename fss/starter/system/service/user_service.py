@@ -8,12 +8,12 @@ from fastapi_pagination import Params
 from starlette.responses import StreamingResponse
 
 from fss.common.schema.schema import Token
-from fss.common.service.service import Service
+from fss.common.service.service_base import ServiceBase
 from fss.starter.system.model.user_do import UserDO
 from fss.starter.system.schema.user_schema import UserQuery, LoginCmd
 
 
-class UserService(Service[UserDO], ABC):
+class UserService(ServiceBase[UserDO], ABC):
     @abstractmethod
     async def register(self, *, user_create_cmd) -> UserDO: ...
 

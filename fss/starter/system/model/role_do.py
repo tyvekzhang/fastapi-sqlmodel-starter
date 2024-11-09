@@ -4,7 +4,7 @@ from typing import Optional
 
 from sqlmodel import Field, Column, Integer, String, SQLModel
 
-from fss.common.persistence.base_model import ModelExt, BaseModel
+from fss.common.persistence.model_base import ModelExt, ModelBase
 
 
 class BaseRole(SQLModel):
@@ -18,6 +18,6 @@ class BaseRole(SQLModel):
     )
 
 
-class RoleDO(ModelExt, BaseRole, BaseModel, table=True):
+class RoleDO(ModelExt, BaseRole, ModelBase, table=True):
     __tablename__ = "sys_role"
     __table_args__ = {"comment": "角色信息表"}

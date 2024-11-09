@@ -2,16 +2,18 @@
 
 import io
 from datetime import datetime
-from typing import List
+from typing import List, TypeVar, Type
 
 import pandas as pd
 from loguru import logger
 from pydantic import BaseModel
 from starlette.responses import StreamingResponse
 
+T = TypeVar("T", bound=BaseModel)
+
 
 async def export_template(
-    schema: BaseModel, file_name: str, records: List[BaseModel] = None
+    schema: Type[T], file_name: str, records: List[T] = None
 ) -> StreamingResponse:
     """
     Export template or template with date

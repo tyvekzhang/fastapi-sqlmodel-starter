@@ -2,13 +2,13 @@
 
 from typing import List
 
-from fss.common.service.impl.service_impl import ServiceImpl
+from fss.common.service.impl.service_base_impl import ServiceBaseImpl
 from fss.starter.system.mapper.user_role_mapper import UserRoleMapper
 from fss.starter.system.model.user_role_do import UserRoleDO
 from fss.starter.system.service.user_role_service import UserRoleService
 
 
-class UserRoleServiceImpl(ServiceImpl[UserRoleMapper, UserRoleDO], UserRoleService):
+class UserRoleServiceImpl(ServiceBaseImpl[UserRoleMapper, UserRoleDO], UserRoleService):
     """
     Implementation of the UserRoleService interface.
     """
@@ -32,4 +32,4 @@ class UserRoleServiceImpl(ServiceImpl[UserRoleMapper, UserRoleDO], UserRoleServi
         user_roles = [
             UserRoleDO(user_id=user_id, role_id=role_id) for role_id in role_ids
         ]
-        await self.mapper.batch_insert_records(records=user_roles)
+        await self.mapper.batch_insert(records=user_roles)

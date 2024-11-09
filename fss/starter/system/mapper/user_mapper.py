@@ -5,11 +5,11 @@ from typing import Union
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from fss.common.persistence.sqlmodel_impl import SqlModelMapper
+from fss.common.persistence.sqlmodel_impl import SqlModelMapperBase
 from fss.starter.system.model.user_do import UserDO
 
 
-class UserMapper(SqlModelMapper[UserDO]):
+class UserMapper(SqlModelMapperBase[UserDO]):
     async def get_user_by_username(
         self, *, username: str, db_session: Union[AsyncSession, None] = None
     ) -> Union[UserDO, None]:
