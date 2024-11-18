@@ -9,7 +9,7 @@ services:
       # The password for the default postgres user.
       POSTGRES_PASSWORD: fss123#456
       # The name of the default postgres database.
-      POSTGRES_DB: fss
+      POSTGRES_DB: src
       # postgres data directory
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
@@ -32,9 +32,9 @@ services:
   # The Fss server
   fss_server:
     container_name: fss_server
-    image: tyvek2zhang/fastapi-sqlmodel-starter:1.1.1
+    image: tyvek2zhang/fastapi-sqlmodel-main:1.1.1
     restart: always
-    command: "sh -c 'cd fss && alembic upgrade head && python apiserver.py'"
+    command: "sh -c 'cd src && alembic upgrade head && python apiserver.py'"
     depends_on:
       - db
       - redis

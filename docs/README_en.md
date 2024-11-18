@@ -52,7 +52,7 @@
 1. Clone the code
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter.git
-cd fastapi-sqlmodel-starter
+cd fastapi-sqlmodel-main
 ```
 2. Install Poetry and download dependencies with conda
 ```shell
@@ -66,7 +66,7 @@ poetry install
 ```
 4. Database migration
 ```shell
-cd fss && alembic upgrade head
+cd src && alembic upgrade head
 ```
 5. Start the server
 ```shell

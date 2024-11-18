@@ -53,7 +53,7 @@
 1. 克隆代码
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter.git
-cd fastapi-sqlmodel-starter
+cd fastapi-sqlmodel-main
 ```
 2. 安装 Poetry并下载依赖
 - 通过conda虚拟环境安装, 如果安装了conda的话
@@ -68,7 +68,7 @@ cd fastapi-sqlmodel-starter
   ```
 3. 数据库迁移
 ```shell
-cd fss && alembic upgrade head
+cd src && alembic upgrade head
 ```
 4. 启动
 ```shell
