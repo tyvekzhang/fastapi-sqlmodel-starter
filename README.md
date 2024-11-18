@@ -53,7 +53,7 @@
 1. 克隆代码
 ```shell
 git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter.git
-cd fastapi-sqlmodel-main
+cd fastapi-sqlmodel-starter
 ```
 2. 安装 Poetry并下载依赖
 - 通过conda虚拟环境安装, 如果安装了conda的话
