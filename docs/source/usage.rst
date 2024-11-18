@@ -53,7 +53,7 @@ Quick Start
 
 .. code-block:: shell
 
-    cd fss && alembic upgrade head
+    cd src && alembic upgrade head
 
 4. **Start the server**:
 

@@ -86,7 +86,7 @@ line-length = 120
 [tool.coverage.run]
 parallel = true
 branch = true
-source = ["src/common", "src/middleware", "src/starter", "src/tests"]
+source = ["src/common", "src/middleware", "src/main", "src/tests"]
 
 [tool.coverage.report]
 fail_under = 85
