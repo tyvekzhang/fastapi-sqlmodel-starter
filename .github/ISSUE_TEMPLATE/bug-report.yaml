@@ -1,5 +1,5 @@
 name: "🕷️ Bug report"
-description: Report a bug encountered while operating Fastapi sqlmodel starter
+description: Report a bug encountered while operating Fastapi sqlmodel main
 labels: kind/bug
 body:
   - type: textarea
@@ -34,7 +34,7 @@ body:
   - type: textarea
     id: version
     attributes:
-      label: Fastapi sqlmodel starter version
+      label: Fastapi sqlmodel main version
     validations:
       required: true
 

@@ -3,7 +3,7 @@
 tag ?= v1.1.1
 releaseName = fastapi-sqlmodel-starter
 dockerhubUser = tyvek2zhang
-fssDir = fss
+homeDir = src
 deployDir = deploy
 
 help:
@@ -22,7 +22,7 @@ help:
 	@echo "Use 'make <target>' to run a specific command."
 
 install:
-	cd $(fssDir) && \
+	cd $(homeDir) && \
 	poetry shell && \
 	poetry install
 
@@ -31,7 +31,7 @@ lint:
 	pre-commit run --all-files --verbose --show-diff-on-failure
 
 test:
-	cd $(fssDir); \
+	cd $(homeDir); \
 	rm -rf migrations/db/fss.db; \
 	rm -rf htmlcov; \
 	alembic upgrade head; \
@@ -39,7 +39,7 @@ test:
 	coverage html
 
 start:
-	cd $(fssDir) && \
+	cd $(homeDir) && \
 	alembic upgrade head && \
 	python apiserver.py
 
@@ -52,10 +52,10 @@ clean:
 	rm -rf log; \
 	rm -rf poetry.lock; \
 	rm -rf docs/build; \
-	rm -rf $(fssDir)/htmlcov; \
-	rm -rf $(fssDir)/migrations/db/fss.db; \
-	rm -rf $(fssDir)/.env_fss; \
-	rm -rf $(fssDir)/.coverage; \
+	rm -rf $(homeDir)/htmlcov; \
+	rm -rf $(homeDir)/migrations/db/fss.db; \
+	rm -rf $(homeDir)/.env_fss; \
+	rm -rf $(homeDir)/.coverage; \
 
 image: clean
 	docker build -t $(dockerhubUser)/$(releaseName):$(tag) .

@@ -32,7 +32,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 packages = [
-  { include = "fss"},
+  { include = "src"},
 ]
 
 [tool.poetry.dependencies]
@@ -79,10 +79,14 @@ name = "tsinghua"
 url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
 priority = "primary"
 
+[tool.ruff]
+include = ["src/**/*.py"]
+line-length = 120
+
 [tool.coverage.run]
 parallel = true
 branch = true
-source = ["fss/common", "fss/middleware", "fss/starter", "fss/tests"]
+source = ["src/common", "src/middleware", "src/starter", "src/tests"]
 
 [tool.coverage.report]
 fail_under = 85

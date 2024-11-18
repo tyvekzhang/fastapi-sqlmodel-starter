@@ -7,7 +7,7 @@
 /dist/
 /.pytest_cache/
 .coverage*
-/fss/htmlcov/
+/src/htmlcov/
 /*/build
 log/
-/.fss_py311/
+.venv

@@ -16,7 +16,7 @@ RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; els
 
 ENV PYTHONPATH=/app
 
-COPY fss /app/fss/
+COPY src /app/src/
 COPY README.md /app/
 
 EXPOSE 9010

@@ -15,7 +15,7 @@ Add one of the following kinds:
 /kind doc
 
 Optionally add one or more of the following kinds if applicable:
-/kind api-change
+/kind controller-change
 /kind deprecation
 /kind failing-test
 /kind flake
