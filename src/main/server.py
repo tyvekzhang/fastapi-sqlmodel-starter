@@ -5,7 +5,7 @@ from fastapi_offline import FastAPIOffline
 from starlette.middleware.cors import CORSMiddleware
 from typing import Tuple
 
-from src.common.config import configs, init_log, server_startup_config
+from src.main.common.config import configs, init_log, server_startup_config
 
 # Offline swagger docs
 app = FastAPIOffline(

@@ -2,7 +2,7 @@
 
 from typing import List
 
-from src.common.service.impl.service_base_impl import ServiceBaseImpl
+from src.main.common.service.impl.service_base_impl import ServiceBaseImpl
 from src.main.system.mapper.user_role_mapper import UserRoleMapper
 from src.main.system.model.user_role_do import UserRoleDO
 from src.main.system.service.user_role_service import UserRoleService

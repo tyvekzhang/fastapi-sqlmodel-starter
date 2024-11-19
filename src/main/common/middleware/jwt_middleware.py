@@ -7,8 +7,8 @@ from jose import JWTError
 from loguru import logger
 from starlette.responses import JSONResponse
 
-from src.common.config import configs
-from src.common.security.security import is_valid_token
+from src.main.common.config import configs
+from src.main.common.security.security import is_valid_token
 from src.main.server import app
 
 

@@ -2,7 +2,7 @@
 
 import http
 
-from src.common.exception.exception import ServiceException
+from src.main.common.exception.exception import ServiceException
 
 
 class SystemException(ServiceException):

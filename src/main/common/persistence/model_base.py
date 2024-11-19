@@ -6,7 +6,7 @@ from typing import Optional
 from sqlalchemy import BigInteger
 from sqlmodel import SQLModel as _SQLModel, Field
 
-from src.common.util.snowflake import snowflake_id
+from src.main.common.util.snowflake import snowflake_id
 
 
 class ModelBase(_SQLModel):

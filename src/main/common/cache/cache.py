@@ -3,8 +3,8 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from src.common.cache.redis_manager import RedisManager
-from src.common.config import configs
+from src.main.common.cache.redis_manager import RedisManager
+from src.main.common.config import configs
 
 
 class Cache(ABC):
@@ -35,12 +35,12 @@ async def get_cache_client() -> Cache:
     :return:
     """
 
-    from src.common.cache.redis_cache import RedisCache
+    from src.main.common.cache.redis_cache import RedisCache
 
     redis_client = await RedisManager.get_instance()
     if configs.enable_redis:
         return RedisCache(redis_client)
     else:
-        from src.common.cache.page_cache import PageCache
+        from src.main.common.cache.page_cache import PageCache
 
         return PageCache()

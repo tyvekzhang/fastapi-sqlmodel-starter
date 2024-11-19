@@ -4,10 +4,10 @@ from typing import List, Dict
 
 from fastapi import APIRouter, Depends, Query
 
-from src.common.result import result
-from src.common.result.result import BaseResponse
-from src.common.schema.schema import CurrentUser
-from src.common.security.security import get_current_user
+from src.main.common.result import result
+from src.main.common.result.result import BaseResponse
+from src.main.common.schema.schema import CurrentUser
+from src.main.common.security.security import get_current_user
 from src.main.system.factory.service_factory import get_role_service
 from src.main.system.model.role_do import RoleDO
 from src.main.system.schema.role_schema import RoleCreateCmd

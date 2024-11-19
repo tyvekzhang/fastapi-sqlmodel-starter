@@ -1,7 +1,7 @@
 from sqlalchemy import BigInteger, Column, Index, UniqueConstraint
 from sqlmodel import SQLModel, Field
 
-from src.common.persistence.model_base import ModelExt, ModelBase
+from src.main.common.persistence.model_base import ModelExt, ModelBase
 
 
 class UserRoleMeta(SQLModel):

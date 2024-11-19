@@ -1,8 +1,8 @@
 """Role domain service impl"""
 
+from src.main.common.service.impl.service_base_impl import ServiceBaseImpl
 from src.main.system.mapper.role_mapper import RoleMapper
 
-from src.common.service.impl.service_base_impl import ServiceBaseImpl
 from src.main.system.model.role_do import RoleDO
 from src.main.system.service.role_service import RoleService
 
