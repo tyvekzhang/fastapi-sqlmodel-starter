@@ -14,8 +14,8 @@ from passlib.context import CryptContext
 from starlette import status
 from starlette.responses import JSONResponse
 
-from src.common.config import configs
-from src.common.schema.schema import CurrentUser
+from src.main.common.config import configs
+from src.main.common.schema.schema import CurrentUser
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{configs.api_version}/user/login")
 

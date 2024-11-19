@@ -12,7 +12,7 @@ from fastapi.utils import is_body_allowed_for_status_code
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.responses import JSONResponse, Response
 
-from src.common.exception.exception import ServiceException
+from src.main.common.exception.exception import ServiceException
 from src.main.server import app
 from src.main.system.enum.system import SystemResponseCode
 

@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 
-from src.common.config import configs
+from src.main.common.config import configs
 from src.main.server import app
 from src.main.system.controller.v1.probe_controller import probe_router
 from src.main.system.controller.v1.user_controller import user_router

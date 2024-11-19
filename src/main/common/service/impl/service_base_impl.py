@@ -2,8 +2,8 @@
 
 from typing import Any, TypeVar, List, Generic, Type, Tuple
 
-from src.common.persistence.mapper_base import MapperBase
-from src.common.service.service_base import ServiceBase
+from src.main.common.persistence.mapper_base import MapperBase
+from src.main.common.service.service_base import ServiceBase
 from src.main.system.enum.system import SystemResponseCode
 from src.main.system.exception.system import SystemException
 

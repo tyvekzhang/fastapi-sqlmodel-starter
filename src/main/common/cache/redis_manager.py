@@ -5,7 +5,7 @@ from typing import Optional
 
 import redis.asyncio as redis
 
-from src.common.config import configs
+from src.main.common.config import configs
 
 
 class RedisManager:

@@ -3,7 +3,7 @@
 from abc import ABC
 from typing import List
 
-from src.common.service.service_base import ServiceBase
+from src.main.common.service.service_base import ServiceBase
 from src.main.system.model.user_role_do import UserRoleDO
 
 

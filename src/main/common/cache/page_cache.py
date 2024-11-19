@@ -4,7 +4,7 @@ from typing import Any
 
 import diskcache
 
-from src.common.cache.cache import Cache
+from src.main.common.cache.cache import Cache
 
 
 class PageCache(Cache):

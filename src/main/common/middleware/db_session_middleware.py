@@ -11,7 +11,7 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from starlette.requests import Request
 from starlette.types import ASGIApp
 
-from src.common.config import configs
+from src.main.common.config import configs
 from src.main.server import app
 
 try:

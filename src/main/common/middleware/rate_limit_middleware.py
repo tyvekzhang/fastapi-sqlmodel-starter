@@ -5,7 +5,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
-from src.common.config import configs
+from src.main.common.config import configs
 from src.main.server import app
 
 # Enable rate limiting.

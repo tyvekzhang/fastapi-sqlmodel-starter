@@ -6,9 +6,9 @@ from pydantic import BaseModel
 from sqlmodel import SQLModel, select, insert, update, delete, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from src.common.enum.enum import SortEnum
-from src.common.persistence.mapper_base import MapperBase
-from src.middleware.db_session_middleware import db
+from src.main.common.enum.enum import SortEnum
+from src.main.common.persistence.mapper_base import MapperBase
+from src.main.common.middleware.db_session_middleware import db
 
 ModelType = TypeVar("ModelType", bound=SQLModel)
 SchemaType = TypeVar("SchemaType", bound=BaseModel)

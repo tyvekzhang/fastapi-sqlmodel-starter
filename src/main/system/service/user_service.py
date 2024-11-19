@@ -7,8 +7,8 @@ from fastapi import UploadFile
 from fastapi_pagination import Params
 from starlette.responses import StreamingResponse
 
-from src.common.schema.schema import Token
-from src.common.service.service_base import ServiceBase
+from src.main.common.schema.schema import Token
+from src.main.common.service.service_base import ServiceBase
 from src.main.system.model.user_do import UserDO
 from src.main.system.schema.user_schema import UserQuery, LoginCmd
 

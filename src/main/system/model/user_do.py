@@ -4,7 +4,7 @@ from typing import Optional
 
 from sqlmodel import Field, Column, String, SQLModel
 
-from src.common.persistence.model_base import ModelExt, ModelBase
+from src.main.common.persistence.model_base import ModelExt, ModelBase
 
 
 class BaseUser(SQLModel):

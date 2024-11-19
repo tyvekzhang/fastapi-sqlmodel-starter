@@ -7,10 +7,10 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_pagination import Params
 from starlette.responses import StreamingResponse
 
-from src.common.result import result
-from src.common.result.result import BaseResponse
-from src.common.schema.schema import Token, CurrentUser
-from src.common.security.security import get_current_user
+from src.main.common.result import result
+from src.main.common.result.result import BaseResponse
+from src.main.common.schema.schema import Token, CurrentUser
+from src.main.common.security.security import get_current_user
 from src.main.system.factory.service_factory import (
     get_user_service,
     get_user_role_service,
