@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from src.main.common.config import configs
+from src.main.app.common.config import configs
 
 
 @pytest.fixture

@@ -1,0 +1,40 @@
+server:
+  name: Fss
+  host: 0.0.0.0
+  port: 19001
+  version: 2.0.0
+  app_desc: Fss aims to one of the best scaffolding in the PyWeb field.
+  api_version: /v1
+  workers: 1
+  log_file_path: ../log/fss/log.txt
+  win_tz: china standard time
+  linux_tz: asia/shanghai
+  enable_rate_limit: False
+  global_default_limits: 10/second
+
+database:
+  dialect: sqlite
+  # When use sqlite do not need to set url and default in src/main/resource/alembic/db/server.db
+  # Url format: driver://user:pass@localhost:port/dbname
+  url: ""
+  pool_size: 10
+  max_overflow: 20
+  pool_recycle: 1800
+  echo_sql: True
+  pool_pre_ping: True
+  enable_redis: False
+  cache_host: 127.0.0.1
+  cache_port: 6379
+  cache_pass: ""
+  db_num: 0
+
+security:
+  enable: False
+  enable_swagger: False
+  algorithm: HS256
+  secret_key: 43365f0e3e88863ff5080ac382d7717634a8ef72d8f2b52d436fc9847dbecc64
+  access_token_expire_minutes: 30
+  refresh_token_expire_days: 30
+  white_list_routes: /v1/probe/liveness, /v1/probe/readiness, /v1/user/login, /v1/user/add, /v1/user/refreshTokens, /v1/user/export
+  backend_cors_origins: http://127.0.0.1:8200, http://localhost:8200, http://localhost
+  black_ip_list: ""

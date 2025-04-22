@@ -5,10 +5,10 @@ import pytest
 from fastapi import UploadFile
 from fastapi.testclient import TestClient
 
-from src.main.common.config import configs
+from src.main.app.common.config import configs
 from src.main.common.security.security import get_user_id
 from src.main.server import app
-from src.main.system.schema.user_schema import UpdateUserCmd
+from src.main.app.system.schema.user_schema import UpdateUserCmd
 
 
 @pytest.fixture

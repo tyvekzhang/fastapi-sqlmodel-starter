@@ -19,12 +19,25 @@ help:
 	@echo "  doc                   Make doc for this project."
 	@echo "  pypi                  Build and publish to pypi."
 	@echo "  clean                 Remove temporary files."
+	@echo "  db                    Generate db structure."
+	@echo "  db_up                 Upgrade db structure."
 	@echo "Use 'make <target>' to run a specific command."
 
 install:
-	cd $(homeDir) && \
-	poetry shell && \
-	poetry install
+	@echo "Detecting OS..."
+ifeq ($(OS),Windows_NT)
+	@echo "Windows system detected"
+	uv venv --python 3.11 && .venv\Scripts\activate && uv sync
+else
+	@echo "Linux/Mac system detected"
+	uv venv --python 3.11 && . .venv/bin/activate && uv sync
+endif
+
+db:
+	alembic revision --autogenerate
+
+db_up:
+	alembic upgrade head
 
 lint:
 	uv add pre-commit --group test && \
