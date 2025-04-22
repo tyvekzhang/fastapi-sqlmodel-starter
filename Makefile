@@ -27,7 +27,7 @@ install:
 	poetry install
 
 lint:
-	python -m pip install pre-commit && \
+	uv add pre-commit --group test && \
 	pre-commit run --all-files --verbose --show-diff-on-failure
 
 test:
