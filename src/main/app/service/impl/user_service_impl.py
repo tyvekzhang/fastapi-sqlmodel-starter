@@ -19,10 +19,10 @@ from src.main.app.common.security import security
 from src.main.app.common.service.impl.service_base_impl import ServiceBaseImpl
 from src.main.app.common.util.excel import export_template
 from src.main.app.common.security.security import verify_password, get_password_hash
-from src.main.app.enum.system import SystemResponseCode
+from src.main.app.enums.system import SystemResponseCode
 from src.main.app.exception.system import SystemException
 from src.main.app.mapper.user_mapper import UserMapper
-from src.main.app.model.user_do import UserDO
+from src.main.app.entity.user_entity import UserEntity
 from src.main.app.schema.user_schema import (
     UserQuery,
     LoginCmd,
@@ -32,7 +32,7 @@ from src.main.app.schema.user_schema import (
 from src.main.app.service.user_service import UserService
 
 
-class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
+class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
     """
     Implementation of the UserService interface.
     """
@@ -57,8 +57,8 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
         Returns:
             Optional[UserQuery]: The user query object if found, None otherwise.
         """
-        user_do = await self.mapper.select_by_id(id=id)
-        return UserQuery(**user_do.model_dump()) if user_do else None
+        user_entity = await self.mapper.select_by_id(id=id)
+        return UserQuery(**user_entity.model_dump()) if user_entity else None
 
     async def login(self, login_cmd: LoginCmd) -> Token:
         """
@@ -72,8 +72,8 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
         """
         # verify username and password
         username: str = login_cmd.username
-        user_do: UserDO = await self.mapper.get_user_by_username(username=username)
-        if user_do is None or not verify_password(login_cmd.password, user_do.password):
+        user_entity: UserEntity = await self.mapper.get_user_by_username(username=username)
+        if user_entity is None or not verify_password(login_cmd.password, user_entity.password):
             raise SystemException(
                 SystemResponseCode.AUTH_FAILED.code,
                 SystemResponseCode.AUTH_FAILED.msg,
@@ -83,13 +83,13 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
         security_config = load_config().security
         access_token_expires = timedelta(minutes=security_config.access_token_expire_minutes)
         access_token = await security.create_token(
-            subject=user_do.id,
+            subject=user_entity.id,
             expires_delta=access_token_expires,
             token_type=TokenTypeEnum.access,
         )
         # generate refresh token
         refresh_token = await security.create_token(
-            subject=user_do.id,
+            subject=user_entity.id,
             token_type=TokenTypeEnum.refresh,
         )
         token = Token(
@@ -102,7 +102,7 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
         # cache token info
         cache_client: Cache = await get_cache_client()
         await cache_client.set(
-            f"User:{user_do.id}",
+            f"User:{user_entity.id}",
             access_token,
             access_token_expires,
         )
@@ -134,14 +134,14 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
         user_name_list = []
 
         for user_record in user_records:
-            user_import = UserDO(**user_record)
+            user_import = UserEntity(**user_record)
             user_import.password = await get_password_hash(user_import.password)
             user_import_list.append(user_import)
             user_name_list.append(user_import.username)
         await file.close()
 
         # Check if any usernames already exist
-        existing_users: List[UserDO] = await self.mapper.get_user_by_usernames(usernames=user_name_list)
+        existing_users: List[UserEntity] = await self.mapper.get_user_by_usernames(usernames=user_name_list)
 
         if existing_users:
             existing_usernames = [user.username for user in existing_users]
@@ -163,13 +163,13 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
         Returns:
             StreamingResponse: The Excel file containing user record.
         """
-        user_pages, _ = await self.mapper.select_pagination(page=params.page, size=params.size)
+        user_pages, _ = await self.mapper.select_by_page(page=params.page, size=params.size)
         records = []
         for user in user_pages:
             records.append(UserQuery(**user.model_dump()))
         return await export_template(schema=UserQuery, file_name=file_name, records=records)
 
-    async def register(self, user_create_cmd: UserCreateCmd) -> UserDO:
+    async def register(self, user_create_cmd: UserCreateCmd) -> UserEntity:
         """
         Register a new user.
 
@@ -177,10 +177,10 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
             user_create_cmd (UserCreateCmd): The user creation command containing username and password.
 
         Returns:
-            UserDO: The newly created user.
+            UserEntity: The newly created user.
         """
         # user name duplicate verification
-        user: UserDO = await self.mapper.get_user_by_username(username=user_create_cmd.username)
+        user: UserEntity = await self.mapper.get_user_by_username(username=user_create_cmd.username)
         if user is not None:
             raise ServiceException(
                 SystemResponseCode.USER_NAME_EXISTS.code,
@@ -201,5 +201,5 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserDO], UserService):
         Returns:
             Optional[List[UserQuery]]: The list of users or None if no users are found.
         """
-        results, _ = await self.mapper.select_pagination(page=page, size=size, **kwargs)
+        results, _ = await self.mapper.select_by_page(page=page, size=size, **kwargs)
         return [UserQuery(**user.model_dump()) for user in results]

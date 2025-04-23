@@ -9,7 +9,7 @@ from src.main.app.common.util.snowflake_util import snowflake_id
 
 class ModelBase(_SQLModel):
     """
-    Identifier for a data object
+    Identifier for a entity
     """
 
     id: int = Field(
@@ -22,7 +22,7 @@ class ModelBase(_SQLModel):
 
 class ModelExt(_SQLModel):
     """
-    Create time and update time for a data object, can be automatically generated
+    Create time and update time for a entity, can be automatically generated
     """
 
     create_time: Optional[datetime] = Field(

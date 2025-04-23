@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from src.main.common.cache.cache import Cache
+from src.main.app.common.cache.cache import Cache
 
 
 class RedisCache(Cache):

@@ -1,12 +1,12 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from src.main.app.common.config import configs
+from src.main.app.common.config.config_manager import load_config
 
 
 @pytest.fixture
 def client():
-    from src.main.server import app
+    from src.main.app.server import app
 
     return TestClient(app)
 
@@ -19,6 +19,6 @@ def client():
     ],
 )
 def test_probe(client, endpoint, expected_json):
-    response = client.get(f"{configs.api_version}/probe/{endpoint}")
+    response = client.get(f"{load_config().server.api_version}/probe/{endpoint}")
     assert response.status_code == 200
     assert response.json() == expected_json

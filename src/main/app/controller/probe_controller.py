@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends
 
 from src.main.app.common.cache.cache import get_cache_client, Cache
-from src.main.app.enum.system import SystemResponseCode
+from src.main.app.enums.system import SystemResponseCode
 from src.main.app.factory.service_factory import get_user_service
 from src.main.app.service.user_service import UserService
 

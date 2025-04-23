@@ -3,15 +3,29 @@
 import argparse
 import os
 import sys
+
 import uvicorn
 
-# Add the project path to the system path for module imports
-base_dir = os.path.dirname(os.path.abspath(__file__))
-project_dir = os.path.join(base_dir, os.pardir, os.pardir)
-project_path = os.path.abspath(project_dir)
-sys.path.insert(0, project_path)
 
-parser = argparse.ArgumentParser(description="Custom arguments for the server")
+def find_project_root(marker_file="pyproject.toml"):
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    while True:
+        if os.path.exists(os.path.join(current_dir, marker_file)):
+            return current_dir
+
+        parent_dir = os.path.dirname(current_dir)
+
+        if parent_dir == current_dir:
+            raise FileNotFoundError(f"Could not find {marker_file} in any parent directory")
+
+        current_dir = parent_dir
+
+
+project_dir = find_project_root()
+sys.path.insert(0, project_dir)
+print(sys.path)
+
+parser = argparse.ArgumentParser(description="Custom arguments for this server")
 parser.add_argument(
     "-e",
     "--env",

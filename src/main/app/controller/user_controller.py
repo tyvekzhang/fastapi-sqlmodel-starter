@@ -13,9 +13,8 @@ from src.main.app.common.schema.schema import Token, CurrentUser
 from src.main.app.common.security.security import get_current_user
 from src.main.app.factory.service_factory import (
     get_user_service,
-    get_user_role_service,
 )
-from src.main.app.model.user_do import UserDO
+from src.main.app.entity.user_entity import UserEntity
 from src.main.app.schema.user_schema import (
     UserCreateCmd,
     UserQuery,
@@ -23,7 +22,6 @@ from src.main.app.schema.user_schema import (
     UpdateUserCmd,
     UserFilterParams,
 )
-from src.main.app.service.user_role_service import UserRoleService
 from src.main.app.service.user_service import UserService
 
 user_router = APIRouter()
@@ -44,7 +42,7 @@ async def register_user(
     Returns:
         BaseResponse with new user's ID.
     """
-    user: UserDO = await user_service.register(user_create_cmd=user_create_cmd)
+    user: UserEntity = await user_service.register(user_create_cmd=user_create_cmd)
     return result.success(data=user.id)
 
 
@@ -117,7 +115,7 @@ async def update_user(
     Returns:
         Success result message
     """
-    await user_service.modify_by_id(update_user_cmd=update_user_cmd)
+    await user_service.modify_by_id(data=update_user_cmd)
     return result.success()
 
 
@@ -199,28 +197,3 @@ async def list_user(
         like=userFilterParams.like,
     )
     return BaseResponse(data=records)
-
-
-@user_router.post("/{user_id}/roles")
-async def assign_user_roles(
-    user_id: int,
-    role_ids: List[int],
-    user_role_service: UserRoleService = Depends(get_user_role_service),
-    current_user: CurrentUser = Depends(get_current_user()),
-) -> Dict:
-    """
-    Assign roles to a user.
-
-    Args:
-        user_id: ID of the user to assign roles to.
-
-        role_ids: List of role IDs to assign to the user.
-
-        user_role_service: Service handling user-role associations.
-
-        current_user: Logged-in user performing the role assignment.
-    Returns:
-        Success result message
-    """
-    await user_role_service.assign_roles(user_id=user_id, role_ids=role_ids)
-    return result.success()

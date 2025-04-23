@@ -79,7 +79,7 @@ def create_token(
     expire = int(
         (datetime.now() + (expires_delta or timedelta(minutes=config.security.access_token_expire_minutes))).timestamp()
     )
-    to_encode = {"exp": expire, "sub": str(subject), "model": token_type}
+    to_encode = {"exp": expire, "sub": str(subject), "entity": token_type}
     return jwt.encode(to_encode, config.security.secret_key, algorithm=config.security.algorithm)
 
 

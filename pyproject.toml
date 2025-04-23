@@ -5,6 +5,7 @@ description = "Fss aims to be one of the best scaffold in PyWeb."
 readme = "README.md"
 keywords = [
   "fastapi",
+  "python",
   "scaffold",
   "sqlmodel",
   "tools",
@@ -57,6 +58,18 @@ dependencies = [
   "xlsxwriter>=3.2.3",
 ]
 
+[dependency-groups]
+dev = [
+    "coverage>=7.8.0",
+    "httpx>=0.28.1",
+    "pytest>=8.3.5",
+    "sphinx>=7.4.7",
+    "sphinx-rtd-theme>=3.0.2",
+]
+test = [
+    "pre-commit>=4.2.0",
+]
+
 [tool.ruff]
 include = ["src/**/*.py"]
 exclude = ["doc/**/*.py"]
@@ -65,7 +78,7 @@ line-length = 120
 [tool.coverage.run]
 parallel = true
 branch = true
-source = ["src/common", "src/middleware", "src/main", "src/tests"]
+source = ["src/main/app", "src/tests"]
 
 [tool.coverage.report]
 fail_under = 85
@@ -87,8 +100,3 @@ exclude_also = [
 name = "aliyun"
 url = "https://mirrors.aliyun.com/pypi/simple/"
 default = true
-
-[dependency-groups]
-test = [
-    "pre-commit>=4.2.0",
-]

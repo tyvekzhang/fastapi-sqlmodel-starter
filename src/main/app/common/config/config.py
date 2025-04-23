@@ -62,7 +62,7 @@ class DatabaseConfig:
     def __init__(
         self,
         dialect: str = "sqlite",
-        db_name="df.db",
+        db_name="fss.db",
         url: str = "",
         pool_size: int = 10,
         max_overflow: int = 20,
@@ -76,10 +76,10 @@ class DatabaseConfig:
         db_num: int = 0,
     ) -> None:
         """
-        Initializes database configuration with a default database model.
+        Initializes database configuration with a default database entity.
 
         Args:
-            dialect (str): The model of database. Default is 'sqlite'.
+            dialect (str): The entity of database. Default is 'sqlite'.
             db_name (str): The name of sqlite database. Default is 'server.db'.
             url (str): The url of database. Default is 'src/main/resource/alembic/db/server.db'.
             pool_size (int): The pool size of database. Default is 10.
@@ -133,7 +133,7 @@ class SecurityConfig:
         algorithm: str = "HS256",
         secret_key: str = "43365f0e3e88863ff5080ac382d7717634a8ef72d8f2b52d436fc9847dbecc64",
         access_token_expire_minutes: int = 30,
-        refresh_token_expire_days: int = 30,
+        refresh_token_expire_minutes: int = 43200,
         white_list_routes: str = "/v1/probe/liveness, /v1/probe/readiness, /v1/user/login, /v1/user/add, /v1/user/refreshTokens, /v1/user/export",
         backend_cors_origins: str = "http://127.0.0.1:8200, http://localhost:8200, http://localhost",
         black_ip_list: str = "",
@@ -151,8 +151,8 @@ class SecurityConfig:
                               Default is a predefined key.
             access_token_expire_minutes (int): The number of minutes until the access
                                               token expires. Default is 30 minutes.
-            refresh_token_expire_days (int): The number of days until the refresh
-                                           token expires. Default is 30 days.
+            refresh_token_expire_minutes (int): The number of minutes until the refresh
+                                           token expires. Default is 43200 minutes.
             white_list_routes (str): Comma-separated list of routes which can be accessed
                                     without authentication. Default includes common probe and user routes.
             backend_cors_origins (str): Comma-separated list of allowed CORS origins.
@@ -164,7 +164,7 @@ class SecurityConfig:
         self.algorithm = algorithm
         self.secret_key = secret_key
         self.access_token_expire_minutes = access_token_expire_minutes
-        self.refresh_token_expire_days = refresh_token_expire_days
+        self.refresh_token_expire_minutes = refresh_token_expire_minutes
         self.white_list_routes = white_list_routes
         self.backend_cors_origins = backend_cors_origins
         self.black_ip_list = black_ip_list

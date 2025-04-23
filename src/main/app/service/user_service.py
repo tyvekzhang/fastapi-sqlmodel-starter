@@ -9,13 +9,13 @@ from starlette.responses import StreamingResponse
 
 from src.main.app.common.schema.schema import Token
 from src.main.app.common.service.service_base import ServiceBase
-from src.main.app.model.user_do import UserDO
+from src.main.app.entity.user_entity import UserEntity
 from src.main.app.schema.user_schema import UserQuery, LoginCmd
 
 
-class UserService(ServiceBase[UserDO], ABC):
+class UserService(ServiceBase[UserEntity], ABC):
     @abstractmethod
-    async def register(self, *, user_create_cmd) -> UserDO: ...
+    async def register(self, *, user_create_cmd) -> UserEntity: ...
 
     @abstractmethod
     async def login(self, *, login_cmd: LoginCmd) -> Token: ...

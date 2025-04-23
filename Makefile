@@ -44,17 +44,16 @@ lint:
 	pre-commit run --all-files --verbose --show-diff-on-failure
 
 test:
-	cd $(homeDir); \
-	rm -rf migrations/db/fss.db; \
+	rm -rf src/main/resource/alembic/db/fss.db; \
 	rm -rf htmlcov; \
+	uv sync --group dev ; \
 	alembic upgrade head; \
-	coverage run -m pytest; \
+	coverage run -m pytest src/tests; \
 	coverage html
 
 start:
-	cd $(homeDir) && \
 	alembic upgrade head && \
-	python apiserver.py
+	python src/apiserver.py
 
 clean:
 	find . -type f -name '*.pyc' -delete; \

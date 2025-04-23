@@ -71,7 +71,7 @@ class SortEnum(str, Enum):
 
 class TokenTypeEnum(str, Enum):
     """
-    Enum for token model.
+    Enum for token entity.
     """
 
     access = "access"

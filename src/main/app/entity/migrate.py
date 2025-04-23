@@ -3,17 +3,16 @@
 import importlib
 from pathlib import Path
 
-# 定义模型所在的目录
-MODELS_DIR = Path("src/main/app/model")
+MODELS_DIR = Path("src/main/app/entity")
 
 
 # 动态导入所有模型类
 def import_models():
-    for model_file in MODELS_DIR.glob("*_model.py"):
-        module_name = f"src.main.app.model.{model_file.stem}"
+    for model_file in MODELS_DIR.glob("*_entity.py"):
+        module_name = f"src.main.app.entity.{model_file.stem}"
         module = importlib.import_module(module_name)
         for name in dir(module):
-            if name.endswith("DO"):  # 假设所有模型类以 DO 结尾
+            if name.endswith("Entity"):
                 globals()[name] = getattr(module, name)
 
 

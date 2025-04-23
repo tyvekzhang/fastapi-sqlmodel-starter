@@ -1,4 +1,4 @@
-"""User data object"""
+"""User entity"""
 
 from typing import Optional
 
@@ -13,6 +13,6 @@ class BaseUser(SQLModel):
     nickname: Optional[str] = Field(default=None, sa_column=Column(String(32), comment="昵称"))
 
 
-class UserDO(ModelExt, BaseUser, ModelBase, table=True):
+class UserEntity(ModelExt, BaseUser, ModelBase, table=True):
     __tablename__ = "sys_user"
     __table_args__ = {"comment": "用户信息表"}

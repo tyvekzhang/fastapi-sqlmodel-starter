@@ -2,6 +2,8 @@
 
 import http
 import os
+import subprocess
+import time
 
 from fastapi import FastAPI
 from fastapi import Request
@@ -33,6 +35,7 @@ from src.main.app.router.router import create_router
 config = load_config()
 server_config = config.server
 
+# server setup config, eg: openapi, cors, router, middleware, etc.
 app = FastAPI(
     docs_url=None,
     redoc_url=None,
@@ -42,6 +45,16 @@ app = FastAPI(
 )
 app.add_middleware(SQLAlchemyMiddleware, custom_engine=get_async_engine())
 app.mount("/static", StaticFiles(directory=os.path.join(resource_dir, "static")), name="static")
+
+logger.add(server_config.log_file_path)
+
+# Set timezone
+if os.name == "nt":
+    subprocess.run(["tzutil", "/s", server_config.win_tz], check=True)
+
+else:
+    os.environ["TZ"] = server_config.linux_tz
+    time.tzset()
 
 router = create_router()
 app.include_router(router, prefix=server_config.api_version)
@@ -83,6 +96,7 @@ async def redoc_html():
     )
 
 
+# global exception handler
 @app.middleware("http")
 async def jwt_middleware(request: Request, call_next):
     media_type_json = ".json"

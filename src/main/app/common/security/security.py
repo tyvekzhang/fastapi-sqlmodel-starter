@@ -18,8 +18,9 @@ from src.main.app.common.config.config_manager import load_config
 
 from src.main.app.common.schema.schema import CurrentUser
 
-server = load_config().server
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{server.api_version}/user/login")
+security_config = load_config().security
+server_config = load_config().server
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{server_config.api_version}/user/login")
 
 
 def get_current_user() -> Callable[[], CurrentUser]:
@@ -57,9 +58,9 @@ async def create_token(subject: Union[str, Any], expires_delta: timedelta = None
     if expires_delta:
         expire = datetime.now() + expires_delta
     else:
-        expire = datetime.now() + timedelta(minutes=server.refresh_token_expire_minutes)
+        expire = datetime.now() + timedelta(minutes=security_config.refresh_token_expire_minutes)
     to_encode = {"exp": expire, "sub": str(subject), "type": token_type}
-    encoded_jwt = jwt.encode(to_encode, server.secret_key, algorithm=server.algorithm)
+    encoded_jwt = jwt.encode(to_encode, security_config.secret_key, algorithm=security_config.algorithm)
     return encoded_jwt
 
 
@@ -73,11 +74,11 @@ async def get_password_hash(password: str) -> str:
 
 
 async def get_payload(token: str):
-    return jwt.decode(token, server.secret_key, algorithms=server.algorithm)
+    return jwt.decode(token, security_config.secret_key, algorithms=security_config.algorithm)
 
 
 def get_user_id(token: str):
-    payload = jwt.decode(token, server.secret_key, algorithms=server.algorithm)
+    payload = jwt.decode(token, security_config.secret_key, algorithms=security_config.algorithm)
     return payload["sub"]
 
 

@@ -38,7 +38,7 @@ async def get_cache_client() -> Cache:
     from src.main.app.common.cache.redis_cache import RedisCache
 
     redis_client = await RedisManager.get_instance()
-    if load_config().server.enable_redis:
+    if load_config().database.enable_redis:
         return RedisCache(redis_client)
     else:
         from src.main.app.common.cache.page_cache import PageCache

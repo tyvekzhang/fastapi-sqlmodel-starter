@@ -81,7 +81,7 @@ def create_middleware_and_session_proxy():
             if not isinstance(_Session, async_sessionmaker):
                 raise SessionNotInitialisedException
 
-            self.token = _session.set(_Session(**self.session_args))  # model: ignore
+            self.token = _session.set(_Session(**self.session_args))  # entity: ignore
             return type(self)
 
         async def __aexit__(self, exc_type, exc_value, traceback):

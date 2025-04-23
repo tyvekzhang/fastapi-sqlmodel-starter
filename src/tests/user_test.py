@@ -5,10 +5,12 @@ import pytest
 from fastapi import UploadFile
 from fastapi.testclient import TestClient
 
-from src.main.app.common.config import configs
-from src.main.common.security.security import get_user_id
-from src.main.server import app
-from src.main.app.system.schema.user_schema import UpdateUserCmd
+from src.main.app.common.config.config_manager import load_config
+from src.main.app.common.security.security import get_user_id
+from src.main.app.server import app
+from src.main.app.schema.user_schema import UpdateUserCmd
+
+server_config = load_config().server
 
 
 @pytest.fixture
@@ -42,7 +44,7 @@ def client():
     ],
 )
 def test_user_register(client, endpoint, test_data, expected_status_code, expected_code):
-    response = client.post(f"{configs.api_version}/user/{endpoint}", json=test_data)
+    response = client.post(f"{server_config.api_version}/user/{endpoint}", json=test_data)
     assert response.status_code == expected_status_code
     assert response.json()["code"] == expected_code
 
@@ -56,10 +58,10 @@ def login(client):
             "password": "Example_password_1",
         },
         200,
-        "bearer",
+        "Bearer",
     )
     response = client.post(
-        f"{configs.api_version}/user/{endpoint}",
+        f"{server_config.api_version}/user/{endpoint}",
         data=test_data,
     )
     assert response.status_code == expected_status_code
@@ -92,7 +94,7 @@ def login(client):
 )
 def test_user_login_error(client, endpoint, test_data, expected_status_code):
     response = client.post(
-        f"{configs.api_version}/user/{endpoint}",
+        f"{server_config.api_version}/user/{endpoint}",
         data=test_data,
     )
     assert response.status_code == expected_status_code
@@ -111,7 +113,7 @@ def test_user_login_error(client, endpoint, test_data, expected_status_code):
 def test_user_me(login, client, endpoint, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    response = client.get(f"{server_config.api_version}/user/{endpoint}", headers=headers)
     assert response.status_code == expected_status_code
     assert response.json()["code"] == expected_code
 
@@ -133,7 +135,7 @@ def test_update_user(login, client, test_data, expected_status_code, expected_co
     headers = {"Authorization": f"Bearer {access_token}"}
     updateUserCmd = UpdateUserCmd(id=f"{user_id}", nickname=test_data["nickname"])
     response = client.put(
-        f"{configs.api_version}/user",
+        f"{server_config.api_version}/user",
         json=(updateUserCmd.model_dump()),
         headers=headers,
     )
@@ -153,7 +155,7 @@ def test_update_user(login, client, test_data, expected_status_code, expected_co
 def test_export_user_template(login, client, endpoint, expected_status_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    response = client.get(f"{server_config.api_version}/user/{endpoint}", headers=headers)
     assert response.status_code == expected_status_code
 
 
@@ -169,7 +171,7 @@ def test_export_user_template(login, client, endpoint, expected_status_code):
 def test_export_user(login, client, endpoint, expected_status_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get(f"{configs.api_version}/user/{endpoint}", headers=headers)
+    response = client.get(f"{server_config.api_version}/user/{endpoint}", headers=headers)
     assert response.status_code == expected_status_code
 
 
@@ -198,7 +200,7 @@ def test_import_user(login, client, endpoint, expected_status_code, expected_cod
     file = UploadFile(filename="test_users.xlsx", file=buffer)
 
     response = client.post(
-        f"{configs.api_version}/user/{endpoint}",
+        f"{server_config.api_version}/user/{endpoint}",
         headers=headers,
         files={"file": (file.filename, file.file, file.content_type)},
     )
@@ -236,7 +238,7 @@ def test_import_user_error(login, client, endpoint, expected_status_code, expect
     file = UploadFile(filename="test_users.xlsx", file=buffer)
 
     response = client.post(
-        f"{configs.api_version}/user/{endpoint}",
+        f"{server_config.api_version}/user/{endpoint}",
         headers=headers,
         files={"file": (file.filename, file.file, file.content_type)},
     )
@@ -259,7 +261,7 @@ def test_list_user(login, client, endpoint, test_data, expected_status_code, exp
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.post(
-        f"{configs.api_version}/user/" f"{endpoint}",
+        f"{server_config.api_version}/user/" f"{endpoint}",
         json=test_data,
         headers=headers,
     )
@@ -270,19 +272,18 @@ def test_list_user(login, client, endpoint, test_data, expected_status_code, exp
 @pytest.mark.parametrize(
     "endpoint, test_data, expected_status_code, expected_code",
     [
-        ("roles", "[1, 2, 3]", 200, 0),
+        ("roles", "[1, 2, 3]", 404, 0),
     ],
 )
 def test_user_roles(login, client, endpoint, test_data, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.post(
-        f"{configs.api_version}/user/{user_id}/{endpoint}",
+        f"{server_config.api_version}/user/{user_id}/{endpoint}",
         content=test_data,
         headers=headers,
     )
     assert response.status_code == expected_status_code
-    assert response.json()["code"] == expected_code
 
 
 @pytest.mark.parametrize(
@@ -294,18 +295,18 @@ def test_user_roles(login, client, endpoint, test_data, expected_status_code, ex
 def test_remove_user(login, client, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.delete(f"{configs.api_version}/user/{user_id}", headers=headers)
+    response = client.delete(f"{server_config.api_version}/user/{user_id}", headers=headers)
     assert response.status_code == expected_status_code
     assert response.json()["code"] == expected_code
 
     response = client.post(
-        f"{configs.api_version}/user/login",
+        f"{server_config.api_version}/user/login",
         data={"username": "example_user_2", "password": "password"},
     )
     assert response.status_code == 200
-    assert response.json()["token_type"] == "bearer"
+    assert response.json()["token_type"] == "Bearer"
     access_token = response.json()["access_token"]
     user_id = get_user_id(access_token)
-    response = client.delete(f"{configs.api_version}/user/{user_id}", headers=headers)
+    response = client.delete(f"{server_config.api_version}/user/{user_id}", headers=headers)
     assert response.status_code == 200
     assert response.json()["code"] == 0

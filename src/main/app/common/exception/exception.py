@@ -18,7 +18,7 @@ class ServiceException(Exception):
         Initializes the ServiceException with the given parameters.
 
         Args:
-            code: Error code indicating the model of error.
+            code: Error code indicating the entity of error.
             msg: Error message providing details about the error.
             status_code: HTTP status code corresponding to the error (default is 200 OK).
         """
