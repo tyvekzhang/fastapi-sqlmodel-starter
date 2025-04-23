@@ -19,29 +19,41 @@ help:
 	@echo "  doc                   Make doc for this project."
 	@echo "  pypi                  Build and publish to pypi."
 	@echo "  clean                 Remove temporary files."
+	@echo "  db                    Generate db structure."
+	@echo "  db_up                 Upgrade db structure."
 	@echo "Use 'make <target>' to run a specific command."
 
 install:
-	cd $(homeDir) && \
-	poetry shell && \
-	poetry install
+	@echo "Detecting OS..."
+ifeq ($(OS),Windows_NT)
+	@echo "Windows system detected"
+	uv venv --python 3.11 && .venv\Scripts\activate && uv sync
+else
+	@echo "Linux/Mac system detected"
+	uv venv --python 3.11 && . .venv/bin/activate && uv sync
+endif
+
+db:
+	alembic revision --autogenerate
+
+db_up:
+	alembic upgrade head
 
 lint:
-	python -m pip install pre-commit && \
+	uv add pre-commit --group test && \
 	pre-commit run --all-files --verbose --show-diff-on-failure
 
 test:
-	cd $(homeDir); \
-	rm -rf migrations/db/fss.db; \
+	rm -rf src/main/resource/alembic/db/fss.db; \
 	rm -rf htmlcov; \
+	uv sync --group dev ; \
 	alembic upgrade head; \
-	coverage run -m pytest; \
+	coverage run -m pytest src/tests; \
 	coverage html
 
 start:
-	cd $(homeDir) && \
 	alembic upgrade head && \
-	python apiserver.py
+	python src/apiserver.py
 
 clean:
 	find . -type f -name '*.pyc' -delete; \

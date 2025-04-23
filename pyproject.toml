@@ -1,25 +1,24 @@
-[build-system]
-build-backend = "poetry.core.masonry.api"
-requires = [
-  "poetry-core",
-]
-
-[tool.poetry]
+[project]
 name = "fastapi-sqlmodel-starter"
-version = "1.1.1"
+version = "2.0.0"
 description = "Fss aims to be one of the best scaffold in PyWeb."
-license = "MIT"
-authors = [
-  "tyvekZhang <tyvekzhang@gmail.com>",
-]
-maintainers = [
-  "tyvekZhang <tyvekzhang@gmail.com>",
-]
 readme = "README.md"
-homepage = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter"
-repository = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter"
-documentation = "https://github.com/tyvekzhang/fastapi-sqlmodel-starter/wiki"
-keywords = ["fastapi", "sqlmodel", "tools", "web", "scaffold"]
+keywords = [
+  "fastapi",
+  "python",
+  "scaffold",
+  "sqlmodel",
+  "tools",
+  "web",
+]
+license = "MIT"
+maintainers = [
+     {name = "tyvekZhang", email = "tyvekzhang@gmail.com"}
+]
+authors = [
+   {name = "tyvekZhang", email = "tyvekzhang@gmail.com"}
+]
+requires-python = ">=3.9"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Programming Language :: Python",
@@ -31,62 +30,55 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-packages = [
-  { include = "src"},
+dependencies = [
+  "aiomysql>=0.2",
+  "aiosqlite>=0.21",
+  "alembic>=1.15.2",
+  "asyncpg>=0.30",
+  "bcrypt>=4.3",
+  "diskcache>=5.6.3",
+  "fastapi[standard]>=0.115.12",
+  "fastapi-async-sqlalchemy>=0.6.1",
+  "fastapi-pagination>=0.13",
+  "greenlet>=3.2",
+  "jinja2>=3.1.6",
+  "loguru>=0.7.3",
+  "openpyxl>=3.1.5",
+  "pandas>=2.2.3",
+  "passlib>=1.7.4",
+  "pyjwt>=2.10.1",
+  "python-dotenv>=1.1",
+  "python-jose[cryptography]>=3.4",
+  "python-multipart>=0.0.20",
+  "redis[hiredis]>=5.2.1",
+  "slowapi>=0.1.9",
+  "sqlalchemy-utils>=0.41.2",
+  "sqlmodel>=0.0.24",
+  "uvicorn>=0.34.2",
+  "xlsxwriter>=3.2.3",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-loguru = "^0.7.2"
-fastapi = "^0.110.0"
-fastapi-pagination = "^0.12.21"
-fastapi-async-sqlalchemy = "^0.6.1"
-fastapi-offline = "^1.7.1"
-uvicorn = "^0.29.0"
-sqlmodel = "^0.0.16"
-python-dotenv = "^1.0.1"
-python-multipart = "^0.0.9"
-bcrypt = "==4.0.1"
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-passlib = "^1.7.4"
-alembic = "^1.13.1"
-sqlalchemy-utils = "^0.41.2"
-aiosqlite = "^0.20.0"
-eval-type-backport = "^0.1.3"
-diskcache = "^5.6.3"
-pandas = "^2.2.2"
-xlsxwriter = "^3.2.0"
-openpyxl = "^3.1.2"
-slowapi = "^0.1.9"
-asyncpg = "^0.29.0"
-aiomysql = "^0.2.0"
-redis = {extras = ["hiredis"], version = "^5.0.3"}
-greenlet = "^3.0.3"
-jinja2 = "^3.1.4"
-
-[tool.poetry.group.test.dependencies]
-pytest = "^8.1.1"
-httpx = "^0.27.0"
-coverage = "^7.4.4"
-
-[tool.poetry.group.docs.dependencies]
-sphinx = "^7.2.6"
-sphinx-rtd-theme = "^2.0.0"
-
-[tool.poetry.scripts]
-[[tool.poetry.source]]
-name = "tsinghua"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
-priority = "primary"
+[dependency-groups]
+dev = [
+    "coverage>=7.8.0",
+    "httpx>=0.28.1",
+    "pytest>=8.3.5",
+    "sphinx>=7.4.7",
+    "sphinx-rtd-theme>=3.0.2",
+]
+test = [
+    "pre-commit>=4.2.0",
+]
 
 [tool.ruff]
 include = ["src/**/*.py"]
+exclude = ["doc/**/*.py"]
 line-length = 120
 
 [tool.coverage.run]
 parallel = true
 branch = true
-source = ["src/common", "src/middleware", "src/main", "src/tests"]
+source = ["src/main/app", "src/tests"]
 
 [tool.coverage.report]
 fail_under = 85
@@ -102,4 +94,9 @@ exclude_also = [
     "if TYPE_CHECKING:",
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
-    ]
+]
+
+[[tool.uv.index]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true
