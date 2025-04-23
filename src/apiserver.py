@@ -23,7 +23,6 @@ def find_project_root(marker_file="pyproject.toml"):
 
 project_dir = find_project_root()
 sys.path.insert(0, project_dir)
-print(sys.path)
 
 parser = argparse.ArgumentParser(description="Custom arguments for this server")
 parser.add_argument(
