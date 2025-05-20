@@ -1,6 +1,6 @@
 <!--
 Thanks for sending a pull request!
-If this is your first time, please read our contributor guidelines: https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/.github/CONTRIBUTING.md
+If this is your first time, please read our contributor guidelines: https://github.com/tyvekzhang/fast-web/blob/main/.github/CONTRIBUTING.md
 Before submitting your pull request, please make sure the checklist below is confirmed.
 Your pull requests will be merged after one of the collaborators approve.
 -->

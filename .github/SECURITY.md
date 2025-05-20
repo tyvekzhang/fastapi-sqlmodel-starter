@@ -6,7 +6,7 @@ We're extremely grateful for security researchers and users that report vulnerab
 
 You can email the private [tyvekzhang@gmail.com](tyvekzhang@gmail.com)
 list with the security details and the details expected for
-[all Fastapi sqlmodel starter bug reports](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/master/.github/ISSUE_TEMPLATE/bug-report.yaml).
+[all Fastapi sqlmodel starter bug reports](https://github.com/tyvekzhang/fast-web/blob/master/.github/ISSUE_TEMPLATE/bug-report.yaml).
 
 ### When Should I Report a Vulnerability?
 

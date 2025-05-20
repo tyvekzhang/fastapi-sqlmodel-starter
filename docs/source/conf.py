@@ -18,7 +18,7 @@ sys.path.insert(0, parent_dir)
 sys.path.insert(0, project_dir)
 sys.path.insert(0, root_dir)
 
-project = "fastapi-sqlmodel-starter"
+project = "fast-web"
 copyright = "2024, src group"
 author = "tyvekZhang"
 release = "1.0.0-beta.2"

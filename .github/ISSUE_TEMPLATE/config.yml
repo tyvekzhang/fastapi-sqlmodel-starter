@@ -1,4 +1,4 @@
 contact_links:
   - name: Support Request
-    url: https://github.com/tyvekzhang/fastapi-sqlmodel-starter/issues
+    url: https://github.com/tyvekzhang/fast-web/issues
     about: Support request or question relating to Fastapi sqlmodel main

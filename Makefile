@@ -1,7 +1,7 @@
 .PHONY: help install lint test start image push docker-compose-start deploy-k8s doc pypi clean
 
 tag ?= v1.1.1
-releaseName = fastapi-sqlmodel-starter
+releaseName = fast-web
 dockerhubUser = tyvek2zhang
 homeDir = src
 deployDir = deploy
@@ -36,38 +36,35 @@ endif
 db:
 	alembic revision --autogenerate
 
-db_up:
+dp:
 	alembic upgrade head
+
+start:
+	alembic upgrade head && \
+	uv run apiserver.py
 
 lint:
 	uv add pre-commit --group test && \
 	pre-commit run --all-files --verbose --show-diff-on-failure
 
 test:
-	rm -rf src/main/resource/alembic/db/fss.db; \
+	rm -rf src/main/resource/alembic/db/fast_web.db; \
 	rm -rf htmlcov; \
 	uv sync --group dev ; \
 	alembic upgrade head; \
 	coverage run -m pytest src/tests; \
 	coverage html
 
-start:
-	alembic upgrade head && \
-	python src/apiserver.py
-
 clean:
-	find . -type f -name '*.pyc' -delete; \
-	find . -type d -name __pycache__ -delete; \
+	rm -rf dist; \
 	rm -rf .pytest_cache; \
 	rm -rf .ruff_cache; \
-	rm -rf dist; \
 	rm -rf log; \
-	rm -rf poetry.lock; \
 	rm -rf docs/build; \
 	rm -rf $(homeDir)/htmlcov; \
-	rm -rf $(homeDir)/migrations/db/fss.db; \
-	rm -rf $(homeDir)/.env_fss; \
-	rm -rf $(homeDir)/.coverage; \
+	rm -rf $(homeDir)/migrations/db/fast_web.db; \
+	rm -rf $(homeDir)/.env_fast_web; \
+	rm -rf $(homeDir)/.coverage;
 
 image: clean
 	docker build -t $(dockerhubUser)/$(releaseName):$(tag) .

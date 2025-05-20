@@ -12,7 +12,7 @@ class ServerConfig:
         app_desc: str = "Server",
         api_version: str = "/v1",
         workers: int = 1,
-        log_file_path: str = "../log/fss/log.txt",
+        log_file_path: str = "../log/fast_web/log.txt",
         win_tz: str = "China Standard Time",
         linux_tz: str = "Asia/Shanghai",
         enable_rate_limit: bool = False,
@@ -29,7 +29,7 @@ class ServerConfig:
             app_desc (str): The server app_desc. Default is 'server'.
             api_version (str): The server api_version. Default is 'v1'.
             workers (int): The server worker numbers. Default is 1.
-            log_file_path (str): Path to the log file. Default is '../log/fss/log.txt'.
+            log_file_path (str): Path to the log file. Default is '../log/fast_web/log.txt'.
             win_tz (str): Windows timezone setting. Default is 'China Standard Time'.
             linux_tz (str): Linux timezone setting. Default is 'Asia/Shanghai'.
             enable_rate_limit (bool): Whether to enable rate limiting. Default is False.
@@ -62,7 +62,7 @@ class DatabaseConfig:
     def __init__(
         self,
         dialect: str = "sqlite",
-        db_name="fss.db",
+        db_name="fast_web.db",
         url: str = "",
         pool_size: int = 10,
         max_overflow: int = 20,

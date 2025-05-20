@@ -1,7 +1,7 @@
 [project]
-name = "fastapi-sqlmodel-starter"
-version = "2.0.0"
-description = "Fss aims to be one of the best scaffold in PyWeb."
+name = "fast-web"
+version = "3.0.0"
+description = "Fast web aims to be one of the best scaffold in PyWeb."
 readme = "README.md"
 keywords = [
   "fastapi",
@@ -13,10 +13,10 @@ keywords = [
 ]
 license = "MIT"
 maintainers = [
-     {name = "tyvekZhang", email = "tyvekzhang@gmail.com"}
+  { name = "tyvekZhang", email = "tyvekzhang@gmail.com" },
 ]
 authors = [
-   {name = "tyvekZhang", email = "tyvekzhang@gmail.com"}
+  { name = "tyvekZhang", email = "tyvekzhang@gmail.com" },
 ]
 requires-python = ">=3.9"
 classifiers = [
@@ -27,6 +27,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
@@ -60,40 +61,41 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "coverage>=7.8.0",
-    "httpx>=0.28.1",
-    "pytest>=8.3.5",
-    "sphinx>=7.4.7",
-    "sphinx-rtd-theme>=3.0.2",
+  "coverage>=7.8",
+  "httpx>=0.28.1",
+  "pytest>=8.3.5",
+  "sphinx>=7.4.7",
+  "sphinx-rtd-theme>=3.0.2",
 ]
 test = [
-    "pre-commit>=4.2.0",
+  "pre-commit>=4.2",
 ]
 
 [tool.ruff]
-include = ["src/**/*.py"]
-exclude = ["doc/**/*.py"]
 line-length = 120
+
+include = [ "apiserver.py", "src/**/*.py" ]
+exclude = [ "doc/**/*.py" ]
 
 [tool.coverage.run]
 parallel = true
 branch = true
-source = ["src/main/app", "src/tests"]
+source = [ "src/main/app", "src/tests", "apiserver.py" ]
 
 [tool.coverage.report]
 fail_under = 85
 show_missing = true
 exclude_also = [
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "if TYPE_CHECKING:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
+  "def __repr__",
+  "if self.debug:",
+  "if settings.DEBUG",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if 0:",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "class .*\\bProtocol\\):",
+  "@(abc\\.)?abstractmethod",
 ]
 
 [[tool.uv.index]]

@@ -6,8 +6,8 @@ Project Info
 
 .. code-block:: none
 
-    APP_NAME=Fss
-    APP_DESC="Fss aims to one of the best scaffolding in the PyWeb field."
+    APP_NAME=Fast web
+    APP_DESC="Fast web aims to one of the best scaffolding in the PyWeb field."
     VERSION=1.1.1
     MODE=prod
     HOST=0.0.0.0
@@ -16,7 +16,7 @@ Project Info
     API_VERSION=/api/v1
     ECHO_SQL=True
     ENABLE_SWAGGER=True
-    LOG_FILE=../log/fss/log.txt
+    LOG_FILE=../log/fast_web/log.txt
 
 Time Zone
 ---------
@@ -32,7 +32,7 @@ Database
 .. code-block:: none
 
     #SQLALCHEMY_DATABASE_URL=driver://user:pass@localhost:port/dbname
-    SQLALCHEMY_DATABASE_URL=sqlite+aiosqlite:///migrations/db/fss.db
+    SQLALCHEMY_DATABASE_URL=sqlite+aiosqlite:///migrations/db/fast_web.db
     #SQLALCHEMY_DATABASE_URL=postgresql+asyncpg://user:pass@localhost:port/dbname
     #SQLALCHEMY_DATABASE_URL=mysql+aiomysql://user:pass@localhost:port/dbname
 

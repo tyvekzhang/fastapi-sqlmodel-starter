@@ -5,7 +5,7 @@ services:
   db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: "fss123#456"
+      MYSQL_ROOT_PASSWORD: "fast_web123#456"
     command:
       --default-authentication-plugin=mysql_native_password
       --character-set-server=utf8mb4
@@ -26,14 +26,14 @@ services:
       # Mount the redis data directory to the container.
       - ./volumes/redis/data:/data
     # Set the redis password when startup redis server.
-    command: redis-server --requirepass fss123#456
+    command: redis-server --requirepass fast_web123#456
     ports:
       - "6379:6379"
 
-  # The Fss server
-  fss_server:
-    container_name: fss_server
-    image: tyvek2zhang/fastapi-sqlmodel-starter:1.1.1
+  # The fast web server
+  fast_web_server:
+    container_name: fast_web_server
+    image: tyvek2zhang/fast-web:1.1.1
     restart: always
     command: "sh -c 'cd src && alembic upgrade head && python apiserver.py'"
     depends_on:
