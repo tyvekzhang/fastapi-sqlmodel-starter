@@ -13,11 +13,11 @@ Before submitting code to Fastapi sqlmodel starter, you should first complete th
 Before you get started, you will need to sign up for a [GitHub](http://github.com/signup) user account.
 
 ### Code of Conduct
-Please make sure to read and observe the [Code of Conduct](https://github.com/tyvekzhang/fastapi-sqlmodel-starter?tab=coc-ov-file)
+Please make sure to read and observe the [Code of Conduct](https://github.com/tyvekzhang/fast-web?tab=coc-ov-file)
 
 ### Setting up your development environment
 It is not required to set up a developer environment in order to contribute to Fastapi sqlmodel starter.
-If you are interested in it, you can refer to [Readme](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/blob/main/README.md)
+If you are interested in it, you can refer to [Readme](https://github.com/tyvekzhang/fast-web/blob/main/README.md)
 
 ## Your First Contribution
 
@@ -27,7 +27,7 @@ Here are some things you can do today to get started contributing:
 - Clarify code, variables, or functions that can be renamed or commented on
 - Write test coverage
 - Help triage issues
-If the above suggestions don't appeal to you, you can browse the [issues labeled as a good first issue](https://github.com/tyvekzhang/fastapi-sqlmodel-starter/issues) to see who is looking for help.
+If the above suggestions don't appeal to you, you can browse the [issues labeled as a good first issue](https://github.com/tyvekzhang/fast-web/issues) to see who is looking for help.
 
 ### Issue Assignment in Github
 When you've found an issue to work on, you can assign it to yourself.

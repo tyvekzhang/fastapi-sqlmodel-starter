@@ -3,25 +3,25 @@ FastAPI SQLModel Starter
 
 Welcome to the documentation for FastAPI SQLModel Starter, you can easily use this scaffold to develop your project.
 
-.. image:: https://img.shields.io/github/license/tyvekzhang/fastapi-sqlmodel-starter
+.. image:: https://img.shields.io/github/license/tyvekzhang/fast-web
     :alt: GitHub License
-    :target: https://github.com/tyvekzhang/fastapi-sqlmodel-starter
+    :target: https://github.com/tyvekzhang/fast-web
 
-.. image:: https://img.shields.io/pypi/pyversions/fastapi-sqlmodel-starter
+.. image:: https://img.shields.io/pypi/pyversions/fast-web
     :alt: PyPI - Python Version
-    :target: https://pypi.org/project/fastapi-sqlmodel-starter/
+    :target: https://pypi.org/project/fast-web/
 
-.. image:: https://github.com/tyvekzhang/fastapi-sqlmodel-starter/actions/workflows/ci.yaml/badge.svg
+.. image:: https://github.com/tyvekzhang/fast-web/actions/workflows/ci.yaml/badge.svg
     :alt: CI
-    :target: https://github.com/tyvekzhang/fastapi-sqlmodel-starter/actions
+    :target: https://github.com/tyvekzhang/fast-web/actions
 
-.. image:: https://img.shields.io/codecov/c/github/tyvekzhang/fastapi-sqlmodel-starter
+.. image:: https://img.shields.io/codecov/c/github/tyvekzhang/fast-web
     :alt: Codecov
-    :target: https://codecov.io/gh/tyvekzhang/fastapi-sqlmodel-starter
+    :target: https://codecov.io/gh/tyvekzhang/fast-web
 
-.. image:: https://img.shields.io/readthedocs/fastapi-sqlmodel-starter
+.. image:: https://img.shields.io/readthedocs/fast-web
     :alt: Read the Docs
-    :target: https://fastapi-sqlmodel-starter.readthedocs.io/
+    :target: https://fast-web.readthedocs.io/
 
 .. toctree::
    :maxdepth: 1

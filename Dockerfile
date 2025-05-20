@@ -1,22 +1,37 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11-slim
-ENV PYTHONUNBUFFERED=1
-ENV PIP_DEFAULT_TIMEOUT=100
+# Base image
+FROM python:3.11-slim AS builder
+
+# Environment variables
+ENV PYTHONUNBUFFERED=1 \
+    UV_HOME=/opt/uv
+
+# Install curl  and clean up
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="${UV_HOME}/bin:${PATH}"
+
+# Copy dependency files
 WORKDIR /app
+COPY pyproject.toml .
 
-RUN apt clean && apt update && apt install curl -y
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
-    poetry config virtualenvs.create false
+# Install dependencies with uv
+RUN uv pip install .
 
-COPY pyproject.toml ./poetry.lock* /app/
+# Runtime stage
+FROM python:3.11-slim
 
-ARG INSTALL_DEV=false
-RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; else poetry install --no-root --only main ; fi"
+# Copy installed packages from builder
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
-ENV PYTHONPATH=/app
+# Copy application code
+WORKDIR /app
+COPY src ./src
 
-COPY src /app/src/
-COPY README.md /app/
+# Expose server port
+EXPOSE 9100
 
-EXPOSE 9010
+CMD ["uv", "run", "apiserver.py"]

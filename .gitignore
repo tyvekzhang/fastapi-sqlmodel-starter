@@ -1,7 +1,5 @@
 .vscode/
 .idea/
-*.lock
-.tox/
 .ruff_cache/
 *.db
 /dist/

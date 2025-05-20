@@ -21,8 +21,8 @@ Once you have conda, you can create an FSS environment with Python 3.11 (or grea
 
 .. code-block:: shell
 
-    conda create -n fss_py311 python==3.11 -y
-    conda activate fss_py311
+    conda create -n fast_web_py311 python==3.11 -y
+    conda activate fast_web_py311
 
 .. _Quick Start:
 
@@ -33,8 +33,8 @@ Quick Start
 
 .. code-block:: shell
 
-    git clone https://github.com/tyvekzhang/fastapi-sqlmodel-starter
-    cd fastapi-sqlmodel-starter
+    git clone https://github.com/tyvekzhang/fast-web
+    cd fast-web
 
 2. **Install Poetry and download dependencies with conda**:
 

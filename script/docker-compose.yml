@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  fss_server:
-    container_name: fss_server
-    image: tyvek2zhang/fastapi-sqlmodel-starter:1.1.1
+  fast_web_server:
+    container_name: fast_web_server
+    image: tyvek2zhang/fast-web:1.1.1
     restart: always
     command: "sh -c 'cd src && alembic upgrade head && python apiserver.py'"
     ports:

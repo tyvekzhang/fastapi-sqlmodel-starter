@@ -261,7 +261,7 @@ def test_list_user(login, client, endpoint, test_data, expected_status_code, exp
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.post(
-        f"{server_config.api_version}/user/" f"{endpoint}",
+        f"{server_config.api_version}/user/{endpoint}",
         json=test_data,
         headers=headers,
     )

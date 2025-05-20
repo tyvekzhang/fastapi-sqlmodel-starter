@@ -11,6 +11,7 @@ class BaseUser(SQLModel):
     username: str = Field(sa_column=Column(String(32), index=True, unique=True, nullable=True, comment="用户名"))
     password: str = Field(default=None, sa_column=Column(String(64), nullable=True, comment="密码"))
     nickname: Optional[str] = Field(default=None, sa_column=Column(String(32), comment="昵称"))
+    avatar: Optional[str] = Field(default=None, sa_column=Column(String(64), comment="头像"))
 
 
 class UserEntity(ModelExt, BaseUser, ModelBase, table=True):
