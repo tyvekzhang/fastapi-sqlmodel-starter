@@ -23,21 +23,20 @@ def upgrade():
     op.create_table(
         "sys_user",
         sa.Column("id", sa.BigInteger(), nullable=False, comment="主键"),
-        sa.Column("username", sa.String(length=32), nullable=True, comment="用户名"),
-        sa.Column("password", sa.String(length=64), nullable=True, comment="密码"),
-        sa.Column("nickname", sa.String(length=32), nullable=True, comment="昵称"),
-        sa.Column("avatar", sa.String(length=64), nullable=True, comment="头像"),
+        sa.Column("username", sa.String(length=32), nullable=False, comment="用户名"),
+        sa.Column("password", sa.String(length=63), nullable=False, comment="密码"),
+        sa.Column("nickname", sa.String(length=32), nullable=False, comment="昵称"),
+        sa.Column("avatar_url", sa.String(length=63), nullable=True, comment="头像地址"),
+        sa.Column("status", sa.Integer(), nullable=True, comment="状态(0:停用,1:待审核,2:正常,3:已注销)"),
+        sa.Column("remark", sa.String(length=255), nullable=True, comment="备注"),
         sa.Column("create_time", sa.DateTime(), nullable=True, comment="创建时间"),
         sa.Column("update_time", sa.DateTime(), nullable=True, comment="更新时间"),
         sa.PrimaryKeyConstraint("id"),
         comment="用户信息表",
     )
     op.create_index(op.f("ix_sys_user_username"), "sys_user", ["username"], unique=True)
-
-    # 添加自定义的 INSERT 语句
     op.execute("""
-        INSERT INTO "sys_user" ("id", "username", "password", "nickname", "create_time", "update_time")
-        VALUES (72607707435008, 'admin', '$2b$12$CxVv3BQY7AnXXACbQ2ZXMO4XzjqGSvDG0oSh4e.k4LgFdaAQ4oZGW', '管理员', '2025-05-20 22:04:31.328280', '2025-05-20 22:04:31.328280')
+        INSERT INTO sys_user (id, username, password, nickname, avatar_url, status, remark, create_time, update_time) VALUES(72973580767232, 'admin', '$2b$12$qupycbom77r6MoRuCW5L8um0QUmCazQgBNfv4otYwX3nnXP55dVg6', '管理员', NULL, 1, '管理员', '2025-05-21 22:18:22.868513', '2025-05-21 22:18:22.868513');
     """)
     # ### end Alembic commands ###
 

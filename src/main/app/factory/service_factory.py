@@ -9,7 +9,7 @@ from src.main.app.service.user_service import UserService
 _singleton_user_service_instance: Optional[UserService] = None
 
 
-def get_user_service(service_name: str = "default") -> UserService:
+def wire_user_service(service_name: str = "default") -> UserService:
     """
     Return an instance of the UserService implementation.
 

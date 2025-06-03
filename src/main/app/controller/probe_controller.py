@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends
 
 from src.main.app.common.cache.cache import get_cache_client, Cache
 from src.main.app.common.schema.response import HttpResponse
-from src.main.app.enums.system import SystemResponseCode
-from src.main.app.factory.service_factory import get_user_service
+from src.main.app.enums.enum import SystemResponseCode
+from src.main.app.factory.service_factory import wire_user_service
 from src.main.app.service.user_service import UserService
 
 probe_router = APIRouter()
@@ -20,11 +20,12 @@ async def liveness() -> HttpResponse[str]:
         HttpResponse[str]: An HTTP response containing a success message
         with the string "Hi" as data.
     """
-    return HttpResponse.success(data="Hi")
+    # return HttpResponse.success(data="Hi")
+    return HttpResponse.success()
 
 
 @probe_router.get("/readiness")
-async def readiness(user_id: int = 1, user_service: UserService = Depends(get_user_service)) -> HttpResponse[str]:
+async def readiness(user_id: int = 1, user_service: UserService = Depends(wire_user_service)) -> HttpResponse[str]:
     """
     Checks system and dependencies' readiness.
 

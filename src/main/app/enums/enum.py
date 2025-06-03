@@ -2,6 +2,16 @@
 
 from enum import Enum
 
+from src.main.app.common.enums.base_error_code import BaseErrorCode
+
+
+class SystemErrorEnum(BaseErrorCode):
+    """System and infrastructure related errors"""
+
+    INTERNAL_ERROR = (500, "Internal server error")
+    SERVICE_UNAVAILABLE = (503, "Service unavailable")
+    DATABASE_ERROR = (5001, "Database operation failed")
+
 
 class SystemResponseCode(Enum):
     """

@@ -2,8 +2,7 @@
 
 import http
 from datetime import timedelta, datetime
-from typing import Any, Union
-from typing import Callable
+from typing import Any, Union, Callable, Coroutine
 
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
@@ -23,7 +22,7 @@ server_config = load_config().server
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{server_config.api_version}/user/login")
 
 
-def get_current_user() -> Callable[[], CurrentUser]:
+def get_current_user() -> Callable[[str], Coroutine[Any, Any, CurrentUser]]:
     """
     Acquire current info through access_token
     :return: CurrentUser instance

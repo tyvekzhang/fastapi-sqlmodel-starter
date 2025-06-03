@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from src.main.app.common.config.config_manager import load_config
 from src.main.app.common.security.security import get_user_id
 from src.main.app.server import app
-from src.main.app.schema.user_schema import UpdateUserCmd
+from src.main.app.schema.user_schema import UserUpdate
 
 server_config = load_config().server
 
@@ -133,7 +133,7 @@ def test_user_me(login, client, endpoint, expected_status_code, expected_code):
 def test_update_user(login, client, test_data, expected_status_code, expected_code):
     access_token, user_id = login
     headers = {"Authorization": f"Bearer {access_token}"}
-    updateUserCmd = UpdateUserCmd(id=f"{user_id}", nickname=test_data["nickname"])
+    updateUserCmd = UserUpdate(id=f"{user_id}", nickname=test_data["nickname"])
     response = client.put(
         f"{server_config.api_version}/user",
         json=(updateUserCmd.model_dump()),

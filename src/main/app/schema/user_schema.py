@@ -9,7 +9,7 @@ from sqlmodel import Field
 from src.main.app.common.schema.schema import BasePage
 
 
-class UserCreateCmd(BaseModel):
+class UserCreate(BaseModel):
     """
     UserCreate schema
     """
@@ -45,7 +45,7 @@ class UserQuery(BaseModel):
     nickname: str
 
 
-class LoginCmd(BaseModel):
+class LoginForm(BaseModel):
     """
     Login schema
     """
@@ -54,7 +54,7 @@ class LoginCmd(BaseModel):
     password: str
 
 
-class UpdateUserCmd(BaseModel):
+class UserUpdate(BaseModel):
     """
     Update user schema
     """

@@ -19,15 +19,15 @@ from src.main.app.common.security import security
 from src.main.app.common.service.impl.service_base_impl import ServiceBaseImpl
 from src.main.app.common.util.excel import export_template
 from src.main.app.common.security.security import verify_password, get_password_hash
-from src.main.app.enums.system import SystemResponseCode
+from src.main.app.enums.enum import SystemResponseCode
 from src.main.app.exception.system import SystemException
 from src.main.app.mapper.user_mapper import UserMapper
 from src.main.app.entity.user_entity import UserEntity
 from src.main.app.schema.user_schema import (
     UserQuery,
-    LoginCmd,
+    LoginForm,
     UserExport,
-    UserCreateCmd,
+    UserCreate,
 )
 from src.main.app.service.user_service import UserService
 
@@ -60,20 +60,20 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
         user_entity = await self.mapper.select_by_id(id=id)
         return UserQuery(**user_entity.model_dump()) if user_entity else None
 
-    async def login(self, login_cmd: LoginCmd) -> Token:
+    async def login(self, login_form: LoginForm) -> Token:
         """
         Perform login and return an access token and refresh token.
 
         Args:
-            login_cmd (LoginCmd): The login command containing username and password.
+            login_form (LoginForm): The login command containing username and password.
 
         Returns:
             Token: The access token and refresh token.
         """
         # verify username and password
-        username: str = login_cmd.username
+        username: str = login_form.username
         user_entity: UserEntity = await self.mapper.get_user_by_username(username=username)
-        if user_entity is None or not verify_password(login_cmd.password, user_entity.password):
+        if user_entity is None or not verify_password(login_form.password, user_entity.password):
             raise SystemException(
                 SystemResponseCode.AUTH_FAILED.code,
                 SystemResponseCode.AUTH_FAILED.msg,
@@ -169,26 +169,26 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
             records.append(UserQuery(**user.model_dump()))
         return await export_template(schema=UserQuery, file_name=file_name, records=records)
 
-    async def register(self, user_create_cmd: UserCreateCmd) -> UserEntity:
+    async def register(self, user_create: UserCreate) -> UserEntity:
         """
         Register a new user.
 
         Args:
-            user_create_cmd (UserCreateCmd): The user creation command containing username and password.
+            user_create (UserCreate): The user creation command containing username and password.
 
         Returns:
             UserEntity: The newly created user.
         """
         # user name duplicate verification
-        user: UserEntity = await self.mapper.get_user_by_username(username=user_create_cmd.username)
+        user: UserEntity = await self.mapper.get_user_by_username(username=user_create.username)
         if user is not None:
             raise ServiceException(
                 SystemResponseCode.USER_NAME_EXISTS.code,
                 SystemResponseCode.USER_NAME_EXISTS.msg,
             )
         # generate hash password
-        user_create_cmd.password = await get_password_hash(user_create_cmd.password)
-        return await self.mapper.insert(record=user_create_cmd)
+        user_create.password = await get_password_hash(user_create.password)
+        return await self.mapper.insert(record=user_create)
 
     async def retrieve_user(self, page: int, size: int, **kwargs) -> Optional[List[UserQuery]]:
         """

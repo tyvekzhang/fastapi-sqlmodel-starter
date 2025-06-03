@@ -1,60 +1,136 @@
-from typing import Generic, TypeVar, Optional, Any
+# Copyright (c) 2025 Fast web LLC
+# SPDX-License-Identifier: MIT
+"""Standardized HTTP response model for API implementations."""
 
-from pydantic import BaseModel
+from typing import Generic, TypeVar, Optional, Any, Union
+from pydantic import BaseModel, model_serializer
+from src.main.app.common.enums.base_error_code import BaseErrorCode
 
-# Define generic model variables
+
+# Define generic type variables for response data
 DataType = TypeVar("DataType")
 T = TypeVar("T")
 
-# Define default response codes and messages
+# Default response codes and messages
 DEFAULT_SUCCESS_CODE: int = 0
 DEFAULT_FAIL_CODE: int = -1
 DEFAULT_SUCCESS_MSG: str = "success"
 
 
 class HttpResponse(BaseModel, Generic[T]):
-    """
-    Standardized API response model with success/fail static constructors.
+    """Standardized API response model with success/failure constructors.
+
+    Provides a consistent structure for API responses with:
+    - Status code (numeric)
+    - Human-readable message
+    - Optional typed payload data
 
     Attributes:
-        msg: Human-readable response message
-        code: HTTP status code or custom business code
-        data: Optional response payload of type T
+        code: Numeric status code (HTTP status or business code)
+        msg: Human-readable status message
+        data: Optional typed response payload (default: None)
     """
-    msg: str = DEFAULT_SUCCESS_MSG
+
     code: int = DEFAULT_SUCCESS_CODE
+    msg: str = DEFAULT_SUCCESS_MSG
     data: Optional[T] = None
 
-    @staticmethod
-    def success(data: Optional[T] = None,
-                msg: str = DEFAULT_SUCCESS_MSG,
-                code: int = DEFAULT_SUCCESS_CODE) -> "HttpResponse[T]":
-        """
-        Quick constructor for success responses.
-
-        Args:
-            data: Response payload (optional)
-            msg: Success message (default: 'success')
-            code: Status code (default: 200)
+    @model_serializer
+    def serialize_model(self) -> dict:
+        """Custom serializer that conditionally excludes None data field.
 
         Returns:
-            HttpResponse[T]: Success response instance
+            dict: Serialized response dictionary. If data is None, returns
+                dict with only code and msg fields. Otherwise, includes all fields.
+
+        Example:
+            >>> response = HttpResponse(code=200, msg="OK", data=None)
+            >>> response.serialize_model()
+            {'code': 200, 'msg': 'OK'}
         """
-        return HttpResponse[T](msg=msg, code=code, data=data)
+        if self.data is None:
+            return {"code": self.code, "msg": self.msg}
+        return {"code": self.code, "msg": self.msg, "data": self.data}
 
     @staticmethod
-    def fail(msg: str = str,
-             code: int = DEFAULT_FAIL_CODE,
-             data: Optional[Any] = None) -> "HttpResponse[Any]":
-        """
-        Quick constructor for error responses.
+    def success(
+        code: int = DEFAULT_SUCCESS_CODE, msg: str = DEFAULT_SUCCESS_MSG, data: Optional[T] = None
+    ) -> "HttpResponse[T]":
+        """Constructs a standardized success response.
 
         Args:
-            msg: Error message (default: 'error')
-            code: Error code (default: -1)
-            data: Additional error details (optional)
+            code: Numeric status code (default: DEFAULT_SUCCESS_CODE)
+            msg: Human-readable success message (default: DEFAULT_SUCCESS_MSG)
+            data: Optional response payload data (default: None)
 
         Returns:
-            HttpResponse[Any]: Error response instance
+            HttpResponse[T]: Constructed success response instance
+
+        Example:
+            >>> HttpResponse.success(code=200, data={"id": 123})
+            HttpResponse(code=200, msg='success', data={'id': 123})
         """
-        return HttpResponse[Any](msg=msg, code=code, data=data)
+        return HttpResponse[T](code=code, msg=msg, data=data)
+
+    @staticmethod
+    def fail(msg: str = str, code: int = DEFAULT_FAIL_CODE, data: Optional[Any] = None) -> "HttpResponse[Any]":
+        """Constructs a standardized error response.
+
+        Args:
+            msg: Error description message. If default str type is passed,
+                will convert to string representation (default: str)
+            code: Numeric error code (default: DEFAULT_FAIL_CODE)
+            data: Optional additional error details (default: None)
+
+        Returns:
+            HttpResponse[Any]: Constructed error response instance
+
+        Example:
+            >>> HttpResponse.fail(msg="Not found", code=404)
+            HttpResponse(code=404, msg='Not found', data=None)
+        """
+        return HttpResponse[Any](code=code, msg=msg, data=data)
+
+    @staticmethod
+    def fail_with_error(
+        error: Union[BaseErrorCode, tuple[int, str]],  # Supports multiple error types
+        data: Optional[Any] = None,
+        extra_msg: Optional[str] = None,
+    ) -> "HttpResponse[Any]":
+        """Constructs an error response from various error type inputs.
+
+        Provides a unified interface to create error responses from different error
+        representations while maintaining consistent response format.
+
+        Args:
+            error: Error representation, which can be:
+                - BaseErrorCode enum member
+                - ErrorInfo object
+                - Tuple of (error_code, error_message)
+            data: Optional additional error payload (default: None)
+            extra_msg: Optional supplementary message to append to the error
+                      message (default: None)
+
+        Returns:
+            HttpResponse[Any]: Constructed error response with the provided
+                            error information.
+
+        Examples:
+            >>> HttpResponse.fail_with_error(AuthError.UNAUTHORIZED)
+            >>> HttpResponse.fail_with_error((404, "Not Found"))
+            >>> HttpResponse.fail_with_error(
+            ...     BusinessError.INVALID_PARAMS,
+            ...     extra_msg="Invalid email format"
+            ... )
+        """
+        if isinstance(error, tuple) and len(error) == 2:
+            code, msg = error
+        elif hasattr(error, "code") and hasattr(error, "msg"):
+            code, msg = error.code, error.msg
+        else:
+            code, msg = DEFAULT_FAIL_CODE, str(error)
+
+        if extra_msg:
+            msg = f"{msg}: {extra_msg}"
+
+        return HttpResponse[Any](code=code, msg=msg, data=data)

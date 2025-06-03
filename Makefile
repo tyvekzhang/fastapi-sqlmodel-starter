@@ -20,7 +20,7 @@ help:
 	@echo "  pypi                  Build and publish to pypi."
 	@echo "  clean                 Remove temporary files."
 	@echo "  db                    Generate db structure."
-	@echo "  db_up                 Upgrade db structure."
+	@echo "  dp                    Upgrade db structure."
 	@echo "Use 'make <target>' to run a specific command."
 
 install:
