@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2025 Fast web
+# Copyright (c) 2025 Fast web
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # limitations under the License.
 
 """System-related error codes (10000-19999)."""
-from src.main.app.common.exception.base_error_code import BaseErrorCode
+from src.main.app.common.enums.base_error_code import BaseErrorCode
 
 
 class SystemErrorCode(BaseErrorCode):

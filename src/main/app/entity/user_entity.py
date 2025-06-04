@@ -4,7 +4,7 @@ from typing import Optional
 
 from sqlmodel import Field, Column, String, SQLModel
 
-from src.main.app.common.mapper.model_base import ModelExt, ModelBase
+from src.main.app.common.entity.base_entity import ModelExt, BaseModel
 
 
 class BaseUser(SQLModel):
@@ -14,6 +14,6 @@ class BaseUser(SQLModel):
     avatar: Optional[str] = Field(default=None, sa_column=Column(String(64), comment="头像"))
 
 
-class UserEntity(ModelExt, BaseUser, ModelBase, table=True):
+class UserEntity(ModelExt, BaseUser, BaseModel, table=True):
     __tablename__ = "sys_user"
     __table_args__ = {"comment": "用户信息表"}

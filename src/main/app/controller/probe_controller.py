@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends
 
-from src.main.app.common.cache.cache import get_cache_client, Cache
+from src.main.app.common.cache import base_cache, cache_manager
 from src.main.app.common.schema.response import HttpResponse
 from src.main.app.enums.enum import SystemResponseCode
 from src.main.app.factory.service_factory import wire_user_service
@@ -37,7 +37,7 @@ async def readiness(user_id: int = 1, user_service: UserService = Depends(wire_u
         dict: Response with 'code' and 'msg' indicating readiness status.
     """
     try:
-        cache_client: Cache = await get_cache_client()
+        cache_client: base_cache.Cache = await cache_manager.get_cache_client()
         cache_key = f"user:{user_id}"
         await cache_client.set(cache_key, "Ok")
         res = await cache_client.get(cache_key)
@@ -48,6 +48,7 @@ async def readiness(user_id: int = 1, user_service: UserService = Depends(wire_u
         await cache_client.delete(cache_key)
         await user_service.find_by_id(id=user_id)
     except Exception as e:
+        await user_service.find_by_id(id=user_id)
         return HttpResponse.fail(code=SystemResponseCode.SERVICE_INTERNAL_ERROR.code, msg=str(e))
 
     return HttpResponse.success(data="Hello")

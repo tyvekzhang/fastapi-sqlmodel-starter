@@ -2,13 +2,11 @@
 
 from typing import Any, TypeVar, List, Generic, Tuple, Union, Dict
 
-from src.main.app.common.enums.enum import ResponseCode
-from src.main.app.common.exception.exception import SystemException
+from src.main.app.common.entity.base_entity import BaseModel
 from src.main.app.common.mapper.impl.mapper_base_impl import SqlModelMapper
-from src.main.app.common.mapper.model_base import ModelBase
 from src.main.app.common.service.service_base import ServiceBase
 
-T = TypeVar("T", bound=ModelBase)
+T = TypeVar("T", bound=BaseModel)
 M = TypeVar("M", bound=SqlModelMapper)
 
 
@@ -49,33 +47,21 @@ class ServiceBaseImpl(Generic[M, T], ServiceBase[T]):
     async def modify_by_id(self, *, data: T) -> None:
         affect_row: int = await self.mapper.update_by_id(record=data)
         if affect_row != 1:
-            raise SystemException(
-                ResponseCode.PARAMETER_ERROR.code,
-                ResponseCode.PARAMETER_ERROR.msg,
-            )
+            raise ValueError
 
     async def batch_modify_by_ids(
         self, *, ids: Union[List[int], List[str]], data: Dict, db_session: Any = None
     ) -> None:
         affect_row: int = await self.mapper.batch_update_by_ids(ids=ids, record=data)
         if len(ids) != affect_row:
-            raise SystemException(
-                ResponseCode.PARAMETER_ERROR.code,
-                ResponseCode.PARAMETER_ERROR.msg,
-            )
+            raise ValueError
 
     async def remove_by_id(self, *, id: Union[int, str]) -> None:
         affect_row: int = await self.mapper.delete_by_id(id=id)
         if affect_row != 1:
-            raise SystemException(
-                ResponseCode.PARAMETER_ERROR.code,
-                ResponseCode.PARAMETER_ERROR.msg,
-            )
+            raise ValueError
 
     async def batch_remove_by_ids(self, *, ids: Union[List[int], List[str]]) -> None:
         affect_row: int = await self.mapper.batch_delete_by_ids(ids=ids)
         if len(ids) != affect_row:
-            raise SystemException(
-                ResponseCode.PARAMETER_ERROR.code,
-                ResponseCode.PARAMETER_ERROR.msg,
-            )
+            raise ValueError

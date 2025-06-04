@@ -10,19 +10,20 @@ from fastapi import UploadFile
 from fastapi_pagination import Params
 from starlette.responses import StreamingResponse
 
-from src.main.app.common.cache.cache import get_cache_client, Cache
+from src.main.app.common.cache import base_cache, cache_manager
 from src.main.app.common.config.config_manager import load_config
-from src.main.app.common.enums.enum import TokenTypeEnum
-from src.main.app.common.exception.exception import ServiceException
+from src.main.app.common.enums.common_enum import TokenTypeEnum
 from src.main.app.common.schema.schema import Token
 from src.main.app.common.security import security
+from src.main.app.common.security.security import verify_password, get_password_hash
 from src.main.app.common.service.impl.service_base_impl import ServiceBaseImpl
 from src.main.app.common.util.excel import export_template
-from src.main.app.common.security.security import verify_password, get_password_hash
-from src.main.app.enums.enum import SystemResponseCode
-from src.main.app.exception.system import SystemException
-from src.main.app.mapper.user_mapper import UserMapper
 from src.main.app.entity.user_entity import UserEntity
+from src.main.app.enums.biz_error_code import BusinessErrorCode
+from src.main.app.enums.enum import SystemResponseCode
+from src.main.app.exception import biz_exception
+from src.main.app.exception.biz_exception import BusinessException
+from src.main.app.mapper.user_mapper import UserMapper
 from src.main.app.schema.user_schema import (
     UserQuery,
     LoginForm,
@@ -74,7 +75,7 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
         username: str = login_form.username
         user_entity: UserEntity = await self.mapper.get_user_by_username(username=username)
         if user_entity is None or not verify_password(login_form.password, user_entity.password):
-            raise SystemException(
+            raise biz_exception.BusinessException(
                 SystemResponseCode.AUTH_FAILED.code,
                 SystemResponseCode.AUTH_FAILED.msg,
                 status_code=http.HTTPStatus.UNAUTHORIZED,
@@ -100,7 +101,7 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
             re_expired_at=int(timedelta(minutes=security_config.refresh_token_expire_minutes).total_seconds()),
         )
         # cache token info
-        cache_client: Cache = await get_cache_client()
+        cache_client: base_cache.Cache = await cache_manager.get_cache_client()
         await cache_client.set(
             f"User:{user_entity.id}",
             access_token,
@@ -146,9 +147,9 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
         if existing_users:
             existing_usernames = [user.username for user in existing_users]
             err_msg = ",".join(existing_usernames)
-            raise SystemException(
-                SystemResponseCode.USER_NAME_EXISTS.code,
-                f"{SystemResponseCode.USER_NAME_EXISTS.msg}{err_msg}",
+            raise BusinessException(
+                BusinessErrorCode.USER_NAME_EXISTS,
+                f"{BusinessErrorCode.USER_NAME_EXISTS.msg}{err_msg}",
             )
         await self.mapper.batch_insert(records=user_import_list)
 
@@ -182,9 +183,8 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
         # user name duplicate verification
         user: UserEntity = await self.mapper.get_user_by_username(username=user_create.username)
         if user is not None:
-            raise ServiceException(
-                SystemResponseCode.USER_NAME_EXISTS.code,
-                SystemResponseCode.USER_NAME_EXISTS.msg,
+            raise BusinessException(
+                BusinessErrorCode.USER_NAME_EXISTS
             )
         # generate hash password
         user_create.password = await get_password_hash(user_create.password)

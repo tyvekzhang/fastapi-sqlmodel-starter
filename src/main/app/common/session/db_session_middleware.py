@@ -11,7 +11,7 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from starlette.requests import Request
 from starlette.types import ASGIApp
 
-from src.main.app.common.exception.exception import (
+from src.main.app.common.exception.common_exception import (
     SessionNotInitialisedException,
     MissingSessionException,
 )

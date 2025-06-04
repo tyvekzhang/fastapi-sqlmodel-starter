@@ -52,7 +52,6 @@ dependencies = [
   "python-jose[cryptography]>=3.4",
   "python-multipart>=0.0.20",
   "redis[hiredis]>=5.2.1",
-  "slowapi>=0.1.9",
   "sqlalchemy-utils>=0.41.2",
   "sqlmodel>=0.0.24",
   "uvicorn>=0.34.2",

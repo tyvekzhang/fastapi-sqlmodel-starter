@@ -3,8 +3,8 @@
 import os
 from typing import Any
 from jinja2 import Template
-from src.main.app.common.enums.enum import ResponseCode
-from src.main.app.common.exception.exception import SystemException
+from src.main.app.common.enums.common_enum import ResponseCode
+from src.main.app.common.exception.common_exception import SystemException
 from src.main.app.common.util.work_path_util import resource_dir
 
 home_template_dir: str = os.path.join(resource_dir, "template")

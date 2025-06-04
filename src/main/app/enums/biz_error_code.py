@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2025 Fast web
+# Copyright (c) 2025 Fast web
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +14,13 @@
 # limitations under the License.
 
 """Business-related error codes (30000-39999)."""
-from src.main.app.common.exception.base_error_code import BaseErrorCode
+from src.main.app.common.enums.base_error_code import BaseErrorCode
 
 
 class BusinessErrorCode(BaseErrorCode):
     """Business-related error codes."""
+
+    USER_NAME_EXISTS = (30001, "Username already exists")
 
     VALIDATION_ERROR = (30001, "Validation error")
     INVALID_PARAMETER = (30002, "Invalid parameter")

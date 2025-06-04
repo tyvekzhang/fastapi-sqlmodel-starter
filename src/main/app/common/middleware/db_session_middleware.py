@@ -1,3 +1,17 @@
+# Copyright (c) 2025 Fast web and/or its affiliates. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 """Session proxy used in the project"""
 
 from contextvars import ContextVar
@@ -11,8 +25,7 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from starlette.requests import Request
 from starlette.types import ASGIApp
 
-from src.main.app.common.config import configs
-from src.main.server import app
+from src.main.app.common.exception.common_exception import SessionNotInitialisedException, MissingSessionException
 
 try:
     from sqlalchemy.ext.asyncio import async_sessionmaker
@@ -97,46 +110,4 @@ def create_middleware_and_session_proxy():
     return SQLAlchemyMiddleware, DBSession
 
 
-SQLAlchemyMiddleware, db = create_middleware_and_session_proxy()
-
-
-class MissingSessionException(Exception):
-    """
-    Exception raised for when the user tries to access a database session before it is created.
-    """
-
-    def __init__(self):
-        detail = """
-        No session found! Either you are not currently in a request context,
-        or you need to manually create a session context by using a `db` instance as
-        a context manager e.g.:
-
-        async with db():
-            await db.session.execute(foo.select()).fetchall()
-        """
-
-        super().__init__(detail)
-
-
-class SessionNotInitialisedException(Exception):
-    """
-    Exception raised when the user creates a new DB session without first initialising it.
-    """
-
-    def __init__(self):
-        detail = """
-        Session not initialised! Ensure that DBSessionMiddleware has been initialised before
-        attempting database access.
-        """
-
-        super().__init__(detail)
-
-
-# Add SQLAlchemyMiddleware
-app.add_middleware(
-    SQLAlchemyMiddleware,
-    db_url=str(configs.sqlalchemy_database_url),
-    engine_args={
-        "echo": configs.echo_sql,
-    },
-)
+SQLAlchemyMiddleware, db_session = create_middleware_and_session_proxy()

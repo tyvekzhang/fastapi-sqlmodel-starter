@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlmodel import SQLModel, select, insert, update, delete, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from src.main.app.common.enums.enum import SortEnum, FilterOperators
+from src.main.app.common.enums.common_enum import SortEnum, FilterOperators
 from src.main.app.common.mapper.mapper_base import MapperBase
 from src.main.app.common.session.db_session_middleware import db
 

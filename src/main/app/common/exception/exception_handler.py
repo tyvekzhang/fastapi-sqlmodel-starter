@@ -1,81 +1,186 @@
-"""Global exception handler"""
+# Copyright (c) 2025 Fast web and/or its affiliates. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+"""Exception handlers module for FastAPI application."""
 
 import http
+import traceback
+from typing import Dict, Any, Optional
 
 from fastapi import Request
-from fastapi.exception_handlers import (
-    http_exception_handler,
-    request_validation_exception_handler,
-)
-from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse, Response
 from fastapi.utils import is_body_allowed_for_status_code
-from starlette.exceptions import HTTPException as StarletteHTTPException
-from starlette.responses import JSONResponse, Response
+from loguru import logger
 
-from src.main.common.exception.exception import ServiceException
-from src.main.server import app
-from src.main.system.enum.system import SystemResponseCode
+from src.main.app.common.config.config_manager import load_config
+from src.main.app.common.enums.common_enum import ResponseCode
+
+config = load_config()
 
 
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
+async def extract_request_data(request: Request) -> Dict[str, Any]:
     """
-    Asynchronous Exception handler
-    :param request: The request instance containing all request details
-    :param exc: Exception instance
-    :return: A JSON Response object that could be a basic Response or a
-                JSONResponse, depending on whether a response body is allowed for
-                the given status code.
+    Extract request data based on content type.
+
+    Args:
+        request: The FastAPI request object
+
+    Returns:
+        Dictionary containing parsed request data
     """
-    status_code = http.HTTPStatus.INTERNAL_SERVER_ERROR
-    headers = getattr(exc, "headers", None)
-    if not is_body_allowed_for_status_code(status_code):
-        return Response(status_code=status_code, headers=headers)
-    return JSONResponse(
-        {"code": SystemResponseCode.SERVICE_INTERNAL_ERROR.code, "msg": str(exc)},
-        status_code=status_code,
+    data = {}
+
+    # Try to get request data based on content type
+    content_type = request.headers.get("content-type", "")
+
+    try:
+        if "application/json" in content_type:
+            data["json"] = await request.json()
+        elif "application/x-www-form-urlencoded" in content_type or "multipart/form-data" in content_type:
+            # Get form data but exclude files
+            form = await request.form()
+            form_data = {}
+            for key, value in form.items():
+                # Check if it's a file upload (UploadFile instance)
+                if not hasattr(value, "filename"):  # Not a file
+                    form_data[key] = value
+                else:
+                    # Record that a file was present but not included
+                    form_data[key] = f"<file: {value.filename}>"
+
+            if form_data:
+                data["form"] = form_data
+        else:
+            # Get raw body
+            body = await request.body()
+            if body:
+                # Try to decode as string, if fails save as binary indicator
+                try:
+                    data["body"] = body.decode("utf-8")
+                except UnicodeDecodeError:
+                    data["body"] = f"<binary: {len(body)} bytes>"
+    except Exception as e:
+        data["error"] = f"Failed to parse request data: {str(e)}"
+
+    return data
+
+
+def collect_request_info(request: Request) -> Dict[str, Any]:
+    """
+    Collect comprehensive request information for logging.
+
+    Args:
+        request: The FastAPI request object
+
+    Returns:
+        Dictionary containing request metadata
+    """
+    return {
+        "path": request.url.path,
+        "method": request.method,
+        "query_params": dict(request.query_params),
+        "headers": dict(request.headers),
+        "client": f"{request.client.host}:{request.client.port}" if request.client else None,
+    }
+
+
+def log_exception(exc: Exception, request_info: Dict[str, Any]) -> None:
+    """
+    Log exception with full context information.
+
+    Args:
+        exc: The exception that was raised
+        request_info: Dictionary containing request information
+    """
+    logger.error(
+        "Unhandled exception",
+        exception_type=type(exc).__name__,
+        exception_message=str(exc),
+        traceback=traceback.format_exc(),
+        request=request_info,
     )
 
 
-@app.exception_handler(ServiceException)
-async def service_exception_handler(request: Request, exc: ServiceException):
+def build_error_response(
+        exc: Exception,
+        request: Request,
+        status_code: int,
+        headers: Optional[Dict[str, str]] = None
+) -> Response:
     """
-    Asynchronous serviceException handler
-    :param request: The request instance containing all request details
-    :param exc: ServiceException instance
-    :return: A Starlette Response object that could be a basic Response or a
-                JSONResponse, depending on whether a response body is allowed for
-                the given status code.
+    Build standardized error response.
+
+    Args:
+        exc: The exception that was raised
+        request: The FastAPI request object
+        status_code: HTTP status code for the response
+        headers: Optional response headers
+
+    Returns:
+        JSONResponse with error details
     """
-    headers = getattr(exc, "headers", None)
-    if not is_body_allowed_for_status_code(exc.status_code):
-        return Response(status_code=exc.status_code, headers=headers)
+    # Check if response body is allowed for this status code
+    if not is_body_allowed_for_status_code(status_code):
+        return Response(status_code=status_code, headers=headers)
+
+    # Don't expose detailed error messages in production
+    error_message = "Internal server error"
+    if config.server.debug:
+        error_message = str(exc)
+
     return JSONResponse(
-        {"code": exc.code, "msg": exc.msg},
-        status_code=exc.status_code,
+        {
+            "code": ResponseCode.SERVICE_INTERNAL_ERROR.code,
+            "msg": error_message,
+            "request_id": request.headers.get("X-Request-ID"),  # Include request ID if available
+        },
+        status_code=status_code,
         headers=headers,
     )
 
 
-@app.exception_handler(StarletteHTTPException)
-async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+async def global_exception_handler(request: Request, exc: Exception) -> Response:
     """
-    Asynchronous handler for StarletteHTTPException
-    :param request: The request instance containing all request details
-    :param exc: StarletteHTTPException instance
-    :return: A Starlette Response object that could be a basic Response or a
-                JSONResponse, depending on whether a response body is allowed for
-                the given status code.
-    """
-    return await http_exception_handler(request, exc)
+    Handler for all uncaught exceptions.
 
+    This handler captures all unhandled exceptions, logs them with request context,
+    and returns a standardized error response to the client.
 
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    Args:
+        request: The FastAPI request object
+        exc: The exception that was raised
+
+    Returns:
+        Response object with appropriate error information
     """
-    Asynchronous handler for RequestValidationError
-    :param request: The request instance containing all request details
-    :param exc: RequestValidationError instance
-    :return: A Starlette Response object.
-    """
-    return await request_validation_exception_handler(request, exc)
+    # Collect request information
+    request_info = collect_request_info(request)
+
+    # Get request data
+    try:
+        request_data = await extract_request_data(request)
+        if request_data:
+            request_info["data"] = request_data
+    except Exception as e:
+        request_info["data_error"] = str(e)
+
+    # Log the exception with context
+    log_exception(exc, request_info)
+
+    # Determine response status code and headers
+    status_code = getattr(exc, "status_code", http.HTTPStatus.INTERNAL_SERVER_ERROR)
+    headers = getattr(exc, "headers", None)
+
+    # Build and return error response
+    return build_error_response(exc, request, status_code, headers)

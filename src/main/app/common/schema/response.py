@@ -1,11 +1,23 @@
-# Copyright (c) 2025 Fast web LLC
-# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 Fast web and/or its affiliates. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 """Standardized HTTP response model for API implementations."""
 
 from typing import Generic, TypeVar, Optional, Any, Union
 from pydantic import BaseModel, model_serializer
 from src.main.app.common.enums.base_error_code import BaseErrorCode
-
+from src.main.app.enums.biz_error_code import BusinessErrorCode
 
 # Define generic type variables for response data
 DataType = TypeVar("DataType")
@@ -20,14 +32,9 @@ DEFAULT_SUCCESS_MSG: str = "success"
 class HttpResponse(BaseModel, Generic[T]):
     """Standardized API response model with success/failure constructors.
 
-    Provides a consistent structure for API responses with:
-    - Status code (numeric)
-    - Human-readable message
-    - Optional typed payload data
-
     Attributes:
         code: Numeric status code (HTTP status or business code)
-        msg: Human-readable status message
+        msg: Readable status message
         data: Optional typed response payload (default: None)
     """
 
@@ -37,17 +44,8 @@ class HttpResponse(BaseModel, Generic[T]):
 
     @model_serializer
     def serialize_model(self) -> dict:
-        """Custom serializer that conditionally excludes None data field.
+        """Custom serializer that conditionally excludes None data field."""
 
-        Returns:
-            dict: Serialized response dictionary. If data is None, returns
-                dict with only code and msg fields. Otherwise, includes all fields.
-
-        Example:
-            >>> response = HttpResponse(code=200, msg="OK", data=None)
-            >>> response.serialize_model()
-            {'code': 200, 'msg': 'OK'}
-        """
         if self.data is None:
             return {"code": self.code, "msg": self.msg}
         return {"code": self.code, "msg": self.msg, "data": self.data}
@@ -60,7 +58,7 @@ class HttpResponse(BaseModel, Generic[T]):
 
         Args:
             code: Numeric status code (default: DEFAULT_SUCCESS_CODE)
-            msg: Human-readable success message (default: DEFAULT_SUCCESS_MSG)
+            msg: Readable success message (default: DEFAULT_SUCCESS_MSG)
             data: Optional response payload data (default: None)
 
         Returns:
@@ -94,7 +92,6 @@ class HttpResponse(BaseModel, Generic[T]):
     @staticmethod
     def fail_with_error(
         error: Union[BaseErrorCode, tuple[int, str]],  # Supports multiple error types
-        data: Optional[Any] = None,
         extra_msg: Optional[str] = None,
     ) -> "HttpResponse[Any]":
         """Constructs an error response from various error type inputs.
@@ -107,7 +104,6 @@ class HttpResponse(BaseModel, Generic[T]):
                 - BaseErrorCode enum member
                 - ErrorInfo object
                 - Tuple of (error_code, error_message)
-            data: Optional additional error payload (default: None)
             extra_msg: Optional supplementary message to append to the error
                       message (default: None)
 
@@ -116,12 +112,7 @@ class HttpResponse(BaseModel, Generic[T]):
                             error information.
 
         Examples:
-            >>> HttpResponse.fail_with_error(AuthError.UNAUTHORIZED)
-            >>> HttpResponse.fail_with_error((404, "Not Found"))
-            >>> HttpResponse.fail_with_error(
-            ...     BusinessError.INVALID_PARAMS,
-            ...     extra_msg="Invalid email format"
-            ... )
+            >>> HttpResponse.fail_with_error(BusinessErrorCode.VALIDATION_ERROR)
         """
         if isinstance(error, tuple) and len(error) == 2:
             code, msg = error
@@ -133,4 +124,4 @@ class HttpResponse(BaseModel, Generic[T]):
         if extra_msg:
             msg = f"{msg}: {extra_msg}"
 
-        return HttpResponse[Any](code=code, msg=msg, data=data)
+        return HttpResponse[Any](code=code, msg=msg)

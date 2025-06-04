@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright 2025 Fast web
+# Copyright (c) 2025 Fast web and/or its affiliates. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,55 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Base exception classes for the application."""
+"""Base exception class for the application."""
 
 from typing import Optional, Any
 
-from src.main.app.common.exception.base_error_code import BaseErrorCode
+from src.main.app.common.enums.base_error_code import BaseErrorCode
 
 
 class BaseError(Exception):
     """Base exception class for all custom exceptions in the application.
 
     Attributes:
-        error_code: The error code enum member from BaseErrorCode or its subclasses.
-        message: Optional custom message that overrides the default error message.
-        details: Optional additional details about the error.
+        code: The code enum member from BaseErrorCode or its subclasses.
+        msg: Optional additional msg about the error.
     """
 
     def __init__(
             self,
-            error_code: BaseErrorCode,
-            message: Optional[str] = None,
-            details: Optional[Any] = None,
+            code: BaseErrorCode,
+            msg: Optional[Any] = None,
     ):
-        """
-        Args:
-            error_code: An enum member from BaseErrorCode or its subclasses.
-            message: Optional custom message to override the default error message.
-            details: Optional additional details about the error.
-        """
-        self.error_code = error_code
-        self.message = message or error_code.msg
-        self.details = details
-        super().__init__(self.message)
+        self.code = code.code
+        self.msg = msg or code.msg
+        super().__init__(self.msg)
 
     def __str__(self) -> str:
         """Returns string representation of the error."""
-        if self.details:
-            return f"{self.error_code.code}: {self.message} (Details: {self.details})"
-        return f"{self.error_code.code}: {self.message}"
+        return f"{self.code}: {self.msg}"
 
     def to_dict(self) -> dict:
         """Converts the exception to a dictionary for API responses.
 
         Returns:
-            A dictionary containing error code, message, and details (if any).
+            A dictionary containing error code, message, and msg (if any).
         """
         result = {
-            "error_code": self.error_code.code,
-            "message": self.message,
+            "code": self.code,
+            "msg": self.msg,
         }
-        if self.details:
-            result["details"] = self.details
         return result

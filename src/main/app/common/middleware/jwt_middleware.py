@@ -7,24 +7,23 @@ from jose import JWTError
 from loguru import logger
 from starlette.responses import JSONResponse
 
-from src.main.app.common.config import configs
-from src.main.common.security.security import is_valid_token
-from src.main.server import app
+from src.main.app.common.config.config_manager import load_config
+from src.main.app.common.security.security import is_valid_token
 
+config = load_config()
 
-@app.middleware("http")
 async def jwt_middleware(request: Request, call_next):
     raw_url_path = request.url.path
-    if not raw_url_path.__contains__(configs.api_version) or raw_url_path.__contains__(".json"):
-        if configs.enable_swagger:
+    if not raw_url_path.__contains__(config.server.api_version) or raw_url_path.__contains__(".json"):
+        if config.security.enable_swagger:
             return await call_next(request)
         else:
             return JSONResponse(
                 status_code=http.HTTPStatus.FORBIDDEN,
                 content={"detail": "The documentation isn't ready yet."},
             )
-    white_list_routes = [router.strip() for router in configs.white_list_routes.split(",")]
-    request_url_path = configs.api_version + raw_url_path.split(configs.api_version)[1]
+    white_list_routes = [router.strip() for router in config.security.white_list_routes.split(",")]
+    request_url_path = config.server.api_version + raw_url_path.split(config.server.api_version)[1]
     if request_url_path in white_list_routes:
         return await call_next(request)
 

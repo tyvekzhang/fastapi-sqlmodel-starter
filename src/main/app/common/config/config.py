@@ -1,3 +1,19 @@
+# Copyright (c) 2025 Fast web and/or its affiliates. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+"""Application Configuration Management."""
+
 import os.path
 from os import makedirs
 
@@ -12,7 +28,8 @@ class ServerConfig:
         app_desc: str = "Server",
         api_version: str = "/v1",
         workers: int = 1,
-        log_file_path: str = "../log/fast_web/log.txt",
+        debug: bool = False,
+        log_file_path: str = "../log/fast_web/fast_web.log",
         win_tz: str = "China Standard Time",
         linux_tz: str = "Asia/Shanghai",
         enable_rate_limit: bool = False,
@@ -28,8 +45,9 @@ class ServerConfig:
             version (str): The server version. Default is '0.1.0'.
             app_desc (str): The server app_desc. Default is 'server'.
             api_version (str): The server api_version. Default is 'v1'.
+            debug (bool): Whether to enable debug mode, default no.
             workers (int): The server worker numbers. Default is 1.
-            log_file_path (str): Path to the log file. Default is '../log/fast_web/log.txt'.
+            log_file_path (str): Path to the log file. Default is '../log/fast_web/fast_web.log'.
             win_tz (str): Windows timezone setting. Default is 'China Standard Time'.
             linux_tz (str): Linux timezone setting. Default is 'Asia/Shanghai'.
             enable_rate_limit (bool): Whether to enable rate limiting. Default is False.
@@ -41,6 +59,7 @@ class ServerConfig:
         self.version = version
         self.app_desc = app_desc
         self.api_version = api_version
+        self.debug = debug
         self.workers = workers
         self.log_file_path = log_file_path
         self.win_tz = win_tz
@@ -48,7 +67,7 @@ class ServerConfig:
         self.enable_rate_limit = enable_rate_limit
         self.global_default_limits = global_default_limits
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         """
         Returns a string representation of the server configuration.
 
@@ -115,7 +134,7 @@ class DatabaseConfig:
         self.cache_pass = cache_pass
         self.db_num = db_num
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         """
         Returns a string representation of the database configuration.
 
@@ -169,7 +188,7 @@ class SecurityConfig:
         self.backend_cors_origins = backend_cors_origins
         self.black_ip_list = black_ip_list
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         """
         Returns a string representation of the security configuration.
 
@@ -195,7 +214,7 @@ class Config:
         else:
             self.security = SecurityConfig()
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         """
         Returns a string representation of the configuration.
 

@@ -16,7 +16,7 @@ database:
   dialect: sqlite
   # When use sqlite do not need to set url and default in src/main/resource/alembic/db/server.db
   # Url format: driver://user:pass@localhost:port/dbname
-  url: ""
+  url: "sqlite+aiosqlite:///src/main/resource/alembic/db/fast_web.db"
   pool_size: 10
   max_overflow: 20
   pool_recycle: 1800

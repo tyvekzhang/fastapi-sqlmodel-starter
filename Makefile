@@ -8,7 +8,11 @@ deployDir = deploy
 
 help:
 	@echo "Available make targets:"
-	@echo "  install               Install project dependencies using poetry."
+	@echo "  install               Install project dependencies using uv."
+	@echo "  db                    Generate db structure."
+	@echo "  dp                    Upgrade db structure."
+	@echo "  dev                   Development environment startup."
+	@echo "  start                 Production environment startup."
 	@echo "  lint                  Perform static code analysis."
 	@echo "  test                  Run unit tests."
 	@echo "  start                 Start the project."
@@ -19,19 +23,10 @@ help:
 	@echo "  doc                   Make doc for this project."
 	@echo "  pypi                  Build and publish to pypi."
 	@echo "  clean                 Remove temporary files."
-	@echo "  db                    Generate db structure."
-	@echo "  dp                    Upgrade db structure."
 	@echo "Use 'make <target>' to run a specific command."
 
 install:
-	@echo "Detecting OS..."
-ifeq ($(OS),Windows_NT)
-	@echo "Windows system detected"
-	uv venv --python 3.11 && .venv\Scripts\activate && uv sync
-else
-	@echo "Linux/Mac system detected"
-	uv venv --python 3.11 && . .venv/bin/activate && uv sync
-endif
+	uv sync
 
 db:
 	alembic revision --autogenerate
@@ -39,9 +34,13 @@ db:
 dp:
 	alembic upgrade head
 
-start:
+dev:
 	alembic upgrade head && \
 	uv run apiserver.py
+
+start:
+	alembic upgrade head && \
+	nohup alembic upgrade head && uvicorn apiserver.py --env prod > server.log 2>&1 &
 
 lint:
 	uv add pre-commit --group test && \
