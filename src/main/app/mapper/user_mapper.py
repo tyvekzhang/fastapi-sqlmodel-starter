@@ -5,7 +5,7 @@ from typing import Union
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from src.main.app.common.mapper.impl.mapper_base_impl import SqlModelMapper
+from src.main.app.common.mapper.impl.base_mapper_impl import SqlModelMapper
 from src.main.app.entity.user_entity import UserEntity
 
 

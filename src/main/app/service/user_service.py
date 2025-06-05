@@ -8,12 +8,12 @@ from fastapi_pagination import Params
 from starlette.responses import StreamingResponse
 
 from src.main.app.common.schema.schema import Token
-from src.main.app.common.service.service_base import ServiceBase
+from src.main.app.common.service.base_service import BaseService
 from src.main.app.entity.user_entity import UserEntity
 from src.main.app.schema.user_schema import UserQuery, LoginForm, UserCreate
 
 
-class UserService(ServiceBase[UserEntity], ABC):
+class UserService(BaseService[UserEntity], ABC):
     @abstractmethod
     async def register(self, *, user_create: UserCreate) -> UserEntity: ...
 

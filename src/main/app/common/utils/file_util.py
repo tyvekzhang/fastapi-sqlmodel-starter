@@ -40,12 +40,14 @@ def _find_marker_path(marker_file: str, return_dir: bool = True) -> str:
             raise FileNotFoundError(f"Marker file not found: {marker_file}")
         current = parent
 
+
 def get_file_dir(marker_file: str) -> str:
     """Locate directory containing the specified marker file.
 
     See _find_marker_path docstring for details.
     """
     return _find_marker_path(marker_file, return_dir=True)
+
 
 def get_file_path(marker_file: str) -> str:
     """Locate the absolute path of the specified marker file.

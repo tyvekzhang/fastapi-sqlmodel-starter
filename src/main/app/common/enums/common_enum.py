@@ -78,6 +78,7 @@ class TokenTypeEnum(str, Enum):
     refresh = "refresh"
     bearer = "Bearer"
 
+
 class DBTypeEnum(str, Enum):
     """
     Enum for database type.

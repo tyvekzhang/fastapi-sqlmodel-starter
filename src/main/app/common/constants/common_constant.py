@@ -18,4 +18,3 @@ import os
 
 current_dir: str = os.path.dirname(os.path.abspath(__file__))
 RESOURCE_DIR: str = os.path.abspath(os.path.join(current_dir, os.pardir, os.pardir, os.pardir, "resource"))
-SQLITE_DB_PATH = os.path.join(RESOURCE_DIR, "alembic/db/fast_web.db")

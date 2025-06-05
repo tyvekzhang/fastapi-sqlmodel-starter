@@ -16,7 +16,7 @@ from src.main.app.common.enums.common_enum import TokenTypeEnum
 from src.main.app.common.schema.schema import Token
 from src.main.app.common.security import security
 from src.main.app.common.security.security import verify_password, get_password_hash
-from src.main.app.common.service.impl.service_base_impl import ServiceBaseImpl
+from src.main.app.common.service.impl.base_service_impl import BaseServiceImpl
 from src.main.app.common.utils.excel import export_template
 from src.main.app.entity.user_entity import UserEntity
 from src.main.app.enums.biz_error_code import BusinessErrorCode
@@ -33,7 +33,7 @@ from src.main.app.schema.user_schema import (
 from src.main.app.service.user_service import UserService
 
 
-class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
+class UserServiceImpl(BaseServiceImpl[UserMapper, UserEntity], UserService):
     """
     Implementation of the UserService interface.
     """
