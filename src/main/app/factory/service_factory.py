@@ -2,7 +2,6 @@
 
 from typing import Optional
 
-from src.main.app.common.mapper.impl.mapper_base_impl import SqlModelMapper
 from src.main.app.mapper.user_mapper import userMapper
 from src.main.app.service.impl.user_service_impl import UserServiceImpl
 from src.main.app.service.user_service import UserService
@@ -10,7 +9,7 @@ from src.main.app.service.user_service import UserService
 _singleton_user_service_instance: Optional[UserService] = None
 
 
-def wire_user_service(service_name: str = "default") -> UserService:
+def get_user_service(service_name: str = "default") -> UserService:
     """
     Return an instance of the UserService implementation.
 

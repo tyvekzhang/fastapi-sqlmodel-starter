@@ -77,3 +77,12 @@ class TokenTypeEnum(str, Enum):
     access = "access"
     refresh = "refresh"
     bearer = "Bearer"
+
+class DBTypeEnum(str, Enum):
+    """
+    Enum for database type.
+    """
+
+    PGSQL = "postgresql"
+    MYSQl = "mysql"
+    SQLITE = "sqlite"

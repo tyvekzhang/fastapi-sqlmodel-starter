@@ -17,7 +17,6 @@
 from typing import Generic, TypeVar, Optional, Any, Union
 from pydantic import BaseModel, model_serializer
 from src.main.app.common.enums.base_error_code import BaseErrorCode
-from src.main.app.enums.biz_error_code import BusinessErrorCode
 
 # Define generic type variables for response data
 DataType = TypeVar("DataType")

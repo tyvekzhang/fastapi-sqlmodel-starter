@@ -14,6 +14,7 @@
 # limitations under the License.
 
 """Business-related error codes (30000-39999)."""
+
 from src.main.app.common.enums.base_error_code import BaseErrorCode
 
 

@@ -23,19 +23,14 @@ async def log_requests(request: Request, call_next):
         path=request.url.path,
         query_params=dict(request.query_params),
         client_ip=request.client.host if request.client else None,
-        user_agent=request.headers.get("user-agent")
+        user_agent=request.headers.get("user-agent"),
     )
 
     try:
         response = await call_next(request)
     except Exception as exc:
         # Log exception information
-        logger.error(
-            "Request failed",
-            request_id=request_id,
-            exception=str(exc),
-            exc_info=True
-        )
+        logger.error("Request failed", request_id=request_id, exception=str(exc), exc_info=True)
         raise
 
     # Calculate processing time
@@ -49,7 +44,7 @@ async def log_requests(request: Request, call_next):
         method=request.method,
         path=request.url.path,
         status_code=response.status_code,
-        process_time=f"{process_time}ms"
+        process_time=f"{process_time}ms",
     )
 
     # Add request ID to response headers

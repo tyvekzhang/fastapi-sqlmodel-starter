@@ -42,4 +42,3 @@ class Cache(ABC):
         """Check if a key exists in the cache."""
 
         raise NotImplementedError
-

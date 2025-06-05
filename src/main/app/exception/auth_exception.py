@@ -29,8 +29,8 @@ class SystemException(BaseError):
     """
 
     def __init__(
-            self,
-            code: AuthErrorCode,
-            msg: Optional[Any] = None,
+        self,
+        code: AuthErrorCode,
+        msg: Optional[Any] = None,
     ):
         super().__init__(code=code, msg=msg)

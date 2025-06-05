@@ -20,7 +20,7 @@ from typing import Optional
 from sqlalchemy import BigInteger, DateTime
 from sqlmodel import SQLModel as _SQLModel, Field
 
-from src.main.app.common.util.snowflake_util import snowflake_id
+from src.main.app.common.utils.snowflake_util import snowflake_id
 
 
 class BaseModel(_SQLModel):

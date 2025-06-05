@@ -17,7 +17,7 @@ from src.main.app.common.schema.schema import Token
 from src.main.app.common.security import security
 from src.main.app.common.security.security import verify_password, get_password_hash
 from src.main.app.common.service.impl.service_base_impl import ServiceBaseImpl
-from src.main.app.common.util.excel import export_template
+from src.main.app.common.utils.excel import export_template
 from src.main.app.entity.user_entity import UserEntity
 from src.main.app.enums.biz_error_code import BusinessErrorCode
 from src.main.app.enums.enum import SystemResponseCode
@@ -183,9 +183,7 @@ class UserServiceImpl(ServiceBaseImpl[UserMapper, UserEntity], UserService):
         # user name duplicate verification
         user: UserEntity = await self.mapper.get_user_by_username(username=user_create.username)
         if user is not None:
-            raise BusinessException(
-                BusinessErrorCode.USER_NAME_EXISTS
-            )
+            raise BusinessException(BusinessErrorCode.USER_NAME_EXISTS)
         # generate hash password
         user_create.password = await get_password_hash(user_create.password)
         return await self.mapper.insert(record=user_create)

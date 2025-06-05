@@ -1,4 +1,4 @@
-"""Snowflake util to generate unique id"""
+"""Snowflake utils to generate unique id"""
 
 import os
 import time

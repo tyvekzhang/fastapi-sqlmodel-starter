@@ -12,18 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Business exception for the application."""
+"""Common constant"""
 
-from typing import Optional, Any
+import os
 
-from src.main.app.common.exception.base_exception import BaseError
-from src.main.app.enums.biz_error_code import BusinessErrorCode
-
-
-class BusinessException(BaseError):
-    def __init__(
-        self,
-        code: BusinessErrorCode,
-        msg: Optional[Any] = None,
-    ):
-        super().__init__(code=code, msg=msg)
+current_dir: str = os.path.dirname(os.path.abspath(__file__))
+RESOURCE_DIR: str = os.path.abspath(os.path.join(current_dir, os.pardir, os.pardir, os.pardir, "resource"))
+SQLITE_DB_PATH = os.path.join(RESOURCE_DIR, "alembic/db/fast_web.db")

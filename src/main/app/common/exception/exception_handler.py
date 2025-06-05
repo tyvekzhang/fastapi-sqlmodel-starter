@@ -113,10 +113,7 @@ def log_exception(exc: Exception, request_info: Dict[str, Any]) -> None:
 
 
 def build_error_response(
-        exc: Exception,
-        request: Request,
-        status_code: int,
-        headers: Optional[Dict[str, str]] = None
+    exc: Exception, request: Request, status_code: int, headers: Optional[Dict[str, str]] = None
 ) -> Response:
     """
     Build standardized error response.

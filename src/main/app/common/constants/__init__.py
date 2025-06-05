@@ -12,18 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Business exception for the application."""
+from .common_constant import *
 
-from typing import Optional, Any
-
-from src.main.app.common.exception.base_exception import BaseError
-from src.main.app.enums.biz_error_code import BusinessErrorCode
-
-
-class BusinessException(BaseError):
-    def __init__(
-        self,
-        code: BusinessErrorCode,
-        msg: Optional[Any] = None,
-    ):
-        super().__init__(code=code, msg=msg)
+__all__ = ["RESOURCE_DIR"]

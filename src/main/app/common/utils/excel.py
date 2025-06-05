@@ -1,4 +1,4 @@
-"""Excel util"""
+"""Excel utils"""
 
 import io
 from datetime import datetime

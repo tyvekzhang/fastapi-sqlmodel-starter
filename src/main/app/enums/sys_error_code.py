@@ -14,6 +14,7 @@
 # limitations under the License.
 
 """System-related error codes (10000-19999)."""
+
 from src.main.app.common.enums.base_error_code import BaseErrorCode
 
 

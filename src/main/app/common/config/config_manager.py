@@ -22,7 +22,7 @@ from src.main.app.common.config.config import (
 )
 from src.main.app.common.config.config_loader import ConfigLoader
 from src.main.app.common.enums.common_enum import ResponseCode
-from src.main.app.common.util.work_path_util import resource_dir
+from src.main.app.common.constants.common_constant import RESOURCE_DIR
 
 config: Config
 
@@ -54,7 +54,7 @@ def get_database_url(*, env: str = "dev"):
     """
 
     assert env in ("dev", "prod", "local")
-    config_path = os.path.join(resource_dir, f"config-{env}.yml")
+    config_path = os.path.join(RESOURCE_DIR, f"config-{env}.yml")
     config_dict = ConfigLoader.load_yaml_file(config_path)
     if "database" not in config_dict:
         raise SystemException(

@@ -48,6 +48,7 @@ class RedisCache(Cache):
         """Check if a key exists in Redis."""
         return await self.redis_client.exists(key)
 
+
 class RedisManager:
     _instance: Optional[redis.Redis] = None
     _connection_pool: Optional[redis.ConnectionPool] = None
@@ -69,4 +70,3 @@ class RedisManager:
                 if cls._instance is None:
                     cls._instance = await redis.Redis.from_pool(cls._connection_pool)
         return cls._instance
-

@@ -18,6 +18,7 @@ from src.main.app.common.cache.base_cache import Cache
 from src.main.app.common.cache.redis_cache import RedisManager
 from src.main.app.common.config.config_manager import load_config
 
+
 async def get_cache_client() -> Cache:
     """Initialize and return the appropriate cache client based on configuration.
 

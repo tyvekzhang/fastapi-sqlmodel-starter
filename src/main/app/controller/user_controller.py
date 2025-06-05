@@ -12,7 +12,7 @@ from src.main.app.common.schema.schema import Token, CurrentUser
 from src.main.app.common.security.security import get_current_user
 from src.main.app.entity.user_entity import UserEntity
 from src.main.app.factory.service_factory import (
-    wire_user_service,
+    get_user_service,
 )
 from src.main.app.schema.user_schema import (
     UserCreate,
@@ -24,7 +24,7 @@ from src.main.app.schema.user_schema import (
 from src.main.app.service.user_service import UserService
 
 user_router = APIRouter()
-user_service: UserService = wire_user_service()
+user_service: UserService = get_user_service()
 
 
 @user_router.post("/register")

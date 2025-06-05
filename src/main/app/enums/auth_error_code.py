@@ -14,6 +14,7 @@
 # limitations under the License.
 
 """Authentication and authorization error codes (20000-29999)."""
+
 from src.main.app.common.enums.base_error_code import BaseErrorCode
 
 

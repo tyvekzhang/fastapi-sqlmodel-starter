@@ -18,16 +18,15 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from src.main.app.common.config.config_manager import load_config
-from src.main.app.common.middleware.db_session_middleware import SQLAlchemyMiddleware
-from src.main.app.common.middleware.jwt_middleware import jwt_middleware
-from src.main.app.common.session.db_engine import get_async_engine
 
-config = load_config()
+server_config = load_config().server
+security_config = load_config().security
+database_config = load_config().database
 
 
 def register_middleware(app: FastAPI) -> None:
     # Register CORS
-    origins = [origin.strip() for origin in config.security.backend_cors_origins.split(",")]
+    origins = [origin.strip() for origin in security_config.backend_cors_origins.split(",")]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
@@ -36,11 +35,4 @@ def register_middleware(app: FastAPI) -> None:
         allow_headers=["*"],
     )
 
-    # Register SQLAlchemy
-    app.add_middleware(
-        SQLAlchemyMiddleware,
-        custom_engine=get_async_engine(),
-    )
-
     # Register JWT
-    app.middleware("http")(jwt_middleware)

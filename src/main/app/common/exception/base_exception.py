@@ -28,9 +28,9 @@ class BaseError(Exception):
     """
 
     def __init__(
-            self,
-            code: BaseErrorCode,
-            msg: Optional[Any] = None,
+        self,
+        code: BaseErrorCode,
+        msg: Optional[Any] = None,
     ):
         self.code = code.code
         self.msg = msg or code.msg

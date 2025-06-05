@@ -12,6 +12,7 @@ from src.main.app.common.security.security import is_valid_token
 
 config = load_config()
 
+
 async def jwt_middleware(request: Request, call_next):
     raw_url_path = request.url.path
     if not raw_url_path.__contains__(config.server.api_version) or raw_url_path.__contains__(".json"):

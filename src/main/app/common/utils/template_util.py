@@ -1,13 +1,13 @@
-"""Template operation util"""
+"""Template operation utils"""
 
 import os
 from typing import Any
 from jinja2 import Template
 from src.main.app.common.enums.common_enum import ResponseCode
 from src.main.app.common.exception.common_exception import SystemException
-from src.main.app.common.util.work_path_util import resource_dir
+from src.main.app.common.constants.common_constant import RESOURCE_DIR
 
-home_template_dir: str = os.path.join(resource_dir, "template")
+home_template_dir: str = os.path.join(RESOURCE_DIR, "template")
 
 
 def load_template_file(template_name: str) -> Template:

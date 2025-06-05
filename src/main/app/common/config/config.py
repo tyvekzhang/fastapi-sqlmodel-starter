@@ -14,22 +14,21 @@
 #
 """Application Configuration Management."""
 
-import os.path
-from os import makedirs
+from src.main.app.common.utils import alembic_config
 
 
 class ServerConfig:
     def __init__(
         self,
-        host: str = "127.0.0.1",
         name: str = "Server",
+        host: str = "127.0.0.1",
         port: int = 18000,
         version: str = "0.1.0",
         app_desc: str = "Server",
         api_version: str = "/v1",
         workers: int = 1,
         debug: bool = False,
-        log_file_path: str = "../log/fast_web/fast_web.log",
+        log_file_path: str = "server.log",
         win_tz: str = "China Standard Time",
         linux_tz: str = "Asia/Shanghai",
         enable_rate_limit: bool = False,
@@ -47,7 +46,7 @@ class ServerConfig:
             api_version (str): The server api_version. Default is 'v1'.
             debug (bool): Whether to enable debug mode, default no.
             workers (int): The server worker numbers. Default is 1.
-            log_file_path (str): Path to the log file. Default is '../log/fast_web/fast_web.log'.
+            log_file_path (str): Path to the log file. Default is 'server.log'.
             win_tz (str): Windows timezone setting. Default is 'China Standard Time'.
             linux_tz (str): Linux timezone setting. Default is 'Asia/Shanghai'.
             enable_rate_limit (bool): Whether to enable rate limiting. Default is False.
@@ -80,9 +79,8 @@ class ServerConfig:
 class DatabaseConfig:
     def __init__(
         self,
-        dialect: str = "sqlite",
-        db_name="fast_web.db",
-        url: str = "",
+        dialect: str = None,
+        url: str = None,
         pool_size: int = 10,
         max_overflow: int = 20,
         pool_recycle: int = 1800,
@@ -98,9 +96,8 @@ class DatabaseConfig:
         Initializes database configuration with a default database entity.
 
         Args:
-            dialect (str): The entity of database. Default is 'sqlite'.
-            db_name (str): The name of sqlite database. Default is 'server.db'.
-            url (str): The url of database. Default is 'src/main/resource/alembic/db/server.db'.
+            dialect (str): The entity of database. Default is None.
+            url (str): The url of database. Default is None.
             pool_size (int): The pool size of database. Default is 10.
             max_overflow (int): The max overflow of database. Default is 20.
             pool_recycle (int): The pool recycle of database. Default is 1800 sec.
@@ -112,16 +109,11 @@ class DatabaseConfig:
             cache_pass (str): Redis password. Default is empty.
             db_num (int): Redis database number. Default is 0.
         """
+        if dialect is None or dialect.strip() == "":
+            dialect = alembic_config.get_db_dialect()
         self.dialect = dialect
-        self.db_name = db_name
-        if dialect == "sqlite" and url == "":
-            base_dir = os.path.dirname(os.path.abspath(__file__))
-            db_dir = os.path.join(base_dir, os.pardir, os.pardir, os.pardir, "resource", "alembic", "db")
-            db_dir = os.path.abspath(db_dir)
-            if not os.path.exists(db_dir):
-                os, makedirs(db_dir)
-            bd_path = os.path.join(db_dir, self.db_name)
-            url = "sqlite+aiosqlite:///" + str(bd_path)
+        if url is None or dialect.strip() == "":
+            url = alembic_config.get_db_url()
         self.url = url
         self.pool_size = pool_size
         self.max_overflow = max_overflow
