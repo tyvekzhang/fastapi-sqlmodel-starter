@@ -6,7 +6,7 @@ from fastapi import UploadFile
 from fastapi.testclient import TestClient
 
 from src.main.app.common.config.config_manager import load_config
-from src.main.app.common.security.security import get_user_id
+from src.main.app.common.security.common_security import get_user_id
 from src.main.app.server import app
 from src.main.app.schema.user_schema import UserUpdate
 

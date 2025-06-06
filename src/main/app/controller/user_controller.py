@@ -7,9 +7,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_pagination import Params
 from starlette.responses import StreamingResponse
 
-from src.main.app.common.schema.response import HttpResponse
-from src.main.app.common.schema.schema import Token, CurrentUser
-from src.main.app.common.security.security import get_current_user
+from src.main.app.common.schema.response_schema import HttpResponse
+from src.main.app.common.schema.common_schema import Token, CurrentUser
+from src.main.app.common.security.common_security import get_current_user
 from src.main.app.entity.user_entity import UserEntity
 from src.main.app.factory.service_factory import (
     get_user_service,
@@ -191,8 +191,8 @@ async def list_user(
     """
 
     records: List[UserQuery] = await user_service.retrieve_user(
-        page=userFilterParams.page,
-        size=userFilterParams.size,
+        page=userFilterParams.current,
+        size=userFilterParams.page_size,
         filter_by=userFilterParams.filter_by,
         like=userFilterParams.like,
     )

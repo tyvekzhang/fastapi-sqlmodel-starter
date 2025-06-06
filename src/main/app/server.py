@@ -20,6 +20,7 @@ import time
 
 from fastapi import FastAPI
 from loguru import logger
+from src.main.app.common.middleware.db_session_middleware import SQLAlchemyMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from src.main.app.common.config.config_manager import load_config
@@ -27,7 +28,6 @@ from src.main.app.common.exception import common_exception
 from src.main.app.common.middleware.jwt_middleware import jwt_middleware
 from src.main.app.common.openapi import offline
 from src.main.app.common.session.db_engine import get_async_engine
-from src.main.app.common.session.db_session_middleware import SQLAlchemyMiddleware
 from src.main.app.common.constants.common_constant import RESOURCE_DIR
 from src.main.app.router.router import create_router
 

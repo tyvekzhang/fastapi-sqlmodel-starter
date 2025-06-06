@@ -22,7 +22,7 @@ from loguru import logger
 from starlette.responses import JSONResponse
 
 from src.main.app.common.config.config_manager import load_config
-from src.main.app.common.security.security import is_valid_token
+from src.main.app.common.security import common_security
 
 config = load_config()
 
@@ -46,7 +46,7 @@ async def jwt_middleware(request: Request, call_next):
     if auth_header:
         try:
             token = auth_header.split(" ")[-1]
-            await is_valid_token(token)
+            await common_security.validate_token(token)
         except JWTError as e:
             logger.error(f"{e}")
             return JSONResponse(

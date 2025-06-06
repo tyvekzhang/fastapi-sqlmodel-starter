@@ -62,10 +62,6 @@ class HttpResponse(BaseModel, Generic[T]):
 
         Returns:
             HttpResponse[T]: Constructed success response instance
-
-        Example:
-            >>> HttpResponse.success(code=200, data={"id": 123})
-            HttpResponse(code=200, msg='success', data={'id': 123})
         """
         return HttpResponse[T](code=code, msg=msg, data=data)
 
@@ -81,10 +77,6 @@ class HttpResponse(BaseModel, Generic[T]):
 
         Returns:
             HttpResponse[Any]: Constructed error response instance
-
-        Example:
-            >>> HttpResponse.fail(msg="Not found", code=404)
-            HttpResponse(code=404, msg='Not found', data=None)
         """
         return HttpResponse[Any](code=code, msg=msg, data=data)
 
@@ -109,9 +101,6 @@ class HttpResponse(BaseModel, Generic[T]):
         Returns:
             HttpResponse[Any]: Constructed error response with the provided
                             error information.
-
-        Examples:
-            >>> HttpResponse.fail_with_error(BusinessErrorCode.VALIDATION_ERROR)
         """
         if isinstance(error, tuple) and len(error) == 2:
             code, msg = error

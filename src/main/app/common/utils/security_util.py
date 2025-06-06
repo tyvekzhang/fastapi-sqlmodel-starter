@@ -26,7 +26,7 @@ from passlib.context import CryptContext
 from starlette import status
 
 from src.main.app.common.config.config_manager import load_config
-from src.main.app.common.schema.schema import CurrentUser
+from src.main.app.common.schema.common_schema import CurrentUser
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

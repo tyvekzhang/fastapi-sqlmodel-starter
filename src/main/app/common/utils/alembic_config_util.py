@@ -47,12 +47,12 @@ class DbConnectionInfo(NamedTuple):
 
 
 def get_alembic_db_info(
-    config_dir: str,
+    config_path: str,
 ) -> DbConnectionInfo:
     """Extracts and parses the SQLAlchemy URL from alembic.ini.
 
     Args:
-        config_dir: Path to the alembic.ini file.
+        config_path: Path to the alembic.ini file.
 
     Returns:
         DbConnectionInfo: Named tuple containing parsed connection details.
@@ -63,7 +63,6 @@ def get_alembic_db_info(
         ValueError: If the URL parsing fails.
     """
     config = configparser.ConfigParser()
-    config_path = os.path.join(config_dir, "alembic.ini")
     config.read(config_path)
 
     if not config.has_option("alembic", "sqlalchemy.url"):

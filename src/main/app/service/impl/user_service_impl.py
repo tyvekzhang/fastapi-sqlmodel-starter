@@ -13,9 +13,9 @@ from starlette.responses import StreamingResponse
 from src.main.app.common.cache import base_cache, cache_manager
 from src.main.app.common.config.config_manager import load_config
 from src.main.app.common.enums.common_enum import TokenTypeEnum
-from src.main.app.common.schema.schema import Token
-from src.main.app.common.security import security
-from src.main.app.common.security.security import verify_password, get_password_hash
+from src.main.app.common.schema.common_schema import Token
+from src.main.app.common.security import common_security
+from src.main.app.common.security.common_security import verify_password, get_password_hash
 from src.main.app.common.service.impl.base_service_impl import BaseServiceImpl
 from src.main.app.common.utils.excel_util import export_template
 from src.main.app.entity.user_entity import UserEntity

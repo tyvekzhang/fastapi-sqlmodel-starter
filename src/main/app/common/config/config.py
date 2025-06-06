@@ -109,11 +109,11 @@ class DatabaseConfig:
             cache_pass (str): Redis password. Default is empty.
             db_num (int): Redis database number. Default is 0.
         """
-        if dialect is None or dialect.strip() == "":
-            dialect = alembic_config.get_db_dialect()
+        if dialect is None or len(dialect.strip()) == 0:
+            dialect = alembic_config_util.get_db_dialect()
         self.dialect = dialect
-        if url is None or dialect.strip() == "":
-            url = alembic_config.get_db_url()
+        if url is None or len(url.strip()) == 0:
+            url = alembic_config_util.get_db_url()
         self.url = url
         self.pool_size = pool_size
         self.max_overflow = max_overflow

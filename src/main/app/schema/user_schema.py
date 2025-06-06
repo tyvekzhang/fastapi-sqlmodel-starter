@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any
 from pydantic import BaseModel, field_validator
 from sqlmodel import Field
 
-from src.main.app.common.schema.schema import BasePage
+from src.main.app.common.schema.common_schema import BasePage
 
 
 class UserCreate(BaseModel):
