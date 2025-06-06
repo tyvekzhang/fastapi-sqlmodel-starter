@@ -14,7 +14,7 @@
 #
 """Application Configuration Management."""
 
-from src.main.app.common.utils import alembic_config
+from src.main.app.common.utils import alembic_config_util
 
 
 class ServerConfig:
