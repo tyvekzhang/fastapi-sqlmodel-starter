@@ -15,10 +15,10 @@
 
 """Business-related error codes (30000-39999)."""
 
-from src.main.app.common.enums.base_error_code import BaseErrorCode
+from src.main.app.common.enums.base_error_code import CustomExceptionCode
 
 
-class BusinessErrorCode(BaseErrorCode):
+class BusinessErrorCode(CustomExceptionCode):
     """Business-related error codes."""
 
     USER_NAME_EXISTS = (30001, "Username already exists")

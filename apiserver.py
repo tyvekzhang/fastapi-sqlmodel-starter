@@ -20,7 +20,6 @@ from pathlib import Path
 
 import uvicorn
 from loguru import logger
-from src.main.app.common import constants
 
 
 def find_project_root(marker_file: str = "pyproject.toml") -> Path:
@@ -44,14 +43,18 @@ def find_project_root(marker_file: str = "pyproject.toml") -> Path:
         parent_dir = current_dir.parent
 
         if parent_dir == current_dir:
-            raise FileNotFoundError(f"Could not find {marker_file} in any parent directory")
+            raise FileNotFoundError(
+                f"Could not find {marker_file} in any parent directory"
+            )
 
         current_dir = parent_dir
 
 
 def parse_arguments() -> argparse.Namespace:
     """Parse and return command line arguments."""
-    parser = argparse.ArgumentParser(description="Fast web server with custom configurations")
+    parser = argparse.ArgumentParser(
+        description="Fast web server with custom configurations"
+    )
 
     parser.add_argument(
         "-e",
@@ -74,6 +77,8 @@ def parse_arguments() -> argparse.Namespace:
 
 def configure_environment(args: argparse.Namespace) -> None:
     """Set up environment variables based on command line arguments."""
+    from src.main.app.core import constants
+
     os.environ[constants.ENV] = args.env
     if args.config_file:
         os.environ[constants.CONFIG_FILE] = args.config_file
@@ -81,10 +86,12 @@ def configure_environment(args: argparse.Namespace) -> None:
 
 def run_server() -> None:
     """Load configuration and start the Uvicorn server."""
-    from src.main.app.common.config import config_manager
+    from src.main.app.core.config import config_manager
 
     server_config = config_manager.load_server_config()
-    logger.info(f"OpenAPI url: http://{server_config.host}:{server_config.port}/docs")
+    logger.info(
+        f"OpenAPI url: http://{server_config.host}:{server_config.port}/docs"
+    )
     uvicorn.run(
         app="src.main.app.server:app",
         host=server_config.host,

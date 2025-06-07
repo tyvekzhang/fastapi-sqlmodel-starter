@@ -12,22 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Project health probe"""
+"""Constant for the application"""
+from .constant import RESOURCE_DIR, ENV, CONFIG_FILE, AUTHORIZATION, CONFIG_FILE_NAME, FilterOperators
 
-from fastapi import APIRouter
-
-from src.main.app.common.schema.response_schema import HttpResponse
-
-probe_router = APIRouter()
-
-
-@probe_router.get("/liveness")
-async def liveness() -> HttpResponse[str]:
-    """
-    Check if the system is alive.
-
-    Returns:
-        HttpResponse[str]: An HTTP response containing a success message
-        with the string "Hi" as data.
-    """
-    return HttpResponse.success(msg="Hi")
+__all__ = ["RESOURCE_DIR", "ENV", "CONFIG_FILE", "AUTHORIZATION", "CONFIG_FILE_NAME", FilterOperators]

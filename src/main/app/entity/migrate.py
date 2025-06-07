@@ -3,13 +3,13 @@
 import importlib
 from pathlib import Path
 
-MODELS_DIR = Path("src/main/app/entity")
+MODELS_DIR = Path("src/main/app/model")
 
 
 # 动态导入所有模型类
 def import_models():
     for model_file in MODELS_DIR.glob("*_entity.py"):
-        module_name = f"src.main.app.entity.{model_file.stem}"
+        module_name = f"src.main.app.model.{model_file.stem}"
         module = importlib.import_module(module_name)
         for name in dir(module):
             if name.endswith("Entity"):

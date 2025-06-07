@@ -32,10 +32,10 @@ install:
 	uv sync
 
 db:
-	alembic revision --autogenerate
+	uv run alembic revision --autogenerate
 
 dp:
-	alembic upgrade head
+	uv run alembic upgrade head
 
 dev: install
 	uv run alembic upgrade head && \
@@ -43,24 +43,22 @@ dev: install
 
 start: install
 	uv run alembic upgrade head && \
-	nohup uvicorn apiserver.py --env prod > $(SERVER_LOG) 2>&1 &
+	nohup uv run apiserver.py --env prod > $(SERVER_LOG) 2>&1 &
 
 lint:
-	uv add pre-commit --group test && \
-	pre-commit run --all-files --verbose --show-diff-on-failure
+	uv add pre-commit --group dev && \
+	uv run pre-commit run --all-files --verbose --show-diff-on-failure
 
-test:
-	rm -rf $(SOURCE_DIR)/main/resource/alembic/db/fast_web.db; \
-	rm -rf htmlcov; \
-	uv sync --group dev; \
-	alembic upgrade head; \
-	coverage run -m pytest $(SOURCE_DIR)/tests; \
-	coverage html
+test: clean
+	uv sync --group dev && \
+	uv run alembic upgrade head && \
+	uv run coverage run -m pytest $(SOURCE_DIR)/tests && \
+	uv run coverage html
 
 ifeq ($(OS),Windows_NT)
 clean:
 	-rmdir /s /q dist 2>nul
-	-rmdir /s /q $(DOCS_DIR)\build 2>nul
+	-rmdir /s /q $(DOCS_DIR)/build 2>nul
 
 else
 clean:
@@ -83,8 +81,8 @@ deploy-k8s:
 
 doc:
 	uv add -r $(DOCS_DIR)/requirements.txt --group docs
-	sphinx-build -M html $(DOCS_DIR)/source/ $(DOCS_DIR)/build/
+	uv run sphinx-build -M html $(DOCS_DIR)/source/ $(DOCS_DIR)/build/
 
 pypi:
-	poetry build
-	poetry publish
+	uv build
+	uv publish

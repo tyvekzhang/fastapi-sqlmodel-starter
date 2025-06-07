@@ -15,10 +15,10 @@
 
 """System-related error codes (10000-19999)."""
 
-from src.main.app.common.enums.base_error_code import BaseErrorCode
+from src.main.app.common.enums.base_error_code import CustomExceptionCode
 
 
-class SystemErrorCode(BaseErrorCode):
+class SystemErrorCode(CustomExceptionCode):
     """System-related error codes."""
 
     INTERNAL_ERROR = (10001, "Internal server error")

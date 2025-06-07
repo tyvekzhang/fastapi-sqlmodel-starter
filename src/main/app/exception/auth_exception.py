@@ -20,7 +20,7 @@ from src.main.app.common.exception.base_exception import BaseError
 from src.main.app.enums.auth_error_code import AuthErrorCode
 
 
-class SystemException(BaseError):
+class AuthException(BaseError):
     """Exception class for auth-level errors in the application.
 
     This class should be used for errors related to auth operations,

@@ -15,21 +15,23 @@
 """Server startup that include register router、session、cors、global exception handler、jwt, openapi..."""
 
 import os
-import time
 import subprocess
+import time
 
-from loguru import logger
 from fastapi import FastAPI
+from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
-from src.main.app.common.openapi import offline
+from src.main.app.core import exceptions
+from src.main.app.core.config import config_manager
+from src.main.app.core.constants import RESOURCE_DIR
+from src.main.app.core.middleware.db_session_middleware import (
+    SQLAlchemyMiddleware
+)
+from src.main.app.core.middleware.jwt_middleware import jwt_middleware
+from src.main.app.core.openapi import offline
+from src.main.app.core.session.db_engine import get_async_engine
 from src.main.app.router.router import create_router
-from src.main.app.common.config import config_manager
-from src.main.app.common.constants import RESOURCE_DIR
-from src.main.app.common.exception import common_exception
-from src.main.app.common.session.db_engine import get_async_engine
-from src.main.app.common.middleware.jwt_middleware import jwt_middleware
-from src.main.app.common.middleware.db_session_middleware import SQLAlchemyMiddleware
 
 # Load config
 server_config = config_manager.load_server_config()
@@ -64,7 +66,9 @@ app = FastAPI(
 
 # Register middleware
 app.add_middleware(SQLAlchemyMiddleware, custom_engine=get_async_engine())
-origins = [origin.strip() for origin in security_config.backend_cors_origins.split(",")]
+origins = [
+    origin.strip() for origin in security_config.backend_cors_origins.split(",")
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -75,7 +79,7 @@ app.add_middleware(
 app.middleware("http")(jwt_middleware)
 
 # Register exception handler
-common_exception.register_exception_handlers(app)
+exceptions.register_exception_handlers(app)
 
 # Setup router
 router = create_router()
