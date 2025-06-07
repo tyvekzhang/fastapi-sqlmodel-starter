@@ -15,6 +15,7 @@
 """Exception handlers module for FastAPI application."""
 
 import http
+import textwrap
 import traceback
 from typing import Dict, Any, Optional
 
@@ -24,7 +25,7 @@ from fastapi.utils import is_body_allowed_for_status_code
 from loguru import logger
 
 from src.main.app.common.config.config_manager import load_config
-from src.main.app.common.enums.common_enum import ResponseCode
+from src.main.app.common.enums.common_enum import CommonCode
 
 config = load_config()
 
@@ -104,11 +105,13 @@ def log_exception(exc: Exception, request_info: Dict[str, Any]) -> None:
         request_info: Dictionary containing request information
     """
     logger.error(
-        "Unhandled exception",
-        exception_type=type(exc).__name__,
-        exception_message=str(exc),
-        traceback=traceback.format_exc(),
-        request=request_info,
+        textwrap.dedent(f"""\
+    Unhandled exception,
+    exception_type: {type(exc).__name__},
+    exception_message: {str(exc)},
+    traceback: {traceback.format_exc()},
+    request: {request_info},
+    """)
     )
 
 
@@ -138,9 +141,8 @@ def build_error_response(
 
     return JSONResponse(
         {
-            "code": ResponseCode.SERVICE_INTERNAL_ERROR.code,
+            "code": CommonCode.SERVICE_INTERNAL_ERROR.code,
             "msg": error_message,
-            "request_id": request.headers.get("X-Request-ID"),  # Include request ID if available
         },
         status_code=status_code,
         headers=headers,

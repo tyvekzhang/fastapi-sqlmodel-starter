@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from .common_constant import *
+from .common_constant import RESOURCE_DIR, ENV, CONFIG_FILE
 
-__all__ = ["RESOURCE_DIR"]
+__all__ = ["RESOURCE_DIR", "ENV", "CONFIG_FILE"]

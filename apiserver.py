@@ -11,14 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Main entry point of the project."""
+"""Main entry point of the application."""
 
-import argparse
 import os
 import sys
+import argparse
 from pathlib import Path
 
 import uvicorn
+from loguru import logger
+from src.main.app.common import constants
 
 
 def find_project_root(marker_file: str = "pyproject.toml") -> Path:
@@ -72,21 +74,22 @@ def parse_arguments() -> argparse.Namespace:
 
 def configure_environment(args: argparse.Namespace) -> None:
     """Set up environment variables based on command line arguments."""
-    os.environ["ENV"] = args.env
+    os.environ[constants.ENV] = args.env
     if args.config_file:
-        os.environ["CONFIG_FILE"] = args.config_file
+        os.environ[constants.CONFIG_FILE] = args.config_file
 
 
 def run_server() -> None:
     """Load configuration and start the Uvicorn server."""
-    from src.main.app.common.config.config_manager import load_config
+    from src.main.app.common.config import config_manager
 
-    config = load_config().server
+    server_config = config_manager.load_server_config()
+    logger.info(f"OpenAPI url: http://{server_config.host}:{server_config.port}/docs")
     uvicorn.run(
         app="src.main.app.server:app",
-        host=config.host,
-        port=config.port,
-        workers=config.workers,
+        host=server_config.host,
+        port=server_config.port,
+        workers=server_config.workers,
     )
 
 

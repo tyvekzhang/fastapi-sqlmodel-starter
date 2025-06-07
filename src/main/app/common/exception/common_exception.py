@@ -1,8 +1,12 @@
 """Common module exception"""
 
+from typing import Optional, Any
+
 from fastapi import FastAPI
 
+from src.main.app.common.enums.base_error_code import BaseErrorCode
 from src.main.app.common.exception import exception_handler
+from src.main.app.common.exception.base_exception import BaseError
 
 
 def register_exception_handlers(app: FastAPI) -> None:
@@ -42,3 +46,14 @@ class MissingSessionException(Exception):
         """
 
         super().__init__(detail)
+
+
+class CommonException(BaseError):
+    """Exception class for common errors in the application."""
+
+    def __init__(
+        self,
+        code: BaseErrorCode,
+        msg: Optional[Any] = None,
+    ):
+        super().__init__(code=code, msg=msg)

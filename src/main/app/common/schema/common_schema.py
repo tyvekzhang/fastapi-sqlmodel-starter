@@ -27,6 +27,7 @@ class Token(BaseModel):
         refresh_token: Token used to refresh access.
         re_expired_at: Unix timestamp when refresh token expires.
     """
+
     access_token: str
     token_type: str
     expired_at: int
@@ -40,6 +41,7 @@ class CurrentUser(BaseModel):
     Attributes:
         user_id: Unique identifier of the authenticated user.
     """
+
     user_id: int
 
 
@@ -51,6 +53,7 @@ class BasePage(BaseModel):
         page_size: Number of items per page.
         count: Flag to request total count of items.
     """
+
     current: int = 1
     page_size: int = 10
     count: bool = False

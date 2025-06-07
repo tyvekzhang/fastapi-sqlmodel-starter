@@ -15,26 +15,25 @@
 """Server startup that include register router、session、cors、global exception handler、jwt, openapi..."""
 
 import os
-import subprocess
 import time
+import subprocess
 
-from fastapi import FastAPI
 from loguru import logger
-from src.main.app.common.middleware.db_session_middleware import SQLAlchemyMiddleware
+from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from src.main.app.common.config.config_manager import load_config
-from src.main.app.common.exception import common_exception
-from src.main.app.common.middleware.jwt_middleware import jwt_middleware
 from src.main.app.common.openapi import offline
-from src.main.app.common.session.db_engine import get_async_engine
-from src.main.app.common.constants.common_constant import RESOURCE_DIR
 from src.main.app.router.router import create_router
+from src.main.app.common.config import config_manager
+from src.main.app.common.constants import RESOURCE_DIR
+from src.main.app.common.exception import common_exception
+from src.main.app.common.session.db_engine import get_async_engine
+from src.main.app.common.middleware.jwt_middleware import jwt_middleware
+from src.main.app.common.middleware.db_session_middleware import SQLAlchemyMiddleware
 
 # Load config
-config = load_config()
-server_config = config.server
-security_config = config.security
+server_config = config_manager.load_server_config()
+security_config = config_manager.load_security_config()
 
 # Setup timezone
 if os.name == "nt":

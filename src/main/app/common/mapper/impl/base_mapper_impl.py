@@ -21,7 +21,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from src.main.app.common.enums.common_enum import SortEnum, FilterOperators
 from src.main.app.common.mapper.base_mapper import BaseMapper
-from src.main.app.common.session.db_session_middleware import db
+from src.main.app.common.middleware.db_session_middleware import db
+
 
 IDType = TypeVar("IDType", int, str)
 ModelType = TypeVar("ModelType", bound=SQLModel)

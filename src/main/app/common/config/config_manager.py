@@ -17,12 +17,15 @@
 import os
 from functools import lru_cache
 
-from src.main.app.common.config.config import (
+from src.main.app.common import constants
+from src.main.app.common.config.common_config import (
     Config,
 )
 from src.main.app.common.config.config_loader import ConfigLoader
-from src.main.app.common.enums.common_enum import ResponseCode
-from src.main.app.common.constants.common_constant import RESOURCE_DIR
+from src.main.app.common.config.database_config import DatabaseConfig
+from src.main.app.common.config.security_config import SecurityConfig
+from src.main.app.common.config.server_config import ServerConfig
+from src.main.app.common.enums.common_enum import CommonCode
 
 config: Config
 
@@ -36,13 +39,49 @@ def load_config() -> Config:
         Config: A configuration object populated with the loaded settings.
     """
     global config
-    env = os.getenv("ENV", "dev")
+    env = os.getenv(constants.ENV, "dev")
 
-    config_file = os.getenv("CONFIG_FILE", None)
+    config_file = os.getenv(constants.CONFIG_FILE, None)
     config_loader = ConfigLoader(env, config_file)
     config_dict = config_loader.load_config()
     config = Config(config_dict)
     return config
+
+
+@lru_cache
+def load_server_config() -> ServerConfig:
+    """
+    Loads and returns the server configuration.
+
+    Returns:
+        ServerConfig: The server configuration object.
+    """
+    config_data = load_config()
+    return config_data.server
+
+
+@lru_cache
+def load_database_config() -> DatabaseConfig:
+    """
+    Loads and returns the database configuration.
+
+    Returns:
+        DatabaseConfig: The database configuration object.
+    """
+    config_data = load_config()
+    return config_data.database
+
+
+@lru_cache
+def load_security_config() -> SecurityConfig:
+    """
+    Loads and returns the security configuration.
+
+    Returns:
+        SecurityConfig: The security configuration object.
+    """
+    config_data = load_config()
+    return config_data.security
 
 
 def get_database_url(*, env: str = "dev"):
@@ -54,11 +93,11 @@ def get_database_url(*, env: str = "dev"):
     """
 
     assert env in ("dev", "prod", "local")
-    config_path = os.path.join(RESOURCE_DIR, f"config-{env}.yml")
+    config_path = os.path.join(constants.RESOURCE_DIR, f"config-{env}.yml")
     config_dict = ConfigLoader.load_yaml_file(config_path)
     if "database" not in config_dict:
-        raise SystemException(
-            ResponseCode.PARAMETER_ERROR.code,
-            f"{ResponseCode.PARAMETER_ERROR.msg}: {env}",
+        raise ValueError(
+            CommonCode.PARAMETER_ERROR.code,
+            f"{CommonCode.PARAMETER_ERROR.msg}: {env}",
         )
     return config_dict["database"]["url"]

@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ResponseCode(Enum):
+class CommonCode(Enum):
     """
     Enum for system response codes.
     """

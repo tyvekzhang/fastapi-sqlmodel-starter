@@ -70,6 +70,11 @@ test = [
   "pre-commit>=4.2",
 ]
 
+docs = [
+  "sphinx>=7.2.6",
+  "sphinx-rtd-theme>=2",
+]
+
 [tool.ruff]
 line-length = 120
 

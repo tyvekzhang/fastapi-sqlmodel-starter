@@ -110,4 +110,4 @@ def create_middleware_and_session_proxy():
     return SQLAlchemyMiddleware, DBSession
 
 
-SQLAlchemyMiddleware, db_session = create_middleware_and_session_proxy()
+SQLAlchemyMiddleware, db = create_middleware_and_session_proxy()

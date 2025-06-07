@@ -8,16 +8,16 @@ from typing import Optional, List
 import pandas as pd
 from fastapi import UploadFile
 from fastapi_pagination import Params
+from src.main.app.common.utils import excel_util
+
 from starlette.responses import StreamingResponse
 
+from src.main.app.common.security import common_security
 from src.main.app.common.cache import base_cache, cache_manager
 from src.main.app.common.config.config_manager import load_config
 from src.main.app.common.enums.common_enum import TokenTypeEnum
 from src.main.app.common.schema.common_schema import Token
-from src.main.app.common.security import common_security
-from src.main.app.common.security.common_security import verify_password, get_password_hash
 from src.main.app.common.service.impl.base_service_impl import BaseServiceImpl
-from src.main.app.common.utils.excel_util import export_template
 from src.main.app.entity.user_entity import UserEntity
 from src.main.app.enums.biz_error_code import BusinessErrorCode
 from src.main.app.enums.enum import SystemResponseCode
@@ -74,7 +74,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserEntity], UserService):
         # verify username and password
         username: str = login_form.username
         user_entity: UserEntity = await self.mapper.get_user_by_username(username=username)
-        if user_entity is None or not verify_password(login_form.password, user_entity.password):
+        if user_entity is None or not common_security.verify_password(login_form.password, user_entity.password):
             raise biz_exception.BusinessException(
                 SystemResponseCode.AUTH_FAILED.code,
                 SystemResponseCode.AUTH_FAILED.msg,
@@ -83,13 +83,13 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserEntity], UserService):
         # generate access token
         security_config = load_config().security
         access_token_expires = timedelta(minutes=security_config.access_token_expire_minutes)
-        access_token = await security.create_token(
+        access_token = await common_security.create_token(
             subject=user_entity.id,
             expires_delta=access_token_expires,
             token_type=TokenTypeEnum.access,
         )
         # generate refresh token
-        refresh_token = await security.create_token(
+        refresh_token = await common_security.create_token(
             subject=user_entity.id,
             token_type=TokenTypeEnum.refresh,
         )
@@ -116,7 +116,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserEntity], UserService):
         Args:
             file_name: File name for export
         """
-        return await export_template(schema=UserExport, file_name=file_name)
+        return await excel_util.export_template(schema=UserExport, file_name=file_name)
 
     async def import_user(self, file: UploadFile):
         """
@@ -136,7 +136,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserEntity], UserService):
 
         for user_record in user_records:
             user_import = UserEntity(**user_record)
-            user_import.password = await get_password_hash(user_import.password)
+            user_import.password = await common_security.get_password_hash(user_import.password)
             user_import_list.append(user_import)
             user_name_list.append(user_import.username)
         await file.close()
@@ -168,7 +168,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserEntity], UserService):
         records = []
         for user in user_pages:
             records.append(UserQuery(**user.model_dump()))
-        return await export_template(schema=UserQuery, file_name=file_name, records=records)
+        return await excel_util.export_excel(schema=UserQuery, file_name=file_name, data_list=records)
 
     async def register(self, user_create: UserCreate) -> UserEntity:
         """
@@ -185,8 +185,8 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserEntity], UserService):
         if user is not None:
             raise BusinessException(BusinessErrorCode.USER_NAME_EXISTS)
         # generate hash password
-        user_create.password = await get_password_hash(user_create.password)
-        return await self.mapper.insert(record=user_create)
+        user_create.password = await common_security.get_password_hash(user_create.password)
+        return await self.mapper.insert(data=user_create)
 
     async def retrieve_user(self, page: int, size: int, **kwargs) -> Optional[List[UserQuery]]:
         """

@@ -30,9 +30,7 @@ security_config = config.security
 server_config = config.server
 
 # Security setup
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl=f"{server_config.api_version}/user/login"
-)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{server_config.api_version}/user/login")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -49,11 +47,7 @@ async def decode_jwt_token(token: str) -> dict[str, Any]:
         HTTPException: If token is invalid or expired
     """
     try:
-        return jwt.decode(
-            token,
-            security_config.secret_key,
-            algorithms=[security_config.algorithm]
-        )
+        return jwt.decode(token, security_config.secret_key, algorithms=[security_config.algorithm])
     except ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -74,8 +68,10 @@ def get_current_user() -> Callable[..., Coroutine[Any, Any, CurrentUser]]:
         If security is disabled, returns a default user (user_id=0).
     """
     if not security_config.enable:
+
         async def _default_user() -> CurrentUser:
             return CurrentUser(user_id=0)
+
         return _default_user
 
     async def _current_user(token: str = Depends(oauth2_scheme)) -> CurrentUser:
@@ -86,9 +82,7 @@ def get_current_user() -> Callable[..., Coroutine[Any, Any, CurrentUser]]:
 
 
 async def create_access_token(
-        subject:  Optional[str],
-        expires_delta: Optional[timedelta] = None,
-        token_type: Optional[str] = None
+    subject: Optional[str], expires_delta: Optional[timedelta] = None, token_type: Optional[str] = None
 ) -> str:
     """Create new JWT token.
 
@@ -100,20 +94,9 @@ async def create_access_token(
     Returns:
         Encoded JWT string
     """
-    expire = datetime.now() + (
-            expires_delta or
-            timedelta(minutes=security_config.refresh_token_expire_minutes)
-    )
-    to_encode = {
-        "exp": expire,
-        "sub": str(subject),
-        "type": token_type
-    }
-    return jwt.encode(
-        to_encode,
-        security_config.secret_key,
-        algorithm=security_config.algorithm
-    )
+    expire = datetime.now() + (expires_delta or timedelta(minutes=security_config.refresh_token_expire_minutes))
+    to_encode = {"exp": expire, "sub": str(subject), "type": token_type}
+    return jwt.encode(to_encode, security_config.secret_key, algorithm=security_config.algorithm)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -156,10 +139,7 @@ async def validate_token(token: str) -> bool:
     try:
         payload = await decode_jwt_token(token)
         if datetime.fromtimestamp(payload["exp"]) < datetime.now():
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token has expired"
-            )
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired")
         return True
     except JWTError:
         return False

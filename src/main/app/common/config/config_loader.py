@@ -16,8 +16,9 @@
 
 import os
 import yaml
-
 from typing import Dict
+
+from src.main.app.common import constants
 
 
 class ConfigLoader:
@@ -30,9 +31,7 @@ class ConfigLoader:
             base_config_file (str): Store the base config file path
         """
         if base_config_file is None:
-            base_dir = os.path.dirname(os.path.abspath(__file__))
-            config_path = os.path.join(base_dir, os.pardir, os.pardir, os.pardir, "resource", "config.yml")
-            base_config_file = os.path.abspath(config_path)
+            base_config_file = os.path.join(constants.RESOURCE_DIR, "config.yml")
             self.default_flag = True
         self.base_config_file = base_config_file
         self.config = {}
@@ -95,13 +94,4 @@ class ConfigLoader:
                 env_config = self.load_yaml_file(env_config_path)
                 self.config = self.merge_dicts(self.config, env_config)
 
-        return self.config
-
-    def get_config(self) -> Dict:
-        """
-        Return the loaded configuration.
-
-        Returns:
-            Dict: The configuration loaded and merged from the base and environment-specific files.
-        """
         return self.config
