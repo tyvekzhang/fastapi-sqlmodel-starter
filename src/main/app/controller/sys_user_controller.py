@@ -86,7 +86,7 @@ async def get_user_by_page(
 async def get_user_detail(
         id: int, current_user: CurrentUser
 ) -> HttpResponse[UserDetail]:
-    user_detail: UserDetail = await user_service.get_user_detail(id=id, request=request)
+    user_detail: UserDetail = await user_service.get_user_detail(id=id, current_user=current_user)
     return HttpResponse.success(user_detail)
 
 
@@ -99,14 +99,14 @@ async def export_template(current_user: CurrentUser) -> StreamingResponse:
 async def export_user_page(
         current_user: CurrentUser, ids: list[int] = Query(...)
 ) -> StreamingResponse:
-    return await user_service.export_user_page(ids=ids, request=request)
+    return await user_service.export_user_page(ids=ids, current_user=current_user)
 
 
 @user_router.post("/create")
 async def create_user(
         user_create: UserCreate, current_user: CurrentUser
 ) -> HttpResponse[int]:
-    user: UserModel = await user_service.create_user(user_create=user_create, request=request)
+    user: UserModel = await user_service.create_user(user_create=user_create, current_user=current_user)
     return HttpResponse.success(user.id)
 
 
@@ -114,7 +114,7 @@ async def create_user(
 async def batch_create_user(
         user_create_list: List[UserCreate], current_user: CurrentUser
 ) -> HttpResponse[List[int]]:
-    ids: List[int] = await user_service.batch_create_user(user_create_list=user_create_list, request=request)
+    ids: List[int] = await user_service.batch_create_user(user_create_list=user_create_list, current_user=current_user)
     return HttpResponse.success(ids)
 
 
@@ -122,7 +122,7 @@ async def batch_create_user(
 async def import_user(
         current_user: CurrentUser, file: UploadFile = Form()
 ) -> HttpResponse[List[UserCreate]]:
-    user_create_list: List[UserCreate] = await user_service.import_user(file=file, request=request)
+    user_create_list: List[UserCreate] = await user_service.import_user(file=file, current_user=current_user)
     return HttpResponse.success(user_create_list)
 
 
