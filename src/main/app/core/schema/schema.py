@@ -13,7 +13,7 @@
 # limitations under the License.
 #
 """Common schema with data validation."""
-from typing import List
+from typing import List, Any, Optional
 
 from pydantic import BaseModel
 
@@ -25,7 +25,7 @@ class PageResult(BaseModel):
         records: List of items in current page (default: None)
         total: Total number of items across all pages (default: 0)
     """
-    records: List[BaseModel] = None
+    records: List[Any] = None
     total: int = 0
 
 
@@ -57,6 +57,17 @@ class CurrentUser(BaseModel):
     user_id: int
 
 
+class SortItem(BaseModel):
+    """Single field sorting specification.
+
+    Attributes:
+        field: Name of the field to sort by
+        order: Sort direction ('asc' or 'desc')
+    """
+    field: str
+    order: str
+
+
 class BasePage(BaseModel):
     """Pagination parameters for API endpoints.
 
@@ -69,14 +80,4 @@ class BasePage(BaseModel):
     current: int = 1
     page_size: int = 10
     count: bool = False
-
-
-class SortItem(BaseModel):
-    """Single field sorting specification.
-
-    Attributes:
-        field: Name of the field to sort by
-        order: Sort direction ('asc' or 'desc')
-    """
-    field: str
-    order: str
+    sort_str: Optional[str] = None

@@ -19,6 +19,16 @@ from typing import Optional, List
 from pydantic import BaseModel, Field
 from src.main.app.core.schema import BasePage
 
+
+class LoginForm(BaseModel):
+    """
+    Login form schema
+    """
+
+    username: str
+    password: str
+
+
 class UserPage(BaseModel):
     """
     用户信息分页信息
@@ -27,8 +37,6 @@ class UserPage(BaseModel):
     id: int
     # 用户名
     username: str
-    # 密码
-    password: str
     # 昵称
     nickname: str
     # 头像地址
@@ -39,6 +47,7 @@ class UserPage(BaseModel):
     remark: Optional[str] = None
     # 创建时间
     create_time: Optional[datetime] = None
+
 
 class UserQuery(BasePage):
     """
@@ -61,6 +70,7 @@ class UserQuery(BasePage):
     # 创建时间
     create_time: Optional[datetime] = None
 
+
 class UserCreate(BaseModel):
     """
     用户信息新增
@@ -79,6 +89,7 @@ class UserCreate(BaseModel):
     remark: Optional[str] = None
     # 错误信息
     err_msg: Optional[str] = Field(None, alias="errMsg")
+
 
 class UserModify(BaseModel):
     """
@@ -99,6 +110,7 @@ class UserModify(BaseModel):
     # 备注
     remark: Optional[str] = None
 
+
 class UserBatchModify(BaseModel):
     """
     用户信息批量更新
@@ -116,6 +128,7 @@ class UserBatchModify(BaseModel):
     status: Optional[int] = None
     # 备注
     remark: Optional[str] = None
+
 
 class UserDetail(BaseModel):
     """

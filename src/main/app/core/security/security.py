@@ -13,10 +13,11 @@
 # limitations under the License.
 """Authentication utilities for FastAPI application."""
 
+from functools import wraps
 from datetime import datetime, timedelta
 from typing import Any, Optional, Coroutine, Callable, Union
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
@@ -177,3 +178,23 @@ async def get_user_id(token: str) -> int:
     """
     payload = await decode_jwt_token(token)
     return int(payload["sub"])
+
+
+def role_required(required_role: str):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(current_user: CurrentUser, *args, **kwargs):
+            # Get the current user
+            user_id = request.state.user_id
+
+            # Get user role info or permission info
+            # if user.get("role") != required_role:
+            #     raise HTTPException(
+            #         status_code=status.HTTP_403_FORBIDDEN,
+            #         detail=f"Requires {required_role} role"
+            #     )
+            # return await func(request, *args, **kwargs)
+
+        return wrapper
+
+    return decorator

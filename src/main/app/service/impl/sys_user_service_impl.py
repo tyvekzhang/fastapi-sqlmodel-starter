@@ -15,21 +15,30 @@
 """User domain service impl"""
 
 from __future__ import annotations
+
 import io
+import json
+from datetime import timedelta, datetime
 from typing import Optional, List
 from typing import Union
+
 import pandas as pd
-from fastapi import UploadFile, Request
-from fastapi.exceptions import ResponseValidationError
+from fastapi import UploadFile
 from starlette.responses import StreamingResponse
+
+from src.main.app.core import security
+from src.main.app.core.config import config_manager
 from src.main.app.core.constant import FilterOperators
+from src.main.app.core.enums import TokenTypeEnum
+from src.main.app.core.schema import PageResult, Token, CurrentUser
+from src.main.app.core.service.impl.base_service_impl import BaseServiceImpl
 from src.main.app.core.utils import excel_util
 from src.main.app.core.utils.validate_util import ValidateService
+from src.main.app.enums import AuthErrorCode
+from src.main.app.exception import AuthException
 from src.main.app.mapper.sys_user_mapper import UserMapper
 from src.main.app.model.sys_user_model import UserModel
-from src.main.app.core.schema import PageResult
-from src.main.app.schema.sys_user_schema import UserQuery, UserPage, UserDetail, UserCreate
-from src.main.app.core.service.impl.base_service_impl import BaseServiceImpl
+from src.main.app.schema.sys_user_schema import UserQuery, UserPage, UserDetail, UserCreate, LoginForm
 from src.main.app.service.sys_user_service import UserService
 
 
@@ -48,7 +57,70 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         super().__init__(mapper=mapper)
         self.mapper = mapper
 
-    async def fetch_user_by_page(self, user_query: UserQuery, request: Request) -> PageResult:
+    @classmethod
+    async def generate_tokens(cls, user_id: int) -> Token:
+        security_config = config_manager.load_security_config()
+
+        # generate access token
+        access_token_expires = timedelta(minutes=security_config.access_token_expire_minutes)
+        access_token = await security.create_token(subject=user_id, token_type=TokenTypeEnum.access)
+
+        # generate refresh token
+        refresh_token_expires = timedelta(minutes=security_config.refresh_token_expire_minutes)
+        refresh_token = await security.create_token(
+            subject=user_id,
+            token_type=TokenTypeEnum.refresh,
+            expires_delta=refresh_token_expires,
+        )
+
+        access_token_expires_at = int((datetime.now() + access_token_expires).timestamp())
+        refresh_token_expires_at = int((datetime.now() + refresh_token_expires).timestamp())
+
+        return Token(
+            access_token=access_token,
+            expired_at=access_token_expires_at,
+            token_type=TokenTypeEnum.bearer,
+            refresh_token=refresh_token,
+            re_expired_at=refresh_token_expires_at,
+        )
+
+    async def login(self, *, login_form: LoginForm) -> Token:
+        """
+         Perform login and return an access token and refresh token.
+
+         Args:
+             login_form (LoginCmd): The login command containing username and password.
+
+         Returns:
+             Token: The access token and refresh token.
+         """
+        # verify username and password
+        username: str = login_form.username
+
+        user_record = await self.mapper.get_user_by_username(username=username)
+        if user_record is None or not security.verify_password(login_form.password, user_record.password):
+            raise AuthException(AuthErrorCode.AUTH_FAILED)
+
+        return await self.generate_tokens(user_id=user_record.id)
+
+    async def find_by_id(self, id: int) -> Optional[UserPage]:
+        """
+        Retrieve a user by ID.
+
+        Args:
+            id (int): The user ID to retrieve.
+
+        Returns:
+            Optional[UserQuery]: The user query object if found, None otherwise.
+        """
+        user_record = await self.mapper.select_by_id(id=id)
+        return UserPage(**user_record.model_dump()) if user_record else None
+
+    async def get_user_by_page(self, user_query: UserQuery, current_user: CurrentUser) -> PageResult:
+        sort_list = None
+        sort_str = user_query.sort_str
+        if not sort_str is None:
+            sort_list = json.loads(sort_str)
         eq = {}
         ne = {}
         gt = {}
@@ -57,21 +129,21 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         le = {}
         between = {}
         like = {}
-        if user_query.id is not None and user_query.id != "" :
+        if user_query.id is not None and user_query.id != "":
             eq["id"] = user_query.id
-        if user_query.username is not None and user_query.username != "" :
+        if user_query.username is not None and user_query.username != "":
             like["username"] = user_query.username
-        if user_query.password is not None and user_query.password != "" :
+        if user_query.password is not None and user_query.password != "":
             eq["password"] = user_query.password
-        if user_query.nickname is not None and user_query.nickname != "" :
+        if user_query.nickname is not None and user_query.nickname != "":
             like["nickname"] = user_query.nickname
-        if user_query.avatar_url is not None and user_query.avatar_url != "" :
+        if user_query.avatar_url is not None and user_query.avatar_url != "":
             eq["avatar_url"] = user_query.avatar_url
-        if user_query.status is not None and user_query.status != "" :
+        if user_query.status is not None and user_query.status != "":
             eq["status"] = user_query.status
-        if user_query.remark is not None and user_query.remark != "" :
+        if user_query.remark is not None and user_query.remark != "":
             eq["remark"] = user_query.remark
-        if user_query.create_time is not None and user_query.create_time != "" :
+        if user_query.create_time is not None and user_query.create_time != "":
             eq["create_time"] = user_query.create_time
         filters = {
             FilterOperators.EQ: eq,
@@ -85,43 +157,43 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         }
         records, total = await self.mapper.select_by_ordered_page(
             current=user_query.current,
-            pageSize=user_query.pageSize,
+            page_size=user_query.page_size,
+            count=user_query.count,
+            sort_list=sort_list,
             **filters
         )
-        if total == 0:
+        if total == 0 and user_query.count:
             return PageResult(records=[], total=total)
-        if "sort" in UserModel.model_fields and total > 1:
-            records.sort(key=lambda x: x['sort'])
         records = [UserPage(**record.model_dump()) for record in records]
         return PageResult(records=records, total=total)
 
-    async def fetch_user_detail(self, *, id: int, request: Request) -> Optional[UserDetail]:
-        user_do: UserModel =await self.mapper.select_by_id(id=id)
+    async def get_user_detail(self, *, id: int, current_user: CurrentUser) -> Optional[UserDetail]:
+        user_do: UserModel = await self.mapper.select_by_id(id=id)
         if user_do is None:
             return None
         return UserDetail(**user_do.model_dump())
 
-    async def export_user_page(self, *, ids: List[int], request: Request) -> Optional[StreamingResponse]:
+    async def export_user_page(self, *, ids: List[int], current_user: CurrentUser) -> Optional[StreamingResponse]:
         if ids is None or len(ids) == 0:
             return None
-        user_list: List[UserModel] = await self.retrieve_by_ids(ids = ids)
+        user_list: List[UserModel] = await self.retrieve_by_ids(ids=ids)
         if user_list is None or len(user_list) == 0:
             return None
         user_page_list = [UserPage(**user.model_dump()) for user in user_list]
         return await excel_util.export_excel(schema=UserPage, file_name="user_data_export", data_list=user_page_list)
 
-    async def create_user(self, user_create: UserCreate, request: Request) -> UserModel:
+    async def create_user(self, user_create: UserCreate, current_user: CurrentUser) -> UserModel:
         user: UserModel = UserModel(**user_create.model_dump())
         # user.user_id = request.state.user_id
         return await self.save(data=user)
 
-    async def batch_create_user(self, *, user_create_list: List[UserCreate], request: Request) -> List[int]:
+    async def batch_create_user(self, *, user_create_list: List[UserCreate], current_user: CurrentUser) -> List[int]:
         user_list: List[UserModel] = [UserModel(**user_create.model_dump()) for user_create in user_create_list]
         await self.batch_save(datas=user_list)
         return [user.id for user in user_list]
 
     @staticmethod
-    async def import_user(*, file: UploadFile, request: Request) -> Union[List[UserCreate], None]:
+    async def import_user(*, file: UploadFile, current_user: CurrentUser) -> Union[List[UserCreate], None]:
         contents = await file.read()
         import_df = pd.read_excel(io.BytesIO(contents))
         import_df = import_df.fillna("")
