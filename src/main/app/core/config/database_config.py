@@ -14,7 +14,7 @@
 #
 """Database configuration for the application."""
 
-from src.main.app.common.utils import alembic_config_util
+from src.main.app.core.utils import alembic_config_util
 
 
 class DatabaseConfig:

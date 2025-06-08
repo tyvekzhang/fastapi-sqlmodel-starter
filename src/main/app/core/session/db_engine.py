@@ -18,7 +18,7 @@ from threading import Lock
 from typing import Dict
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
-from src.main.app.common.config import config_manager
+from src.main.app.core.config import config_manager
 
 
 # Global engine cache with thread safety

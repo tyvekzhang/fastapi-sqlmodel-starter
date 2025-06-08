@@ -14,9 +14,9 @@
 #
 """Cache Client manager to instantiate the appropriate cache client"""
 
-from src.main.app.common.cache.cache import Cache
-from src.main.app.common.cache.redis_cache import RedisManager
-from src.main.app.common.config.config_manager import load_config
+from src.main.app.core.cache.cache import Cache
+from src.main.app.core.cache.redis_cache import RedisManager
+from src.main.app.core.config.config_manager import load_config
 
 
 async def get_cache_client() -> Cache:
@@ -28,11 +28,11 @@ async def get_cache_client() -> Cache:
 
     config = load_config()
     if config.database.enable_redis:
-        from src.main.app.common.cache.redis_cache import RedisCache
+        from src.main.app.core.cache.redis_cache import RedisCache
 
         redis_client = await RedisManager.get_instance()
         return RedisCache(redis_client)
     else:
-        from src.main.app.common.cache.page_cache import PageCache
+        from src.main.app.core.cache.page_cache import PageCache
 
         return PageCache()

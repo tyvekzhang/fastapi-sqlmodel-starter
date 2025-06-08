@@ -16,6 +16,8 @@
 
 from enum import Enum
 
+from src.main.app.core.enums import CustomExceptionCode
+
 
 class SortEnum(str, Enum):
     """Enumeration for sorting directions."""
@@ -40,3 +42,9 @@ class DBTypeEnum(str, Enum):
 class MediaTypeEnum(str, Enum):
     """Enumeration for media/content types."""
     JSON = ".json"
+
+
+class CommonErrorCode(CustomExceptionCode):
+    """Error codes for core domain."""
+
+    INTERNAL_SERVER_ERROR = (-1, "Internal server exception")

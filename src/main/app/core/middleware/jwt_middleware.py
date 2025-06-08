@@ -25,7 +25,7 @@ from src.main.app.enums.auth_error_code import AuthErrorCode
 from starlette.responses import JSONResponse
 
 from src.main.app.core.config import config_manager
-from src.main.app.core.security import common_security
+from src.main.app.core.security import security
 
 # Load configuration
 server_config = config_manager.load_server_config()

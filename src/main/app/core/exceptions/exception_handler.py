@@ -19,7 +19,7 @@ import textwrap
 import traceback
 from typing import Dict, Any, Optional
 
-from pydantic_core._pydantic_core import ValidationError # noqa
+from pydantic_core._pydantic_core import ValidationError  # noqa
 
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
@@ -27,8 +27,11 @@ from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import JSONResponse, Response
 from fastapi.utils import is_body_allowed_for_status_code
 from loguru import logger
-from src.main.app.common.config.config_manager import load_config
+from src.main.app.core.config.config_manager import load_config
 from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from src.main.app.core.enums.enum import CommonErrorCode
+from src.main.app.core.exceptions import CustomException
 
 config = load_config()
 
@@ -52,8 +55,8 @@ async def extract_request_data(request: Request) -> Dict[str, Any]:
         if "application/json" in content_type:
             data["json"] = await request.json()
         elif (
-            "application/x-www-form-urlencoded" in content_type
-            or "multipart/form-data" in content_type
+                "application/x-www-form-urlencoded" in content_type
+                or "multipart/form-data" in content_type
         ):
             # Get form data but exclude files
             form = await request.form()
@@ -124,10 +127,10 @@ def log_exception(exc: Exception, request_info: Dict[str, Any]) -> None:
 
 
 def build_error_response(
-    exc: Exception,
-    request: Request,
-    status_code: int,
-    headers: Optional[Dict[str, str]] = None,
+        exc: Exception,
+        request: Request,
+        status_code: int,
+        headers: Optional[Dict[str, str]] = None,
 ) -> Response:
     """
     Build standardized error response.
@@ -152,7 +155,7 @@ def build_error_response(
 
     return JSONResponse(
         {
-            "code": CommonCode.SERVICE_INTERNAL_ERROR.code,
+            "code": CommonErrorCode.INTERNAL_SERVER_ERROR.code,
             "msg": error_message,
         },
         status_code=status_code,
@@ -161,7 +164,7 @@ def build_error_response(
 
 
 async def global_exception_handler(
-    request: Request, exc: Exception
+        request: Request, exc: Exception
 ) -> Response:
     """
     Handler for all uncaught exceptions.
@@ -218,20 +221,20 @@ async def validation_exception_handler(request: Request, exc: ValidationError):
         return Response(status_code=status_code, headers=headers)
     return JSONResponse(
         {
-            "code": CommonCode.SERVICE_INTERNAL_ERROR.code,
+            "code": CommonErrorCode.INTERNAL_SERVER_ERROR.code,
             "msg": str(exc).split("For further")[0],
         },
         status_code=status_code,
     )
 
 
-def is_auth_errors_code(exc: BaseError) -> bool:
+def is_auth_errors_code(exc: CustomException) -> bool:
     if str(exc.code).startswith("20"):
         return True
     return False
 
 
-async def custom_exception_handler(request: Request, exc: BaseError):
+async def custom_exception_handler(request: Request, exc: CustomException):
     """
     Asynchronous handler for CustomException.
     """
@@ -246,7 +249,7 @@ async def custom_exception_handler(request: Request, exc: BaseError):
 
 
 async def custom_http_exception_handler(
-    request: Request, exc: StarletteHTTPException
+        request: Request, exc: StarletteHTTPException
 ):
     """
     Asynchronous handler for StarletteHTTPException.
@@ -263,7 +266,7 @@ async def custom_http_exception_handler(
 
 
 async def request_validation_exception_handler(
-    request: Request, exc: RequestValidationError
+        request: Request, exc: RequestValidationError
 ) -> JSONResponse:
     """
     Asynchronous handler for RequestValidationError.

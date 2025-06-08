@@ -19,9 +19,9 @@ import os.path
 from typing import NamedTuple
 from urllib.parse import urlparse
 
-from src.main.app.common.enums.enum import DBTypeEnum
-from src.main.app.common.utils import file_util
-from src.main.app.common.utils.file_util import get_file_path
+from src.main.app.core.enums.enum import DBTypeEnum
+from src.main.app.core.utils import file_util
+from src.main.app.core.utils.file_util import get_file_path
 
 
 class DbConnectionInfo(NamedTuple):
@@ -118,7 +118,7 @@ def get_db_dialect() -> str:
 
     supported_dbs = {
         DBTypeEnum.PGSQL.value,
-        DBTypeEnum.MYSQl.value,
+        DBTypeEnum.MYSQL.value,
         DBTypeEnum.SQLITE.value,
     }
 

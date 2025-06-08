@@ -12,75 +12,72 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Abstract Service used in the project"""
+"""Abstract service with common database operations."""
 
 from abc import ABC, abstractmethod
-from typing import List, TypeVar, Generic, Tuple, Union, Dict
+from typing import List, TypeVar, Generic, Tuple, Dict
 
 from sqlmodel import SQLModel
 
+from src.main.app.core.schemas import SortItem
+
 T = TypeVar("T", bound=SQLModel)
+IDType = TypeVar("IDType", int, str)
 
 
 class BaseService(Generic[T], ABC):
-    """Abstract base class defining the interface for service operations."""
+    """Abstract base service providing common database operations."""
 
     @abstractmethod
     async def save(self, *, data: T) -> T:
-        """Save a single model."""
+        """Save a single data and return it."""
         ...
 
     @abstractmethod
     async def batch_save(self, *, data: List[T]) -> int:
-        """Save multiple entities, returns count of saved items."""
+        """Save multiple data and return the count saved."""
         ...
 
     @abstractmethod
-    async def retrieve_by_id(self, *, id: Union[int, str]) -> T:
-        """Retrieve an model by its ID."""
+    async def retrieve_by_id(self, *, id: IDType) -> T:
+        """Return a record by its ID."""
         ...
 
     @abstractmethod
-    async def retrieve_by_ids(
-        self, *, ids: Union[List[int], List[str]]
-    ) -> List[T]:
-        """Retrieve multiple entities by their IDs."""
+    async def retrieve_by_ids(self, *, ids: List[IDType]) -> List[T]:
+        """Return multiple records by their IDs."""
         ...
 
     @abstractmethod
-    async def retrieve_data(
-        self, *, page: int, size: int, **kwargs
-    ) -> Tuple[List[T], int]:
-        """Retrieve paginated data with optional filters."""
+    async def retrieve_data(self, *, current: int, page_size: int, **kwargs) -> Tuple[List[T], int]:
+        """Return paginated data with optional filters and total count."""
         ...
 
     @abstractmethod
     async def retrieve_ordered_data(
-        self, *, page: int, size: int, order_by: str, sort_order: str, **kwargs
+            self, *, current: int, page_size: int, sort: List[SortItem] = None, **kwargs
     ) -> Tuple[List[T], int]:
-        """Retrieve paginated data with sorting."""
+        """Return paginated and sorted record with total count."""
         ...
 
     @abstractmethod
     async def modify_by_id(self, *, data: T) -> None:
-        """Update an existing model by ID."""
+        """Update a record by ID."""
         ...
 
     @abstractmethod
     async def batch_modify_by_ids(
-        self, *, ids: Union[List[int], List[str]], data: Dict
+            self, *, ids: List[IDType], data: Dict
     ) -> None:
-        """Update multiple entities by their IDs."""
+        """Update multiple records by their IDs."""
         ...
 
     @abstractmethod
-    async def remove_by_id(self, *, id: Union[int, str]) -> None:
-        """Delete an model by its ID."""
+    async def remove_by_id(self, *, id: IDType) -> None:
+        """Delete a record by its ID."""
         ...
 
     @abstractmethod
-    async def batch_remove_by_ids(
-        self, *, ids: Union[List[int], List[str]]
-    ) -> None:
-        """Delete multiple entities by their IDs."""
+    async def batch_remove_by_ids(self, *, ids: List[IDType]) -> None:
+        """Delete multiple records by their IDs."""
         ...

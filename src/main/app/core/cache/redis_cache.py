@@ -16,13 +16,13 @@
 
 from typing import Any
 
-from src.main.app.common.cache.cache import Cache
+from src.main.app.core.cache.cache import Cache
 import asyncio
 from typing import Optional
 
 import redis.asyncio as redis
 
-from src.main.app.common.config.config_manager import load_config
+from src.main.app.core.config.config_manager import load_config
 
 
 class RedisCache(Cache):

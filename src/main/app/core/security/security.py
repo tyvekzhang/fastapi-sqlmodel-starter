@@ -21,8 +21,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
 
-from src.main.app.common.config.config_manager import load_config
-from src.main.app.common.schema.common_schema import CurrentUser
+from src.main.app.core.config.config_manager import load_config
+from src.main.app.core.schemas import CurrentUser
 
 # Configuration
 config = load_config()
@@ -76,7 +76,7 @@ def get_current_user() -> Callable[..., Coroutine[Any, Any, CurrentUser]]:
     if not security_config.enable:
 
         async def _default_user() -> CurrentUser:
-            return CurrentUser(user_id=0)
+            return CurrentUser(user_id=-1)
 
         return _default_user
 

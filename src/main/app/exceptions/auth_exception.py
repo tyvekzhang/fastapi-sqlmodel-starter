@@ -16,11 +16,11 @@
 
 from typing import Optional, Any
 
-from src.main.app.common.exception.base_exception import BaseError
+from src.main.app.core.exceptions import CustomException
 from src.main.app.enums.auth_error_code import AuthErrorCode
 
 
-class AuthException(BaseError):
+class AuthException(CustomException):
     """Exception class for auth-level errors in the application.
 
     This class should be used for errors related to auth operations,

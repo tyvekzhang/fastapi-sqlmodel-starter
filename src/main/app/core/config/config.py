@@ -14,9 +14,9 @@
 #
 """Application Configuration."""
 
-from src.main.app.common.config.database_config import DatabaseConfig
-from src.main.app.common.config.security_config import SecurityConfig
-from src.main.app.common.config.server_config import ServerConfig
+from src.main.app.core.config.database_config import DatabaseConfig
+from src.main.app.core.config.security_config import SecurityConfig
+from src.main.app.core.config.server_config import ServerConfig
 
 
 class Config:

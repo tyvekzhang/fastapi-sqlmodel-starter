@@ -12,16 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Common service impl with common db operations"""
+"""Common service impl with frequently db operations"""
 
-from typing import TypeVar, List, Generic, Tuple, Union, Dict
+from typing import TypeVar, List, Generic, Tuple, Dict
 
-from src.main.app.common.model.base_entity import BaseModel
-from src.main.app.common.mapper.impl.base_mapper_impl import SqlModelMapper
-from src.main.app.common.service.base_service import BaseService
+from src.main.app.core.mapper.impl.base_mapper_impl import SqlModelMapper
+from src.main.app.core.model import BaseModel
+from src.main.app.core.schemas import SortItem
+from src.main.app.core.service.base_service import BaseService
 
 T = TypeVar("T", bound=BaseModel)
 M = TypeVar("M", bound=SqlModelMapper)
+IDType = TypeVar("IDType", int, str)
 
 
 class BaseServiceImpl(Generic[M, T], BaseService[T]):
@@ -34,35 +36,34 @@ class BaseServiceImpl(Generic[M, T], BaseService[T]):
     async def batch_save(self, *, data: List[T]) -> int:
         return await self.mapper.batch_insert(data_list=data)
 
-    async def retrieve_by_id(self, *, id: Union[int, str]) -> T:
+    async def retrieve_by_id(self, *, id: IDType) -> T:
         return await self.mapper.select_by_id(id=id)
 
     async def retrieve_by_ids(
-        self, *, ids: Union[List[int], List[str]]
+            self, *, ids: List[IDType]
     ) -> List[T]:
         return await self.mapper.select_by_ids(ids=ids)
 
     async def retrieve_data(
-        self, *, page: int, size: int, **kwargs
+            self, *, current: int, page_size: int, **kwargs
     ) -> Tuple[
         List[T],
         int,
     ]:
         return await self.mapper.select_by_page(
-            current=page, pageSize=size, **kwargs
+            current=current, page_size=page_size, **kwargs
         )
 
     async def retrieve_ordered_data(
-        self, *, page: int, size: int, order_by: str, sort_order: str, **kwargs
+            self, *, current: int, page_size: int, sort: List[SortItem] = None, **kwargs
     ) -> Tuple[
         List[T],
         int,
     ]:
         return await self.mapper.select_by_ordered_page(
-            current=page,
-            pageSize=size,
-            order_by=order_by,
-            sort_order=sort_order,
+            current=current,
+            page_size=page_size,
+            sort=sort,
             **kwargs,
         )
 
@@ -72,7 +73,7 @@ class BaseServiceImpl(Generic[M, T], BaseService[T]):
             raise ValueError
 
     async def batch_modify_by_ids(
-        self, *, ids: Union[List[int], List[str]], data: Dict
+            self, *, ids: List[IDType], data: Dict
     ) -> None:
         affect_row: int = await self.mapper.batch_update_by_ids(
             ids=ids, data=data
@@ -80,13 +81,13 @@ class BaseServiceImpl(Generic[M, T], BaseService[T]):
         if len(ids) != affect_row:
             raise ValueError
 
-    async def remove_by_id(self, *, id: Union[int, str]) -> None:
+    async def remove_by_id(self, *, id: IDType) -> None:
         affect_row: int = await self.mapper.delete_by_id(id=id)
         if affect_row != 1:
             raise ValueError
 
     async def batch_remove_by_ids(
-        self, *, ids: Union[List[int], List[str]]
+            self, *, ids: List[IDType]
     ) -> None:
         affect_row: int = await self.mapper.batch_delete_by_ids(ids=ids)
         if len(ids) != affect_row:

@@ -36,24 +36,25 @@ except ImportError:
 
 
 def create_middleware_and_session_proxy():
+    """Create and return SQLAlchemy middleware and session proxy classes."""
     _Session: Optional[async_sessionmaker] = None
-    # Usage of context vars inside closures is not recommended, since they are not properly
-    # garbage collected, but in our use case context var is created on program startup and
-    # is used throughout the whole its lifecycle.
     _session: ContextVar[Optional[AsyncSession]] = ContextVar(
         "_session", default=None
     )
 
     class SQLAlchemyMiddleware(BaseHTTPMiddleware):
+        """Middleware for managing SQLAlchemy sessions in FastAPI applications."""
+
         def __init__(
-            self,
-            app: ASGIApp,
-            db_url: Optional[Union[str, URL]] = None,
-            custom_engine: Optional[Engine] = None,
-            engine_args: Dict = None,
-            session_args: Dict = None,
-            commit_on_exit: bool = True,
+                self,
+                app: ASGIApp,
+                db_url: Optional[Union[str, URL]] = None,
+                custom_engine: Optional[Engine] = None,
+                engine_args: Dict = None,
+                session_args: Dict = None,
+                commit_on_exit: bool = True,
         ):
+            """Initialize the middleware with database configuration."""
             super().__init__(app)
             self.commit_on_exit = commit_on_exit
             engine_args = engine_args or {}
@@ -77,15 +78,18 @@ def create_middleware_and_session_proxy():
             )
 
         async def dispatch(
-            self, request: Request, call_next: RequestResponseEndpoint
+                self, request: Request, call_next: RequestResponseEndpoint
         ):
+            """Manage database session for each request."""
             async with DBSession(commit_on_exit=self.commit_on_exit):
                 return await call_next(request)
 
     class DBSessionMeta(type):
+        """Metaclass for DBSession providing session property."""
+
         @property
         def session(self) -> AsyncSession:
-            """Return an instance of Session local to the current async context."""
+            """Get the current async context session."""
             if _Session is None:
                 raise SessionNotInitialisedError
 
@@ -96,14 +100,18 @@ def create_middleware_and_session_proxy():
             return session
 
     class DBSession(metaclass=DBSessionMeta):
+        """Context manager for database sessions."""
+
         def __init__(
-            self, session_args: Dict = None, commit_on_exit: bool = False
+                self, session_args: Dict = None, commit_on_exit: bool = False
         ):
+            """Initialize session context manager."""
             self.token = None
             self.session_args = session_args or {}
             self.commit_on_exit = commit_on_exit
 
         async def __aenter__(self):
+            """Enter session context."""
             if not isinstance(_Session, async_sessionmaker):
                 raise SessionNotInitialisedError
 
@@ -111,14 +119,13 @@ def create_middleware_and_session_proxy():
             return type(self)
 
         async def __aexit__(self, exc_type, exc_value, traceback):
+            """Exit session context, handling commit/rollback."""
             session = _session.get()
 
             try:
                 if exc_type is not None:
                     await session.rollback()
-                elif (
-                    self.commit_on_exit
-                ):  # Note: Changed this to elif to avoid commit after rollback
+                elif self.commit_on_exit:
                     await session.commit()
             finally:
                 await session.close()

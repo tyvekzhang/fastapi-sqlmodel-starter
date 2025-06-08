@@ -18,7 +18,7 @@ import os
 import yaml
 from typing import Dict
 
-from src.main.app.common import constants
+from src.main.app.core import constants
 
 
 class ConfigLoader:

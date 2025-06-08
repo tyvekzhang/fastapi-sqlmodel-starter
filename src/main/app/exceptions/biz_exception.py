@@ -12,25 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""System exception for the application."""
+"""Business exception for the application."""
 
 from typing import Optional, Any
 
-from src.main.app.common.exception.base_exception import BaseError
-from src.main.app.enums.sys_error_code import SystemErrorCode
+from src.main.app.core.exceptions import CustomException
+from src.main.app.enums.biz_error_code import BusinessErrorCode
 
 
-class SystemException(BaseError):
-    """Exception class for system-level errors in the application.
-
-    This class should be used for errors related to system operations,
-    infrastructure issues, or other technical problems that are not
-    directly caused by user input or business logic.
-    """
-
+class BusinessException(CustomException):
     def __init__(
         self,
-        code: SystemErrorCode,
+        code: BusinessErrorCode,
         msg: Optional[Any] = None,
     ):
         super().__init__(code=code, msg=msg)

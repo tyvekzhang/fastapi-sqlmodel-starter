@@ -15,23 +15,11 @@
 
 """Authentication and authorization error codes (20000-29999)."""
 
-from src.main.app.common.enums.base_error_code import CustomExceptionCode
+from src.main.app.core.enums.base_error_code import CustomExceptionCode
 
 
 class AuthErrorCode(CustomExceptionCode):
     """Authentication and authorization error codes."""
 
     AUTH_FAILED = (20001, "Username or password error")
-    MISSING_TOKEN = (20002, "Missing authentication token")
-    TOKEN_EXPIRED = (20003, "Token expired")
-    OPENAPI_FORBIDDEN = (20004, "The documentation isn't ready yet")
 
-    UNAUTHORIZED = (20001, "Unauthorized access")
-    INVALID_CREDENTIALS = (20002, "Invalid credentials")
-    ACCESS_DENIED = (20003, "Access denied")
-
-    INVALID_TOKEN = (20005, "Invalid token")
-    INVALID_SIGNATURE = (20007, "Invalid signature")
-    SESSION_EXPIRED = (20008, "Session expired")
-    PERMISSION_DENIED = (20009, "Permission denied")
-    TOO_MANY_ATTEMPTS = (20010, "Too many login attempts")

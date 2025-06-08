@@ -15,7 +15,7 @@ current_dir = Path(os.path.dirname(os.path.abspath(__file__)))
 project_dir = str(Path(current_dir).parent.parent.parent.parent)
 sys.path.insert(0, project_dir)
 
-from src.main.app.entity.migrate import start_signal  # noqa
+from src.main.app.models.migrate import start_signal  # noqa
 
 print(start_signal)
 

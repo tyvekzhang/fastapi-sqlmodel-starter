@@ -6,8 +6,8 @@ from jwt import PyJWTError
 from pydantic_core._pydantic_core import ValidationError  # noqa
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from src.main.app.common.exceptions import exception_handler
-from src.main.app.common.exceptions.custom_exception import CustomException
+from src.main.app.core.exceptions import exception_handler
+from src.main.app.core.exceptions.custom_exception import CustomException
 
 
 def register_exception_handlers(app: FastAPI) -> None:

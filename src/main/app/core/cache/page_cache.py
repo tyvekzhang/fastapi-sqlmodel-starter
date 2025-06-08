@@ -18,7 +18,7 @@ from typing import Any
 
 import diskcache
 
-from src.main.app.common.cache.cache import Cache
+from src.main.app.core.cache.cache import Cache
 
 
 class PageCache(Cache):

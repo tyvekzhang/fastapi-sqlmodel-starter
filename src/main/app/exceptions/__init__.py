@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2025 Fast web
+# Copyright (c) 2025 Fast web and/or its affiliates. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+"""Export exception symbols"""
+from src.main.app.enums import SystemErrorCode
+from src.main.app.exceptions.auth_exception import AuthException
+from src.main.app.exceptions.biz_exception import BusinessException
 
-"""System-related error codes (10000-19999)."""
+__all__ = [AuthException, BusinessException, SystemErrorCode]
 
-from src.main.app.core.enums.base_error_code import CustomExceptionCode
-
-
-class SystemErrorCode(CustomExceptionCode):
-    """System-related error codes."""
-
-    INTERNAL_ERROR = (10001, "Internal server error")
 

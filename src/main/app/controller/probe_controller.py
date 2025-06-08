@@ -16,7 +16,7 @@
 
 from fastapi import APIRouter
 
-from src.main.app.common.schema.response_schema import HttpResponse
+from src.main.app.core.schemas import HttpResponse
 
 probe_router = APIRouter()
 

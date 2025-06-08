@@ -17,15 +17,14 @@
 import os
 from functools import lru_cache
 
-from src.main.app.common import constants
-from src.main.app.common.config.config import (
+from src.main.app.core import constants
+from src.main.app.core.config.config import (
     Config,
 )
-from src.main.app.common.config.config_loader import ConfigLoader
-from src.main.app.common.config.database_config import DatabaseConfig
-from src.main.app.common.config.security_config import SecurityConfig
-from src.main.app.common.config.server_config import ServerConfig
-from src.main.app.common.enums.enum import CommonCode
+from src.main.app.core.config.config_loader import ConfigLoader
+from src.main.app.core.config.database_config import DatabaseConfig
+from src.main.app.core.config.security_config import SecurityConfig
+from src.main.app.core.config.server_config import ServerConfig
 
 config: Config
 

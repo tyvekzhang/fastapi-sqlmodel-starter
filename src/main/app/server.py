@@ -31,7 +31,7 @@ from src.main.app.core.middleware.db_session_middleware import (
 from src.main.app.core.middleware.jwt_middleware import jwt_middleware
 from src.main.app.core.openapi import offline
 from src.main.app.core.session.db_engine import get_async_engine
-from src.main.app.router.router import create_router
+from src.main.app import router
 
 # Load config
 server_config = config_manager.load_server_config()
@@ -82,8 +82,7 @@ app.middleware("http")(jwt_middleware)
 exceptions.register_exception_handlers(app)
 
 # Setup router
-router = create_router()
-app.include_router(router, prefix=server_config.api_version)
+app.include_router(router.register_router(["src/main/app/controller"]), prefix=server_config.api_version)
 
 # Register offline openapi
 offline.register_offline_openapi(app=app, resource_dir=RESOURCE_DIR)
