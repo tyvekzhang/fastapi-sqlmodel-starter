@@ -17,7 +17,7 @@
 import os
 from functools import lru_cache
 
-from src.main.app.core import constants
+from src.main.app.core import constant
 from src.main.app.core.config.config import (
     Config,
 )
@@ -38,9 +38,9 @@ def load_config() -> Config:
         Config: A configuration object populated with the loaded settings.
     """
     global config
-    env = os.getenv(constants.ENV, "dev")
+    env = os.getenv(constant.ENV, "dev")
 
-    config_file = os.getenv(constants.CONFIG_FILE, None)
+    config_file = os.getenv(constant.CONFIG_FILE, None)
     config_loader = ConfigLoader(env, config_file)
     config_dict = config_loader.load_config()
     config = Config(config_dict)
@@ -92,7 +92,7 @@ def get_database_url(*, env: str = "dev"):
     """
 
     assert env in ("dev", "prod", "local")
-    config_path = os.path.join(constants.RESOURCE_DIR, f"config-{env}.yml")
+    config_path = os.path.join(constant.RESOURCE_DIR, f"config-{env}.yml")
     config_dict = ConfigLoader.load_yaml_file(config_path)
     if "database" not in config_dict:
         raise ValueError(

@@ -22,9 +22,9 @@ from fastapi import FastAPI
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
-from src.main.app.core import exceptions
+from src.main.app.core import exception
 from src.main.app.core.config import config_manager
-from src.main.app.core.constants import RESOURCE_DIR
+from src.main.app.core.constant import RESOURCE_DIR
 from src.main.app.core.middleware.db_session_middleware import (
     SQLAlchemyMiddleware
 )
@@ -79,7 +79,7 @@ app.add_middleware(
 app.middleware("http")(jwt_middleware)
 
 # Register exception handler
-exceptions.register_exception_handlers(app)
+exception.register_exception_handlers(app)
 
 # Setup router
 app.include_router(router.register_router(["src/main/app/controller"]), prefix=server_config.api_version)

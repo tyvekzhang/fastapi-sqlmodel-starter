@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2025 Fast web
+# Copyright (c) 2025 Fast web and/or its affiliates. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+#
 """Authentication and authorization error codes (20000-29999)."""
 
 from src.main.app.core.enums.base_error_code import CustomExceptionCode
@@ -22,4 +21,6 @@ class AuthErrorCode(CustomExceptionCode):
     """Authentication and authorization error codes."""
 
     AUTH_FAILED = (20001, "Username or password error")
-
+    TOKEN_EXPIRED = (20002, "Token has expired")
+    OPENAPI_FORBIDDEN = (20003, "OpenAPI is not ready")
+    MISSING_TOKEN = (20004, "Authentication token is missing")

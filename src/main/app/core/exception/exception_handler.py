@@ -31,7 +31,7 @@ from src.main.app.core.config.config_manager import load_config
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.main.app.core.enums.enum import CommonErrorCode
-from src.main.app.core.exceptions import CustomException
+from src.main.app.core.exception import CustomException
 
 config = load_config()
 
@@ -167,9 +167,9 @@ async def global_exception_handler(
         request: Request, exc: Exception
 ) -> Response:
     """
-    Handler for all uncaught exceptions.
+    Handler for all uncaught exception.
 
-    This handler captures all unhandled exceptions, logs them with request context,
+    This handler captures all unhandled exception, logs them with request context,
     and returns a standardized error response to the client.
 
     Args:
@@ -205,7 +205,7 @@ async def global_exception_handler(
 
 async def validation_exception_handler(request: Request, exc: ValidationError):
     """
-    Asynchronous exception handler for validation exceptions.
+    Asynchronous exception handler for validation exception.
 
     Args:
         request (Request): The request instance containing all request details.
@@ -288,7 +288,7 @@ async def request_validation_exception_handler(
 
 async def jwt_exception_handler() -> JSONResponse:
     """
-    Asynchronous handler for JWT-related exceptions.
+    Asynchronous handler for JWT-related exception.
 
     Returns:
         JSONResponse: A JSON response with an error code and message.

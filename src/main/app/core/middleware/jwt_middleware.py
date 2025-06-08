@@ -19,13 +19,12 @@ import http
 from fastapi import Request
 from jose import JWTError
 from loguru import logger
-from src.main.app.core import constants
-from src.main.app.core.enums.enum import MediaTypeEnum
-from src.main.app.enums.auth_error_code import AuthErrorCode
 from starlette.responses import JSONResponse
 
+from src.main.app.core import security, constant
 from src.main.app.core.config import config_manager
-from src.main.app.core.security import security
+from src.main.app.core.enums.enum import MediaTypeEnum
+from src.main.app.enums.auth_error_code import AuthErrorCode
 
 # Load configuration
 server_config = config_manager.load_server_config()
@@ -66,11 +65,13 @@ async def jwt_middleware(request: Request, call_next):
         return await call_next(request)
 
     # Validate JWT token
-    auth_header = request.headers.get(constants.AUTHORIZATION)
+    auth_header = request.headers.get(constant.AUTHORIZATION)
     if auth_header:
         try:
             token = auth_header.split(" ")[-1]
-            await common_security.validate_token(token)
+            await security.validate_token(token)
+            user_id = security.get_user_id(token)
+            request.state.user_id = user_id
         except JWTError as e:
             logger.error(f"{e}")
             return JSONResponse(

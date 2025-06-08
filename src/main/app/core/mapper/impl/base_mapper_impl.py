@@ -19,11 +19,11 @@ from typing import Generic, TypeVar, List, Type, Tuple, Optional
 from sqlmodel import SQLModel, select, insert, update, delete, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from src.main.app.core.constants import FilterOperators
+from src.main.app.core.constant import FilterOperators
 from src.main.app.core.enums import SortEnum
 from src.main.app.core.mapper.base_mapper import BaseMapper
 from src.main.app.core.middleware.db_session_middleware import db
-from src.main.app.core.schemas import SortItem
+from src.main.app.core.schema import SortItem
 
 IDType = TypeVar("IDType", int, str)
 ModelType = TypeVar("ModelType", bound=SQLModel)

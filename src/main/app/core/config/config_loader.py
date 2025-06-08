@@ -18,7 +18,7 @@ import os
 import yaml
 from typing import Dict
 
-from src.main.app.core import constants
+from src.main.app.core import constant
 
 
 class ConfigLoader:
@@ -32,7 +32,7 @@ class ConfigLoader:
         """
         if base_config_file is None:
             base_config_file = os.path.join(
-                constants.RESOURCE_DIR, constants.CONFIG_FILE_NAME
+                constant.RESOURCE_DIR, constant.CONFIG_FILE_NAME
             )
             self.default_flag = True
         self.base_config_file = base_config_file
@@ -89,10 +89,10 @@ class ConfigLoader:
         if self.default_flag:
             if not environment:
                 environment = self.env
-            env_config_file = constants.CONFIG_FILE_NAME.replace(".", f"-{environment}.")
+            env_config_file = constant.CONFIG_FILE_NAME.replace(".", f"-{environment}.")
             # Replace the base config file name with the environment-specific one
             env_config_path = self.base_config_file.replace(
-                constants.CONFIG_FILE_NAME, env_config_file
+                constant.CONFIG_FILE_NAME, env_config_file
             )
             if os.path.exists(env_config_path):
                 env_config = self.load_yaml_file(env_config_path)

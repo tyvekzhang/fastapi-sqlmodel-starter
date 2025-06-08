@@ -12,22 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Project health probe"""
+"""Business exception for the application."""
 
-from fastapi import APIRouter
+from typing import Optional, Any
 
-from src.main.app.core.schema import HttpResponse
+from src.main.app.core.exception import CustomException
+from src.main.app.enums.biz_error_code import BusinessErrorCode
 
-probe_router = APIRouter()
 
-
-@probe_router.get("/liveness")
-async def liveness() -> HttpResponse[str]:
-    """
-    Check if the system is alive.
-
-    Returns:
-        HttpResponse[str]: An HTTP response containing a success message
-        with the string "Hi".
-    """
-    return HttpResponse.success(msg="Hi")
+class BusinessException(CustomException):
+    def __init__(
+        self,
+        code: BusinessErrorCode,
+        msg: Optional[Any] = None,
+    ):
+        super().__init__(code=code, msg=msg)

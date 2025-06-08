@@ -20,7 +20,7 @@ from src.main.app.core.enums import CustomExceptionCode
 
 
 class CustomException(Exception):
-    """Base exception class for all custom exceptions in the application.
+    """Base exception class for all custom exception in the application.
 
     Attributes:
         code: The code enum member from BaseErrorCode or its subclasses.

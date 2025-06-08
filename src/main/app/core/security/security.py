@@ -22,7 +22,7 @@ from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
 
 from src.main.app.core.config.config_manager import load_config
-from src.main.app.core.schemas import CurrentUser
+from src.main.app.core.schema import CurrentUser
 
 # Configuration
 config = load_config()

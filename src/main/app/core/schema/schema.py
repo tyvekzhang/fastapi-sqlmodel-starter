@@ -13,8 +13,20 @@
 # limitations under the License.
 #
 """Common schema with data validation."""
+from typing import List
 
 from pydantic import BaseModel
+
+
+class PageResult(BaseModel):
+    """Paginated query result container.
+
+    Attributes:
+        records: List of items in current page (default: None)
+        total: Total number of items across all pages (default: 0)
+    """
+    records: List[BaseModel] = None
+    total: int = 0
 
 
 class Token(BaseModel):

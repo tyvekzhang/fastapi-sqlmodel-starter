@@ -12,18 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Business exception for the application."""
+"""User mapper"""
 
-from typing import Optional, Any
-
-from src.main.app.core.exceptions import CustomException
-from src.main.app.enums.biz_error_code import BusinessErrorCode
+from src.main.app.core.mapper.impl.base_mapper_impl import SqlModelMapper
+from src.main.app.model.sys_user_model import UserModel
 
 
-class BusinessException(CustomException):
-    def __init__(
-        self,
-        code: BusinessErrorCode,
-        msg: Optional[Any] = None,
-    ):
-        super().__init__(code=code, msg=msg)
+class UserMapper(SqlModelMapper[UserModel]):
+    pass
+
+
+userMapper = UserMapper(UserModel)

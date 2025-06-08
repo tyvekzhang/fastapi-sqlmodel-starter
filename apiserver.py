@@ -77,11 +77,11 @@ def parse_arguments() -> argparse.Namespace:
 
 def configure_environment(args: argparse.Namespace) -> None:
     """Set up environment variables based on command line arguments."""
-    from src.main.app.core import constants
+    from src.main.app.core import constant
 
-    os.environ[constants.ENV] = args.env
+    os.environ[constant.ENV] = args.env
     if args.config_file:
-        os.environ[constants.CONFIG_FILE] = args.config_file
+        os.environ[constant.CONFIG_FILE] = args.config_file
 
 
 def run_server() -> None:

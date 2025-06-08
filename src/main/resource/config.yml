@@ -1,7 +1,7 @@
 server:
   name: Fast web
   host: 0.0.0.0
-  port: 19001
+  port: 19000
   version: 2.0.0
   app_desc: Fast web aims to one of the best scaffolding in the PyWeb field.
   api_version: /v1

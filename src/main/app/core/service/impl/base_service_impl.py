@@ -18,7 +18,7 @@ from typing import TypeVar, List, Generic, Tuple, Dict
 
 from src.main.app.core.mapper.impl.base_mapper_impl import SqlModelMapper
 from src.main.app.core.model import BaseModel
-from src.main.app.core.schemas import SortItem
+from src.main.app.core.schema import SortItem
 from src.main.app.core.service.base_service import BaseService
 
 T = TypeVar("T", bound=BaseModel)

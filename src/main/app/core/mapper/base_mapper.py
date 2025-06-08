@@ -20,7 +20,7 @@ from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from src.main.app.core.schemas import SortItem
+from src.main.app.core.schema import SortItem
 
 ModelType = TypeVar("ModelType", bound=SQLModel)
 IDType = TypeVar("IDType", int, str)

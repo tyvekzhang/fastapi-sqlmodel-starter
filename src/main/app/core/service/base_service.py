@@ -19,7 +19,7 @@ from typing import List, TypeVar, Generic, Tuple, Dict
 
 from sqlmodel import SQLModel
 
-from src.main.app.core.schemas import SortItem
+from src.main.app.core.schema import SortItem
 
 T = TypeVar("T", bound=SQLModel)
 IDType = TypeVar("IDType", int, str)

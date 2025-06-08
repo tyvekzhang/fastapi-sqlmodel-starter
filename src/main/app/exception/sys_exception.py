@@ -12,25 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Auth exception for the application."""
+"""System exception for the application."""
 
 from typing import Optional, Any
 
-from src.main.app.core.exceptions import CustomException
-from src.main.app.enums.auth_error_code import AuthErrorCode
+from src.main.app.core.exception import CustomException
+from src.main.app.enums.sys_error_code import SystemErrorCode
 
 
-class AuthException(CustomException):
-    """Exception class for auth-level errors in the application.
+class SystemException(CustomException):
+    """Exception class for system-level errors in the application.
 
-    This class should be used for errors related to auth operations,
+    This class should be used for errors related to system operations,
     infrastructure issues, or other technical problems that are not
     directly caused by user input or business logic.
     """
 
     def __init__(
         self,
-        code: AuthErrorCode,
+        code: SystemErrorCode,
         msg: Optional[Any] = None,
     ):
         super().__init__(code=code, msg=msg)
