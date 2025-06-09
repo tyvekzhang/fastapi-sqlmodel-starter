@@ -49,13 +49,20 @@ class BaseService(Generic[T], ABC):
         ...
 
     @abstractmethod
-    async def retrieve_data(self, *, current: int, page_size: int, **kwargs) -> Tuple[List[T], int]:
+    async def retrieve_data(
+        self, *, current: int, page_size: int, **kwargs
+    ) -> Tuple[List[T], int]:
         """Return paginated data with optional filters and total count."""
         ...
 
     @abstractmethod
     async def retrieve_ordered_data(
-            self, *, current: int, page_size: int, sort: List[SortItem] = None, **kwargs
+        self,
+        *,
+        current: int,
+        page_size: int,
+        sort: List[SortItem] = None,
+        **kwargs,
     ) -> Tuple[List[T], int]:
         """Return paginated and sorted record with total count."""
         ...
@@ -67,7 +74,7 @@ class BaseService(Generic[T], ABC):
 
     @abstractmethod
     async def batch_modify_by_ids(
-            self, *, ids: List[IDType], data: Dict
+        self, *, ids: List[IDType], data: Dict
     ) -> None:
         """Update multiple records by their IDs."""
         ...

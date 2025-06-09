@@ -21,4 +21,3 @@ class SystemErrorCode(CustomExceptionCode):
     """System-related error codes."""
 
     INTERNAL_ERROR = (10001, "Internal server error")
-

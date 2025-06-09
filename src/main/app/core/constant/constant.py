@@ -27,7 +27,6 @@ CONFIG_FILE_NAME = "config.yml"
 
 
 class FilterOperators:
-
     EQ = "EQ"
     NE = "NE"
     GT = "GT"
@@ -36,4 +35,3 @@ class FilterOperators:
     LE = "LE"
     BETWEEN = "BETWEEN"
     LIKE = "LIKE"
-

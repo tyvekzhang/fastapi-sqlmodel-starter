@@ -24,7 +24,9 @@ MODEL_PACKAGES = [
 ]
 
 
-def import_sql_models(packages: Optional[List[str]] = None) -> Dict[str, Type[Any]]:
+def import_sql_models(
+    packages: Optional[List[str]] = None,
+) -> Dict[str, Type[Any]]:
     """Dynamically import all model classes from specified packages.
 
     Scans for Python files matching '*_model.py' pattern in each package directory.
@@ -49,7 +51,7 @@ def import_sql_models(packages: Optional[List[str]] = None) -> Dict[str, Type[An
         for model_file in package_dir.glob("*_model.py"):
             try:
                 # Convert path to module import format (e.g., "src/main/app/models/file_model")
-                module_path = str(model_file.with_suffix('')).replace('/', '.')
+                module_path = str(model_file.with_suffix("")).replace("/", ".")
                 module = importlib.import_module(module_path)
 
                 for name in dir(module):

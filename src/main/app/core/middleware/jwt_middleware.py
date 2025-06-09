@@ -69,7 +69,7 @@ async def jwt_middleware(request: Request, call_next):
     if auth_header:
         try:
             token = auth_header.split(" ")[-1]
-            await security.validate_token(token)
+            security.validate_token(token)
             user_id = security.get_user_id(token)
             request.state.user_id = user_id
         except JWTError as e:

@@ -33,6 +33,7 @@ class UserPage(BaseModel):
     """
     用户信息分页信息
     """
+
     # 主键
     id: int
     # 用户名
@@ -53,6 +54,7 @@ class UserQuery(BasePage):
     """
     用户信息查询参数
     """
+
     # 主键
     id: Optional[int] = None
     # 用户名
@@ -75,6 +77,7 @@ class UserCreate(BaseModel):
     """
     用户信息新增
     """
+
     # 用户名
     username: str
     # 密码
@@ -95,6 +98,7 @@ class UserModify(BaseModel):
     """
     用户信息更新
     """
+
     # 主键
     id: int
     # 用户名
@@ -115,6 +119,7 @@ class UserBatchModify(BaseModel):
     """
     用户信息批量更新
     """
+
     ids: List[int]
     # 用户名
     username: str
@@ -134,6 +139,7 @@ class UserDetail(BaseModel):
     """
     用户信息详情
     """
+
     # 主键
     id: int
     # 用户名

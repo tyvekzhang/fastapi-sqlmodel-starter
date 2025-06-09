@@ -15,9 +15,9 @@
 
 from functools import wraps
 from datetime import datetime, timedelta
-from typing import Any, Optional, Coroutine, Callable, Union
+from typing import Any, Optional, Callable, Union
 
-from fastapi import Depends, HTTPException, status, Request
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
@@ -30,14 +30,10 @@ config = load_config()
 security_config = config.security
 server_config = config.server
 
-# Security setup
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl=f"{server_config.api_version}/user/login"
-)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-async def decode_jwt_token(token: str) -> dict[str, Any]:
+def decode_jwt_token(token: str) -> dict[str, Any]:
     """Decode and validate JWT token.
 
     Args:
@@ -67,28 +63,47 @@ async def decode_jwt_token(token: str) -> dict[str, Any]:
         )
 
 
-def get_current_user() -> Callable[..., Coroutine[Any, Any, CurrentUser]]:
-    """Dependency to get current authenticated user.
+def get_oauth2_scheme() -> OAuth2PasswordBearer:
+    oauth2_scheme = OAuth2PasswordBearer(
+        tokenUrl=f"{server_config.api_version}/user/login"
+    )
+    return oauth2_scheme
+
+
+def get_current_user() -> Callable[[], CurrentUser]:
+    """
+    Acquire current info through access_token
 
     Returns:
-        Coroutine that resolves to CurrentUser.
-        If security is disabled, returns a default user (user_id=0).
+        CurrentUser instance
     """
-    if not security_config.enable:
 
-        async def _default_user() -> CurrentUser:
-            return CurrentUser(user_id=-1)
+    def current_user(
+        access_token: str = Depends(get_oauth2_scheme()),
+    ) -> CurrentUser:
+        security = load_config().security
+        if not security.enable:
+            user_id = 1
+            return CurrentUser(user_id=user_id)
+        try:
+            user_id = get_user_id(access_token)
+        except ExpiredSignatureError:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Your token has expired. Please log in again.",
+            )
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Error when decoding the token. Please check your request.",
+            )
 
-        return _default_user
+        return CurrentUser(user_id=user_id)
 
-    async def _current_user(token: str = Depends(oauth2_scheme)) -> CurrentUser:
-        payload = await decode_jwt_token(token)
-        return CurrentUser(user_id=int(payload["sub"]))
-
-    return _current_user
+    return current_user
 
 
-async def create_token(
+def create_token(
     subject: Optional[Union[str, int]] = None,
     expires_delta: Optional[timedelta] = None,
     token_type: Optional[str] = None,
@@ -128,7 +143,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-async def get_password_hash(password: str) -> str:
+def get_password_hash(password: str) -> str:
     """Generate password hash.
 
     Args:
@@ -140,7 +155,7 @@ async def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-async def validate_token(token: str) -> bool:
+def validate_token(token: str) -> bool:
     """Check if token is valid and not expired.
 
     Args:
@@ -153,7 +168,7 @@ async def validate_token(token: str) -> bool:
         HTTPException: If token is invalid
     """
     try:
-        payload = await decode_jwt_token(token)
+        payload = decode_jwt_token(token)
         if datetime.fromtimestamp(payload["exp"]) < datetime.now():
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -164,7 +179,7 @@ async def validate_token(token: str) -> bool:
         return False
 
 
-async def get_user_id(token: str) -> int:
+def get_user_id(token: str) -> int:
     """Extract user ID from JWT token.
 
     Args:
@@ -176,7 +191,7 @@ async def get_user_id(token: str) -> int:
     Raises:
         HTTPException: If token is invalid or expired
     """
-    payload = await decode_jwt_token(token)
+    payload = decode_jwt_token(token)
     return int(payload["sub"])
 
 
@@ -185,7 +200,7 @@ def role_required(required_role: str):
         @wraps(func)
         async def wrapper(current_user: CurrentUser, *args, **kwargs):
             # Get the current user
-            user_id = request.state.user_id
+            user_id = current_user.user_id
 
             # Get user role info or permission info
             # if user.get("role") != required_role:

@@ -13,6 +13,7 @@
 # limitations under the License.
 #
 """Common schema with data validation."""
+
 from typing import List, Any, Optional
 
 from pydantic import BaseModel
@@ -25,6 +26,7 @@ class PageResult(BaseModel):
         records: List of items in current page (default: None)
         total: Total number of items across all pages (default: 0)
     """
+
     records: List[Any] = None
     total: int = 0
 
@@ -64,6 +66,7 @@ class SortItem(BaseModel):
         field: Name of the field to sort by
         order: Sort direction ('asc' or 'desc')
     """
+
     field: str
     order: str
 

@@ -40,34 +40,22 @@ class UserBase(SQLModel):
     )
     username: str = Field(
         sa_column=Column(
-            String(32),
-            nullable=False,
-            default=None,
-            comment="用户名"
+            String(32), nullable=False, default=None, comment="用户名"
         )
     )
     password: str = Field(
         sa_column=Column(
-            String(64),
-            nullable=False,
-            default=None,
-            comment="密码"
+            String(64), nullable=False, default=None, comment="密码"
         )
     )
     nickname: str = Field(
         sa_column=Column(
-            String(32),
-            nullable=False,
-            default=None,
-            comment="昵称"
+            String(32), nullable=False, default=None, comment="昵称"
         )
     )
     avatar_url: Optional[str] = Field(
         sa_column=Column(
-            String(64),
-            nullable=True,
-            default=None,
-            comment="头像地址"
+            String(64), nullable=True, default=None, comment="头像地址"
         )
     )
     status: Optional[int] = Field(
@@ -75,15 +63,12 @@ class UserBase(SQLModel):
             Integer,
             nullable=True,
             default=None,
-            comment="状态(0:停用,1:待审核,2:正常,3:已注销)"
+            comment="状态(0:停用,1:待审核,2:正常,3:已注销)",
         )
     )
     remark: Optional[str] = Field(
         sa_column=Column(
-            String(255),
-            nullable=True,
-            default=None,
-            comment="备注"
+            String(255), nullable=True, default=None, comment="备注"
         )
     )
     create_time: Optional[datetime] = Field(
@@ -104,6 +89,6 @@ class UserBase(SQLModel):
 class UserModel(UserBase, table=True):
     __tablename__ = "sys_user"
     __table_args__ = (
-        UniqueConstraint('username', name="ix_sys_user_username"),
-        {"comment": "用户信息表"}
+        UniqueConstraint("username", name="ix_sys_user_username"),
+        {"comment": "用户信息表"},
     )

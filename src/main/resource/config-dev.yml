@@ -5,5 +5,5 @@ server:
   debug: True
 
 security:
-  enable: False
+  enable: True
   enable_swagger: True

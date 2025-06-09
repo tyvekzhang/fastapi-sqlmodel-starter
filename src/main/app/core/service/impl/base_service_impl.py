@@ -39,13 +39,11 @@ class BaseServiceImpl(Generic[M, T], BaseService[T]):
     async def retrieve_by_id(self, *, id: IDType) -> T:
         return await self.mapper.select_by_id(id=id)
 
-    async def retrieve_by_ids(
-            self, *, ids: List[IDType]
-    ) -> List[T]:
+    async def retrieve_by_ids(self, *, ids: List[IDType]) -> List[T]:
         return await self.mapper.select_by_ids(ids=ids)
 
     async def retrieve_data(
-            self, *, current: int, page_size: int, **kwargs
+        self, *, current: int, page_size: int, **kwargs
     ) -> Tuple[
         List[T],
         int,
@@ -55,7 +53,12 @@ class BaseServiceImpl(Generic[M, T], BaseService[T]):
         )
 
     async def retrieve_ordered_data(
-            self, *, current: int, page_size: int, sort: List[SortItem] = None, **kwargs
+        self,
+        *,
+        current: int,
+        page_size: int,
+        sort: List[SortItem] = None,
+        **kwargs,
     ) -> Tuple[
         List[T],
         int,
@@ -73,7 +76,7 @@ class BaseServiceImpl(Generic[M, T], BaseService[T]):
             raise ValueError
 
     async def batch_modify_by_ids(
-            self, *, ids: List[IDType], data: Dict
+        self, *, ids: List[IDType], data: Dict
     ) -> None:
         affect_row: int = await self.mapper.batch_update_by_ids(
             ids=ids, data=data
@@ -86,9 +89,7 @@ class BaseServiceImpl(Generic[M, T], BaseService[T]):
         if affect_row != 1:
             raise ValueError
 
-    async def batch_remove_by_ids(
-            self, *, ids: List[IDType]
-    ) -> None:
+    async def batch_remove_by_ids(self, *, ids: List[IDType]) -> None:
         affect_row: int = await self.mapper.batch_delete_by_ids(ids=ids)
         if len(ids) != affect_row:
             raise ValueError

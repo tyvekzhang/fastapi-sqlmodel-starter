@@ -44,7 +44,7 @@ async def log_requests(request: Request, call_next):
         logger.error(
             f"Request failed - {request.method} {request.url.path} "
             f"(ID: {request_id}, Error: {str(exc)})",
-            exc_info=True
+            exc_info=True,
         )
         raise
 

@@ -89,7 +89,9 @@ class ConfigLoader:
         if self.default_flag:
             if not environment:
                 environment = self.env
-            env_config_file = constant.CONFIG_FILE_NAME.replace(".", f"-{environment}.")
+            env_config_file = constant.CONFIG_FILE_NAME.replace(
+                ".", f"-{environment}."
+            )
             # Replace the base config file name with the environment-specific one
             env_config_path = self.base_config_file.replace(
                 constant.CONFIG_FILE_NAME, env_config_file

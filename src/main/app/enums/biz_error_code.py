@@ -21,4 +21,3 @@ class BusinessErrorCode(CustomExceptionCode):
     """Business-related error codes."""
 
     USER_NAME_EXISTS = (30001, "Username already exists")
-

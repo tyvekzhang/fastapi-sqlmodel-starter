@@ -55,8 +55,8 @@ async def extract_request_data(request: Request) -> Dict[str, Any]:
         if "application/json" in content_type:
             data["json"] = await request.json()
         elif (
-                "application/x-www-form-urlencoded" in content_type
-                or "multipart/form-data" in content_type
+            "application/x-www-form-urlencoded" in content_type
+            or "multipart/form-data" in content_type
         ):
             # Get form data but exclude files
             form = await request.form()
@@ -127,10 +127,10 @@ def log_exception(exc: Exception, request_info: Dict[str, Any]) -> None:
 
 
 def build_error_response(
-        exc: Exception,
-        request: Request,
-        status_code: int,
-        headers: Optional[Dict[str, str]] = None,
+    exc: Exception,
+    request: Request,
+    status_code: int,
+    headers: Optional[Dict[str, str]] = None,
 ) -> Response:
     """
     Build standardized error response.
@@ -164,7 +164,7 @@ def build_error_response(
 
 
 async def global_exception_handler(
-        request: Request, exc: Exception
+    request: Request, exc: Exception
 ) -> Response:
     """
     Handler for all uncaught exception.
@@ -249,7 +249,7 @@ async def custom_exception_handler(request: Request, exc: CustomException):
 
 
 async def custom_http_exception_handler(
-        request: Request, exc: StarletteHTTPException
+    request: Request, exc: StarletteHTTPException
 ):
     """
     Asynchronous handler for StarletteHTTPException.
@@ -266,7 +266,7 @@ async def custom_http_exception_handler(
 
 
 async def request_validation_exception_handler(
-        request: Request, exc: RequestValidationError
+    request: Request, exc: RequestValidationError
 ) -> JSONResponse:
     """
     Asynchronous handler for RequestValidationError.

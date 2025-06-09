@@ -42,7 +42,12 @@ class ValidateService:
             return None
         except ValidationError as e:
             # Concatenate error messages
-            errors = ", ".join([f"{'->'.join(map(str, error['loc']))}: {error['msg']}" for error in e.errors()])
+            errors = ", ".join(
+                [
+                    f"{'->'.join(map(str, error['loc']))}: {error['msg']}"
+                    for error in e.errors()
+                ]
+            )
             return errors
 
     @staticmethod

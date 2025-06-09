@@ -25,7 +25,10 @@ from starlette.middleware.base import (
     BaseHTTPMiddleware,
     RequestResponseEndpoint,
 )
-from fastapi_async_sqlalchemy.exceptions import MissingSessionError, SessionNotInitialisedError
+from fastapi_async_sqlalchemy.exceptions import (
+    MissingSessionError,
+    SessionNotInitialisedError,
+)
 from starlette.requests import Request
 from starlette.types import ASGIApp
 
@@ -46,13 +49,13 @@ def create_middleware_and_session_proxy():
         """Middleware for managing SQLAlchemy sessions in FastAPI applications."""
 
         def __init__(
-                self,
-                app: ASGIApp,
-                db_url: Optional[Union[str, URL]] = None,
-                custom_engine: Optional[Engine] = None,
-                engine_args: Dict = None,
-                session_args: Dict = None,
-                commit_on_exit: bool = True,
+            self,
+            app: ASGIApp,
+            db_url: Optional[Union[str, URL]] = None,
+            custom_engine: Optional[Engine] = None,
+            engine_args: Dict = None,
+            session_args: Dict = None,
+            commit_on_exit: bool = True,
         ):
             """Initialize the middleware with database configuration."""
             super().__init__(app)
@@ -78,7 +81,7 @@ def create_middleware_and_session_proxy():
             )
 
         async def dispatch(
-                self, request: Request, call_next: RequestResponseEndpoint
+            self, request: Request, call_next: RequestResponseEndpoint
         ):
             """Manage database session for each request."""
             async with DBSession(commit_on_exit=self.commit_on_exit):
@@ -103,7 +106,7 @@ def create_middleware_and_session_proxy():
         """Context manager for database sessions."""
 
         def __init__(
-                self, session_args: Dict = None, commit_on_exit: bool = False
+            self, session_args: Dict = None, commit_on_exit: bool = False
         ):
             """Initialize session context manager."""
             self.token = None

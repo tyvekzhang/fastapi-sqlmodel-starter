@@ -38,7 +38,13 @@ from src.main.app.enums import AuthErrorCode
 from src.main.app.exception import AuthException
 from src.main.app.mapper.sys_user_mapper import UserMapper
 from src.main.app.model.sys_user_model import UserModel
-from src.main.app.schema.sys_user_schema import UserQuery, UserPage, UserDetail, UserCreate, LoginForm
+from src.main.app.schema.sys_user_schema import (
+    UserQuery,
+    UserPage,
+    UserDetail,
+    UserCreate,
+    LoginForm,
+)
 from src.main.app.service.sys_user_service import UserService
 
 
@@ -62,19 +68,29 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         security_config = config_manager.load_security_config()
 
         # generate access token
-        access_token_expires = timedelta(minutes=security_config.access_token_expire_minutes)
-        access_token = await security.create_token(subject=user_id, token_type=TokenTypeEnum.access)
+        access_token_expires = timedelta(
+            minutes=security_config.access_token_expire_minutes
+        )
+        access_token = security.create_token(
+            subject=user_id, token_type=TokenTypeEnum.access
+        )
 
         # generate refresh token
-        refresh_token_expires = timedelta(minutes=security_config.refresh_token_expire_minutes)
-        refresh_token = await security.create_token(
+        refresh_token_expires = timedelta(
+            minutes=security_config.refresh_token_expire_minutes
+        )
+        refresh_token = security.create_token(
             subject=user_id,
             token_type=TokenTypeEnum.refresh,
             expires_delta=refresh_token_expires,
         )
 
-        access_token_expires_at = int((datetime.now() + access_token_expires).timestamp())
-        refresh_token_expires_at = int((datetime.now() + refresh_token_expires).timestamp())
+        access_token_expires_at = int(
+            (datetime.now() + access_token_expires).timestamp()
+        )
+        refresh_token_expires_at = int(
+            (datetime.now() + refresh_token_expires).timestamp()
+        )
 
         return Token(
             access_token=access_token,
@@ -86,19 +102,21 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
 
     async def login(self, *, login_form: LoginForm) -> Token:
         """
-         Perform login and return an access token and refresh token.
+        Perform login and return an access token and refresh token.
 
-         Args:
-             login_form (LoginCmd): The login command containing username and password.
+        Args:
+            login_form (LoginCmd): The login command containing username and password.
 
-         Returns:
-             Token: The access token and refresh token.
-         """
+        Returns:
+            Token: The access token and refresh token.
+        """
         # verify username and password
         username: str = login_form.username
 
         user_record = await self.mapper.get_user_by_username(username=username)
-        if user_record is None or not security.verify_password(login_form.password, user_record.password):
+        if user_record is None or not security.verify_password(
+            login_form.password, user_record.password
+        ):
             raise AuthException(AuthErrorCode.AUTH_FAILED)
 
         return await self.generate_tokens(user_id=user_record.id)
@@ -116,10 +134,12 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         user_record = await self.mapper.select_by_id(id=id)
         return UserPage(**user_record.model_dump()) if user_record else None
 
-    async def get_user_by_page(self, user_query: UserQuery, current_user: CurrentUser) -> PageResult:
+    async def get_user_by_page(
+        self, user_query: UserQuery, current_user: CurrentUser
+    ) -> PageResult:
         sort_list = None
         sort_str = user_query.sort_str
-        if not sort_str is None:
+        if sort_str is not None:
             sort_list = json.loads(sort_str)
         eq = {}
         ne = {}
@@ -153,47 +173,64 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
             FilterOperators.LT: lt,
             FilterOperators.LE: le,
             FilterOperators.BETWEEN: between,
-            FilterOperators.LIKE: like
+            FilterOperators.LIKE: like,
         }
         records, total = await self.mapper.select_by_ordered_page(
             current=user_query.current,
             page_size=user_query.page_size,
             count=user_query.count,
             sort_list=sort_list,
-            **filters
+            **filters,
         )
         if total == 0 and user_query.count:
             return PageResult(records=[], total=total)
         records = [UserPage(**record.model_dump()) for record in records]
         return PageResult(records=records, total=total)
 
-    async def get_user_detail(self, *, id: int, current_user: CurrentUser) -> Optional[UserDetail]:
+    async def get_user_detail(
+        self, *, id: int, current_user: CurrentUser
+    ) -> Optional[UserDetail]:
         user_do: UserModel = await self.mapper.select_by_id(id=id)
         if user_do is None:
             return None
         return UserDetail(**user_do.model_dump())
 
-    async def export_user_page(self, *, ids: List[int], current_user: CurrentUser) -> Optional[StreamingResponse]:
+    async def export_user_page(
+        self, *, ids: List[int], current_user: CurrentUser
+    ) -> Optional[StreamingResponse]:
         if ids is None or len(ids) == 0:
             return None
         user_list: List[UserModel] = await self.retrieve_by_ids(ids=ids)
         if user_list is None or len(user_list) == 0:
             return None
         user_page_list = [UserPage(**user.model_dump()) for user in user_list]
-        return await excel_util.export_excel(schema=UserPage, file_name="user_data_export", data_list=user_page_list)
+        return await excel_util.export_excel(
+            schema=UserPage,
+            file_name="user_data_export",
+            data_list=user_page_list,
+        )
 
-    async def create_user(self, user_create: UserCreate, current_user: CurrentUser) -> UserModel:
+    async def create_user(
+        self, user_create: UserCreate, current_user: CurrentUser
+    ) -> UserModel:
         user: UserModel = UserModel(**user_create.model_dump())
         # user.user_id = request.state.user_id
         return await self.save(data=user)
 
-    async def batch_create_user(self, *, user_create_list: List[UserCreate], current_user: CurrentUser) -> List[int]:
-        user_list: List[UserModel] = [UserModel(**user_create.model_dump()) for user_create in user_create_list]
+    async def batch_create_user(
+        self, *, user_create_list: List[UserCreate], current_user: CurrentUser
+    ) -> List[int]:
+        user_list: List[UserModel] = [
+            UserModel(**user_create.model_dump())
+            for user_create in user_create_list
+        ]
         await self.batch_save(datas=user_list)
         return [user.id for user in user_list]
 
     @staticmethod
-    async def import_user(*, file: UploadFile, current_user: CurrentUser) -> Union[List[UserCreate], None]:
+    async def import_user(
+        *, file: UploadFile, current_user: CurrentUser
+    ) -> Union[List[UserCreate], None]:
         contents = await file.read()
         import_df = pd.read_excel(io.BytesIO(contents))
         import_df = import_df.fillna("")
@@ -210,7 +247,11 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
                 user_create = UserCreate(**user_record)
                 user_create_list.append(user_create)
             except Exception as e:
-                valid_data = {k: v for k, v in user_record.items() if k in UserCreate.model_fields}
+                valid_data = {
+                    k: v
+                    for k, v in user_record.items()
+                    if k in UserCreate.model_fields
+                }
                 user_create = UserCreate.model_construct(**valid_data)
                 user_create.err_msg = ValidateService.get_validate_err_msg(e)
                 user_create_list.append(user_create)

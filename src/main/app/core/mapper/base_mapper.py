@@ -29,7 +29,7 @@ IDType = TypeVar("IDType", int, str)
 class BaseMapper(ABC, Generic[ModelType]):
     @abstractmethod
     async def insert(
-            self, *, data: ModelType, db_session: Optional[AsyncSession] = None
+        self, *, data: ModelType, db_session: Optional[AsyncSession] = None
     ) -> ModelType:
         """Insert a single data into the database.
 
@@ -44,10 +44,10 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def batch_insert(
-            self,
-            *,
-            data_list: List[ModelType],
-            db_session: Optional[AsyncSession] = None,
+        self,
+        *,
+        data_list: List[ModelType],
+        db_session: Optional[AsyncSession] = None,
     ) -> int:
         """Insert data list into the database in a single operation.
 
@@ -62,7 +62,7 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def select_by_id(
-            self, *, id: IDType, db_session: Optional[AsyncSession] = None
+        self, *, id: IDType, db_session: Optional[AsyncSession] = None
     ) -> Optional[ModelType]:
         """Select a single record by its ID.
 
@@ -77,7 +77,7 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def select_by_ids(
-            self, *, ids: List[IDType], db_session: Optional[AsyncSession] = None
+        self, *, ids: List[IDType], db_session: Optional[AsyncSession] = None
     ) -> List[ModelType]:
         """Select record list by their IDs.
 
@@ -92,12 +92,12 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def select_by_page(
-            self,
-            *,
-            current: IDType,
-            page_size: int,
-            db_session: Optional[AsyncSession] = None,
-            **kwargs,
+        self,
+        *,
+        current: IDType,
+        page_size: int,
+        db_session: Optional[AsyncSession] = None,
+        **kwargs,
     ) -> Tuple[List[ModelType], int]:
         """Select record list with pagination.
 
@@ -114,13 +114,13 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def select_by_ordered_page(
-            self,
-            *,
-            current: IDType,
-            page_size: int,
-            sort: List[SortItem] = None,
-            db_session: Optional[AsyncSession] = None,
-            **kwargs,
+        self,
+        *,
+        current: IDType,
+        page_size: int,
+        sort: List[SortItem] = None,
+        db_session: Optional[AsyncSession] = None,
+        **kwargs,
     ) -> Tuple[List[ModelType], int]:
         """Select record list with pagination and sorting.
 
@@ -138,7 +138,7 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def update_by_id(
-            self, *, data: ModelType, db_session: Optional[AsyncSession] = None
+        self, *, data: ModelType, db_session: Optional[AsyncSession] = None
     ) -> int:
         """Update a record by its ID.
 
@@ -153,11 +153,11 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def batch_update_by_ids(
-            self,
-            *,
-            ids: List[IDType],
-            data: Dict[str, Any],
-            db_session: Optional[AsyncSession] = None,
+        self,
+        *,
+        ids: List[IDType],
+        data: Dict[str, Any],
+        db_session: Optional[AsyncSession] = None,
     ) -> int:
         """Update record list by their IDs with the same values.
 
@@ -173,7 +173,7 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def delete_by_id(
-            self, *, id: IDType, db_session: Optional[AsyncSession] = None
+        self, *, id: IDType, db_session: Optional[AsyncSession] = None
     ) -> int:
         """Delete a data by its ID.
 
@@ -188,7 +188,7 @@ class BaseMapper(ABC, Generic[ModelType]):
 
     @abstractmethod
     async def batch_delete_by_ids(
-            self, *, ids: List[IDType], db_session: Optional[AsyncSession] = None
+        self, *, ids: List[IDType], db_session: Optional[AsyncSession] = None
     ) -> int:
         """Delete multiple data_list by their IDs.
 

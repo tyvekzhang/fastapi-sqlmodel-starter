@@ -21,12 +21,14 @@ from src.main.app.core.enums import CustomExceptionCode
 
 class SortEnum(str, Enum):
     """Enumeration for sorting directions."""
+
     ascending = "asc"
     descending = "desc"
 
 
 class TokenTypeEnum(str, Enum):
     """Enumeration for token types in authentication."""
+
     access = "access"
     refresh = "refresh"
     bearer = "Bearer"
@@ -34,6 +36,7 @@ class TokenTypeEnum(str, Enum):
 
 class DBTypeEnum(str, Enum):
     """Enumeration for supported database types."""
+
     PGSQL = "postgresql"
     MYSQL = "mysql"
     SQLITE = "sqlite"
@@ -41,6 +44,7 @@ class DBTypeEnum(str, Enum):
 
 class MediaTypeEnum(str, Enum):
     """Enumeration for media/content types."""
+
     JSON = ".json"
 
 

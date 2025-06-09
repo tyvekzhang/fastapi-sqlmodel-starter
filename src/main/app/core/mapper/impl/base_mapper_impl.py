@@ -13,7 +13,7 @@
 # limitations under the License.
 #
 """Sqlmodel impl that handle database operation"""
-import json
+
 from typing import Generic, TypeVar, List, Type, Tuple, Optional
 
 from sqlmodel import SQLModel, select, insert, update, delete, func
@@ -35,10 +35,10 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         self.db = db
 
     async def insert(
-            self,
-            *,
-            data: ModelType,
-            db_session: Optional[AsyncSession] = None,
+        self,
+        *,
+        data: ModelType,
+        db_session: Optional[AsyncSession] = None,
     ) -> ModelType:
         """
         Inserts a single data into the database.
@@ -50,10 +50,10 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return validated_data
 
     async def batch_insert(
-            self,
-            *,
-            data_list: List[ModelType],
-            db_session: Optional[AsyncSession] = None,
+        self,
+        *,
+        data_list: List[ModelType],
+        db_session: Optional[AsyncSession] = None,
     ) -> int:
         """
         Insert data list into the database in a single operation..
@@ -69,7 +69,7 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return exec_response.rowcount
 
     async def select_by_id(
-            self, *, id: IDType, db_session: Optional[AsyncSession] = None
+        self, *, id: IDType, db_session: Optional[AsyncSession] = None
     ) -> Optional[ModelType]:
         """
         Select a single record by its ID.
@@ -80,7 +80,7 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return db_response.one_or_none()
 
     async def select_by_ids(
-            self, *, ids: List[IDType], db_session: Optional[AsyncSession] = None
+        self, *, ids: List[IDType], db_session: Optional[AsyncSession] = None
     ) -> List[ModelType]:
         """
         Select record list by their IDs.
@@ -91,13 +91,13 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return db_response.all()
 
     async def select_by_page(
-            self,
-            *,
-            current: int = 1,
-            page_size: int = 100,
-            count: bool = False,
-            db_session: Optional[AsyncSession] = None,
-            **kwargs,
+        self,
+        *,
+        current: int = 1,
+        page_size: int = 100,
+        count: bool = False,
+        db_session: Optional[AsyncSession] = None,
+        **kwargs,
     ) -> Tuple[List[ModelType], int]:
         """
         Select a list of record, with optional filtering, pagination, and ordering.
@@ -164,14 +164,14 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return record_list, total_count
 
     async def select_by_ordered_page(
-            self,
-            *,
-            current: int = 1,
-            page_size: int = 100,
-            count: bool = False,
-            sort_list: List[SortItem] = None,
-            db_session: Optional[AsyncSession] = None,
-            **kwargs,
+        self,
+        *,
+        current: int = 1,
+        page_size: int = 100,
+        count: bool = False,
+        sort_list: List[SortItem] = None,
+        db_session: Optional[AsyncSession] = None,
+        **kwargs,
     ) -> Tuple[List[ModelType], int]:
         """
         Select a list of data_list, with optional filtering, pagination, and ordering.
@@ -235,7 +235,9 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
             for sort_item in sort_list:
                 column = getattr(self.model, sort_item["field"])
                 query = query.order_by(
-                    column.asc() if sort_item["order"] == SortEnum.ascending else column.desc()
+                    column.asc()
+                    if sort_item["order"] == SortEnum.ascending
+                    else column.desc()
                 )
         else:
             # Default to primary key descending
@@ -250,7 +252,7 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return data_list, total_count
 
     async def update_by_id(
-            self, *, data: ModelType, db_session: Optional[AsyncSession] = None
+        self, *, data: ModelType, db_session: Optional[AsyncSession] = None
     ) -> int:
         """
         Update a single data by its ID.
@@ -263,11 +265,11 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return exec_response.rowcount
 
     async def batch_update_by_ids(
-            self,
-            *,
-            ids: List[IDType],
-            data: dict,
-            db_session: Optional[AsyncSession] = None,
+        self,
+        *,
+        ids: List[IDType],
+        data: dict,
+        db_session: Optional[AsyncSession] = None,
     ) -> int:
         """
         Update multiple record by their IDs.
@@ -280,7 +282,7 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return exec_response.rowcount
 
     async def delete_by_id(
-            self, *, id: IDType, db_session: Optional[AsyncSession] = None
+        self, *, id: IDType, db_session: Optional[AsyncSession] = None
     ) -> int:
         """
         Delete a single data by its ID.
@@ -291,7 +293,7 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
         return exec_response.rowcount
 
     async def batch_delete_by_ids(
-            self, *, ids: List[IDType], db_session: Optional[AsyncSession] = None
+        self, *, ids: List[IDType], db_session: Optional[AsyncSession] = None
     ) -> int:
         """
         Delete record list by their IDs.
