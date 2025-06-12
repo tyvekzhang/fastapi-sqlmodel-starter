@@ -15,9 +15,10 @@
 """User schema"""
 
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Set
 from pydantic import BaseModel, Field
 from src.main.app.core.schema import BasePage
+from src.main.app.schema.sys_menu_schema import MenuPage
 
 
 class LoginForm(BaseModel):
@@ -48,6 +49,39 @@ class UserPage(BaseModel):
     remark: Optional[str] = None
     # 创建时间
     create_time: Optional[datetime] = None
+
+
+class UserInfo(BaseModel):
+    """
+    用户信息
+    """
+
+    # 主键
+    id: int
+    # 用户名
+    username: str
+    # 昵称
+    nickname: str
+    # 头像地址
+    avatar_url: Optional[str] = None
+    # 状态(0:停用,1:待审核,2:正常,3:已注销)
+    status: Optional[int] = None
+    # 备注
+    remark: Optional[str] = None
+    # 创建时间
+    create_time: Optional[datetime] = None
+    # 角色集合
+    roles: Optional[Set[str]] = None
+    # 权限集合
+    permissions: Optional[List[str]] = None
+    # 菜单集合
+    menus: Optional[List[MenuPage]] = None
+
+    @staticmethod
+    def is_admin(user_id: int) -> bool:
+        if not user_id is None and user_id == 9:
+            return True
+        return False
 
 
 class UserQuery(BasePage):

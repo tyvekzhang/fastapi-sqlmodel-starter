@@ -19,7 +19,7 @@ from __future__ import annotations
 import io
 import json
 from datetime import timedelta, datetime
-from typing import Optional, List
+from typing import Optional, List, Set
 from typing import Union
 
 import pandas as pd
@@ -36,14 +36,19 @@ from src.main.app.core.utils import excel_util
 from src.main.app.core.utils.validate_util import ValidateService
 from src.main.app.enums import AuthErrorCode
 from src.main.app.exception import AuthException
+from src.main.app.mapper.sys_role_mapper import roleMapper
 from src.main.app.mapper.sys_user_mapper import UserMapper
+from src.main.app.mapper.sys_user_role_mapper import userRoleMapper
+from src.main.app.model.sys_role_model import RoleModel
 from src.main.app.model.sys_user_model import UserModel
+from src.main.app.model.sys_user_role_model import UserRoleModel
+from src.main.app.schema.sys_menu_schema import MenuPage
 from src.main.app.schema.sys_user_schema import (
     UserQuery,
     UserPage,
     UserDetail,
     UserCreate,
-    LoginForm,
+    LoginForm, UserInfo,
 )
 from src.main.app.service.sys_user_service import UserService
 
@@ -115,10 +120,10 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
 
         user_record = await self.mapper.get_user_by_username(username=username)
         if user_record is None or not security.verify_password(
-            login_form.password, user_record.password
+                login_form.password, user_record.password
         ):
             raise AuthException(AuthErrorCode.AUTH_FAILED)
-
+        user_record.status
         return await self.generate_tokens(user_id=user_record.id)
 
     async def find_by_id(self, id: int) -> Optional[UserPage]:
@@ -135,7 +140,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         return UserPage(**user_record.model_dump()) if user_record else None
 
     async def get_user_by_page(
-        self, user_query: UserQuery, current_user: CurrentUser
+            self, user_query: UserQuery, current_user: CurrentUser
     ) -> PageResult:
         sort_list = None
         sort_str = user_query.sort_str
@@ -188,7 +193,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         return PageResult(records=records, total=total)
 
     async def get_user_detail(
-        self, *, id: int, current_user: CurrentUser
+            self, *, id: int, current_user: CurrentUser
     ) -> Optional[UserDetail]:
         user_do: UserModel = await self.mapper.select_by_id(id=id)
         if user_do is None:
@@ -196,7 +201,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         return UserDetail(**user_do.model_dump())
 
     async def export_user_page(
-        self, *, ids: List[int], current_user: CurrentUser
+            self, *, ids: List[int], current_user: CurrentUser
     ) -> Optional[StreamingResponse]:
         if ids is None or len(ids) == 0:
             return None
@@ -211,14 +216,14 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         )
 
     async def create_user(
-        self, user_create: UserCreate, current_user: CurrentUser
+            self, user_create: UserCreate, current_user: CurrentUser
     ) -> UserModel:
         user: UserModel = UserModel(**user_create.model_dump())
         # user.user_id = request.state.user_id
         return await self.save(data=user)
 
     async def batch_create_user(
-        self, *, user_create_list: List[UserCreate], current_user: CurrentUser
+            self, *, user_create_list: List[UserCreate], current_user: CurrentUser
     ) -> List[int]:
         user_list: List[UserModel] = [
             UserModel(**user_create.model_dump())
@@ -229,7 +234,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
 
     @staticmethod
     async def import_user(
-        *, file: UploadFile, current_user: CurrentUser
+            *, file: UploadFile, current_user: CurrentUser
     ) -> Union[List[UserCreate], None]:
         contents = await file.read()
         import_df = pd.read_excel(io.BytesIO(contents))
@@ -258,3 +263,26 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
                 return user_create_list
 
         return user_create_list
+
+    def get_roles(self, id: int) -> Set[str]:
+        roles: Set[str] = set()
+        if UserInfo.is_admin(id):
+            roles.add("admin")
+        else:
+            user_roles: List[UserRoleModel] = userRoleMapper.select_by_userid(user_id=id)
+            if not user_roles:
+                return roles
+
+            role_ids = [user_role.role_id for user_role in user_roles]
+
+            role_models: List[RoleModel] = roleMapper.select_by_role_ids(role_ids=role_ids)
+            if not role_models:
+                return roles
+
+            role_names = [role.name for role in role_models]
+            roles.update(role_names)
+
+        return roles
+
+    def get_menus(self, id: int) -> List[MenuPage]:
+        ...

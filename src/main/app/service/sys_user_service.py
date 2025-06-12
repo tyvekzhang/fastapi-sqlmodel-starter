@@ -25,6 +25,7 @@ from starlette.responses import StreamingResponse
 from src.main.app.core.schema import PageResult, Token, CurrentUser
 from src.main.app.core.service.base_service import BaseService
 from src.main.app.model.sys_user_model import UserModel
+from src.main.app.schema.sys_menu_schema import MenuPage
 from src.main.app.schema.sys_user_schema import (
     UserQuery,
     UserDetail,
@@ -43,30 +44,36 @@ class UserService(BaseService[UserModel], ABC):
 
     @abstractmethod
     async def get_user_by_page(
-        self, *, user_query: UserQuery, current_user: CurrentUser
+            self, *, user_query: UserQuery, current_user: CurrentUser
     ) -> PageResult: ...
 
     @abstractmethod
     async def get_user_detail(
-        self, *, id: int, current_user: CurrentUser
+            self, *, id: int, current_user: CurrentUser
     ) -> Optional[UserDetail]: ...
 
     @abstractmethod
     async def export_user_page(
-        self, *, ids: List[int], current_user: CurrentUser
+            self, *, ids: List[int], current_user: CurrentUser
     ) -> Optional[StreamingResponse]: ...
 
     @abstractmethod
     async def create_user(
-        self, *, user_create: UserCreate, current_user: CurrentUser
+            self, *, user_create: UserCreate, current_user: CurrentUser
     ) -> UserModel: ...
 
     @abstractmethod
     async def batch_create_user(
-        self, *, user_create_list: List[UserCreate], current_user: CurrentUser
+            self, *, user_create_list: List[UserCreate], current_user: CurrentUser
     ) -> List[int]: ...
 
     @abstractmethod
     async def import_user(
-        self, *, file: UploadFile, current_user: CurrentUser
+            self, *, file: UploadFile, current_user: CurrentUser
     ) -> List[UserCreate]: ...
+
+    @abstractmethod
+    def get_roles(self, id: int) -> List[str]: ...
+
+    @abstractmethod
+    def get_menus(self, id: int) -> List[MenuPage]: ...

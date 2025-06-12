@@ -15,18 +15,19 @@
 """Use when performing database migration"""
 
 import importlib
+import os
 from pathlib import Path
-from typing import Dict, Type, Any, List, Optional
+from typing import List, Optional
 
 # List of directories to scan for model files
 MODEL_PACKAGES = [
-    "src/main/app/models",
+    "src/main/app/model",
 ]
 
 
 def import_sql_models(
     packages: Optional[List[str]] = None,
-) -> Dict[str, Type[Any]]:
+) -> None:
     """Dynamically import all model classes from specified packages.
 
     Scans for Python files matching '*_model.py' pattern in each package directory.
@@ -39,7 +40,6 @@ def import_sql_models(
         Dictionary mapping class names to class objects for all imported models.
     """
     packages_to_scan = packages or MODEL_PACKAGES
-    imported_models = {}
 
     for package_path in packages_to_scan:
         package_dir = Path(package_path)
@@ -51,24 +51,23 @@ def import_sql_models(
         for model_file in package_dir.glob("*_model.py"):
             try:
                 # Convert path to module import format (e.g., "src/main/app/models/file_model")
-                module_path = str(model_file.with_suffix("")).replace("/", ".")
+                module_path = (
+                    str(model_file.with_suffix(""))
+                    .replace("/", ".")
+                    .replace(os.sep, ".")
+                )
                 module = importlib.import_module(module_path)
 
                 for name in dir(module):
                     if name.endswith("Model"):
-                        model_class = getattr(module, name)
-                        imported_models[name] = model_class
+                        globals()[name] = getattr(module, name)
 
-            except ImportError as e:
-                print(f"Failed to import module {module_path}: {e}")
             except Exception as e:
-                print(f"Unexpected error processing {module_path}: {e}")
-
-    return imported_models
+                print(f"Unexpected error processing {model_file}: {e}")
 
 
 # Import models from default packages
-imported_models = import_sql_models()
+import_sql_models()
 
 # Alternatively, import from specific packages:
 # imported_models = import_models(["custom/package/models", "another/package/models"])
