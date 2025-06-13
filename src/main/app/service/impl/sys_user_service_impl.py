@@ -19,7 +19,7 @@ from __future__ import annotations
 import io
 import json
 from datetime import timedelta, datetime
-from typing import Optional, List, Set
+from typing import Optional, List, Set, Tuple
 from typing import Union
 
 import pandas as pd
@@ -36,9 +36,13 @@ from src.main.app.core.utils import excel_util
 from src.main.app.core.utils.validate_util import ValidateService
 from src.main.app.enums import AuthErrorCode
 from src.main.app.exception import AuthException
+from src.main.app.mapper.sys_menu_mapper import menuMapper
 from src.main.app.mapper.sys_role_mapper import roleMapper
+from src.main.app.mapper.sys_role_menu_mapper import roleMenuMapper
 from src.main.app.mapper.sys_user_mapper import UserMapper
 from src.main.app.mapper.sys_user_role_mapper import userRoleMapper
+from src.main.app.model.sys_menu_model import MenuModel
+from src.main.app.model.sys_role_menu_model import RoleMenuModel
 from src.main.app.model.sys_role_model import RoleModel
 from src.main.app.model.sys_user_model import UserModel
 from src.main.app.model.sys_user_role_model import UserRoleModel
@@ -48,7 +52,8 @@ from src.main.app.schema.sys_user_schema import (
     UserPage,
     UserDetail,
     UserCreate,
-    LoginForm, UserInfo,
+    LoginForm,
+    UserInfo,
 )
 from src.main.app.service.sys_user_service import UserService
 
@@ -120,7 +125,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
 
         user_record = await self.mapper.get_user_by_username(username=username)
         if user_record is None or not security.verify_password(
-                login_form.password, user_record.password
+            login_form.password, user_record.password
         ):
             raise AuthException(AuthErrorCode.AUTH_FAILED)
         user_record.status
@@ -140,7 +145,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         return UserPage(**user_record.model_dump()) if user_record else None
 
     async def get_user_by_page(
-            self, user_query: UserQuery, current_user: CurrentUser
+        self, user_query: UserQuery, current_user: CurrentUser
     ) -> PageResult:
         sort_list = None
         sort_str = user_query.sort_str
@@ -193,7 +198,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         return PageResult(records=records, total=total)
 
     async def get_user_detail(
-            self, *, id: int, current_user: CurrentUser
+        self, *, id: int, current_user: CurrentUser
     ) -> Optional[UserDetail]:
         user_do: UserModel = await self.mapper.select_by_id(id=id)
         if user_do is None:
@@ -201,7 +206,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         return UserDetail(**user_do.model_dump())
 
     async def export_user_page(
-            self, *, ids: List[int], current_user: CurrentUser
+        self, *, ids: List[int], current_user: CurrentUser
     ) -> Optional[StreamingResponse]:
         if ids is None or len(ids) == 0:
             return None
@@ -216,14 +221,14 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
         )
 
     async def create_user(
-            self, user_create: UserCreate, current_user: CurrentUser
+        self, user_create: UserCreate, current_user: CurrentUser
     ) -> UserModel:
         user: UserModel = UserModel(**user_create.model_dump())
         # user.user_id = request.state.user_id
         return await self.save(data=user)
 
     async def batch_create_user(
-            self, *, user_create_list: List[UserCreate], current_user: CurrentUser
+        self, *, user_create_list: List[UserCreate], current_user: CurrentUser
     ) -> List[int]:
         user_list: List[UserModel] = [
             UserModel(**user_create.model_dump())
@@ -234,7 +239,7 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
 
     @staticmethod
     async def import_user(
-            *, file: UploadFile, current_user: CurrentUser
+        *, file: UploadFile, current_user: CurrentUser
     ) -> Union[List[UserCreate], None]:
         contents = await file.read()
         import_df = pd.read_excel(io.BytesIO(contents))
@@ -264,25 +269,69 @@ class UserServiceImpl(BaseServiceImpl[UserMapper, UserModel], UserService):
 
         return user_create_list
 
-    def get_roles(self, id: int) -> Set[str]:
+    async def get_roles(self, id: int) -> Tuple[Set[str], List[RoleModel]]:
+        """
+        Get user's roles by user ID.
+        Returns a set of role names and a list of role models.
+        """
         roles: Set[str] = set()
+        role_models: List[RoleModel] = []
+
+        # Admin gets automatic 'admin' role
         if UserInfo.is_admin(id):
             roles.add("admin")
         else:
-            user_roles: List[UserRoleModel] = userRoleMapper.select_by_userid(user_id=id)
+            # Get roles from database for non-admin users
+            user_roles: List[UserRoleModel] = userRoleMapper.select_by_userid(
+                user_id=id
+            )
             if not user_roles:
-                return roles
+                return roles, role_models
 
             role_ids = [user_role.role_id for user_role in user_roles]
-
-            role_models: List[RoleModel] = roleMapper.select_by_role_ids(role_ids=role_ids)
+            role_models = roleMapper.select_by_role_ids(role_ids=role_ids)
             if not role_models:
-                return roles
+                return roles, role_models
 
+            # Extract role names from role models
             role_names = [role.name for role in role_models]
             roles.update(role_names)
 
-        return roles
+        return roles, role_models
 
-    def get_menus(self, id: int) -> List[MenuPage]:
-        ...
+    async def get_menus(
+        self, id: int, role_models: List[RoleModel] = None
+    ) -> List[MenuPage]:
+        """
+        Get accessible menus for user based on their roles.
+        Returns a list of menu pages.
+        """
+        menus: List[MenuPage] = []
+
+        # Admin gets all menus
+        if UserInfo.is_admin(id):
+            menu_list, total_count = await menuMapper.select_by_parent_id()
+            if total_count == 0:
+                return menus
+            menus = [MenuPage(**menu.model_dump()) for menu in menu_list]
+            return menus
+
+        # Return empty if no roles provided for non-admin
+        if not role_models:
+            return menus
+
+        # Get menus associated with user's roles
+        role_ids = [role_model.id for role_model in role_models]
+        role_menu_records: List[RoleMenuModel] = (
+            roleMenuMapper.select_by_role_ids(role_ids=role_ids)
+        )
+        if not role_menu_records:
+            return menus
+
+        # Convert menu models to menu pages
+        menu_id_list = [
+            role_menu_record.menu_id for role_menu_record in role_menu_records
+        ]
+        menu_list: List[MenuModel] = menuMapper.select_by_ids(ids=menu_id_list)
+        menus = [MenuPage(**menu.model_dump()) for menu in menu_list]
+        return menus

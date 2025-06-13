@@ -33,8 +33,8 @@ class BaseServiceImpl(Generic[M, T], BaseService[T]):
     async def save(self, *, data: T) -> T:
         return await self.mapper.insert(data=data)
 
-    async def batch_save(self, *, data: List[T]) -> int:
-        return await self.mapper.batch_insert(data_list=data)
+    async def batch_save(self, *, data_list: List[T]) -> int:
+        return await self.mapper.batch_insert(data_list=data_list)
 
     async def retrieve_by_id(self, *, id: IDType) -> T:
         return await self.mapper.select_by_id(id=id)

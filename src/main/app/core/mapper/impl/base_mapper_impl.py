@@ -19,7 +19,7 @@ from typing import Generic, TypeVar, List, Type, Tuple, Optional
 from sqlmodel import SQLModel, select, insert, update, delete, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from src.main.app.core.constant import FilterOperators
+from src.main.app.core.constant import FilterOperators, constant
 from src.main.app.core.enums import SortEnum
 from src.main.app.core.mapper.base_mapper import BaseMapper
 from src.main.app.core.middleware.db_session_middleware import db
@@ -229,6 +229,106 @@ class SqlModelMapper(BaseMapper, Generic[ModelType]):
             count_query = select(func.count()).select_from(query.subquery())
             total_count_result = await db_session.exec(count_query)
             total_count: int = total_count_result.all()[0]
+
+        # Apply sorting
+        if sort_list:
+            for sort_item in sort_list:
+                column = getattr(self.model, sort_item["field"])
+                query = query.order_by(
+                    column.asc()
+                    if sort_item["order"] == SortEnum.ascending
+                    else column.desc()
+                )
+        else:
+            # Default to primary key descending
+            query = query.order_by(self.model.id.desc())
+
+        # Apply pagination
+        query = query.offset((current - 1) * page_size).limit(page_size)
+
+        exec_response = await db_session.exec(query)
+        data_list: List[ModelType] = exec_response.all()
+
+        return data_list, total_count
+
+    async def select_by_parent_id(
+        self,
+        *,
+        current: int = 1,
+        page_size: int = constant.MAX_PAGE_SIZE,
+        count: bool = True,
+        sort_list: List[SortItem] = None,
+        db_session: Optional[AsyncSession] = None,
+        **kwargs,
+    ) -> Tuple[List[ModelType], int]:
+        """
+        Select record list with pagination and sorting by parent ID.
+
+        Parameters:
+            current : The current page number to select (1-indexed)
+            page_size : The number of data_list per page
+            count : Whether to data the total row
+            sort_list: List of SortItems for multi-column ordering (default: primary key desc)
+            db_session : The database session to use
+            **kwargs: Additional filter criteria, including:
+                - EQ: Equal to (e.g., {"column_name": value})
+                - NE: Not equal to (e.g., {"column_name": value})
+                - GT: Greater than (e.g., {"column_name": value})
+                - GE: Greater than or equal to (e.g., {"column_name": value})
+                - LT: Less than (e.g., {"column_name": value})
+                - LE: Less than or equal to (e.g., {"column_name": value})
+                - BETWEEN: Between two values (e.g., {"column_name": (start, end)})
+                - LIKE: Fuzzy search (e.g., {"column_name": "%value%"})
+        """
+        db_session = db_session or self.db.session
+        query = select(self.model)
+
+        # Apply filters
+        if hasattr(self.model, constant.PARENT_ID) and (
+            constant.PARENT_ID not in kwargs
+            or kwargs[constant.PARENT_ID] is None
+        ):
+            query = query.filter(
+                getattr(self.model, constant.PARENT_ID)
+                == constant.ROOT_PARENT_ID
+            )
+        if FilterOperators.EQ in kwargs:
+            for column, value in kwargs[FilterOperators.EQ].items():
+                query = query.filter(getattr(self.model, column) == value)
+        if FilterOperators.NE in kwargs:
+            for column, value in kwargs[FilterOperators.NE].items():
+                query = query.filter(getattr(self.model, column) != value)
+        if FilterOperators.GT in kwargs:
+            for column, value in kwargs[FilterOperators.GT].items():
+                query = query.filter(getattr(self.model, column) > value)
+        if FilterOperators.GE in kwargs:
+            for column, value in kwargs[FilterOperators.GE].items():
+                query = query.filter(getattr(self.model, column) >= value)
+        if FilterOperators.LT in kwargs:
+            for column, value in kwargs[FilterOperators.LT].items():
+                query = query.filter(getattr(self.model, column) < value)
+        if FilterOperators.LE in kwargs:
+            for column, value in kwargs[FilterOperators.LE].items():
+                query = query.filter(getattr(self.model, column) <= value)
+        if FilterOperators.BETWEEN in kwargs:
+            for column, (start, end) in kwargs[FilterOperators.BETWEEN].items():
+                query = query.filter(
+                    getattr(self.model, column).between(start, end)
+                )
+        if FilterOperators.LIKE in kwargs:
+            for column, value in kwargs[FilterOperators.LIKE].items():
+                query = query.filter(getattr(self.model, column).like(value))
+
+        # Get total count if requested
+        total_count = 0
+        if count:
+            count_query = select(func.count()).select_from(query.subquery())
+            total_count_result = await db_session.exec(count_query)
+            total_count: int = total_count_result.all()[0]
+            if total_count > constant.MAX_PAGE_SIZE:
+                raise ValueError(
+                    f"Total count exceeds {constant.MAX_PAGE_SIZE}"
+                )
 
         # Apply sorting
         if sort_list:

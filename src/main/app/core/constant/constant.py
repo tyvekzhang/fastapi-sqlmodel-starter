@@ -24,6 +24,9 @@ ENV = "env"
 CONFIG_FILE = "config_file"
 AUTHORIZATION = "Authorization"
 CONFIG_FILE_NAME = "config.yml"
+MAX_PAGE_SIZE = 1000
+ROOT_PARENT_ID = 0
+PARENT_ID = "parent_id"
 
 
 class FilterOperators:

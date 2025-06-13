@@ -79,7 +79,7 @@ class UserInfo(BaseModel):
 
     @staticmethod
     def is_admin(user_id: int) -> bool:
-        if not user_id is None and user_id == 9:
+        if user_id is not None and user_id == 9:
             return True
         return False
 

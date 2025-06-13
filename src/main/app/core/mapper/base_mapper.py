@@ -137,6 +137,30 @@ class BaseMapper(ABC, Generic[ModelType]):
         raise NotImplementedError
 
     @abstractmethod
+    async def select_by_parent_id(
+        self,
+        *,
+        current: IDType,
+        page_size: int,
+        sort: List[SortItem] = None,
+        db_session: Optional[AsyncSession] = None,
+        **kwargs,
+    ) -> Tuple[List[ModelType], int]:
+        """Select record list with pagination and sorting by parent ID.
+
+        Args:
+            current: Current page number (1-based)
+            page_size: Number of record list per page
+            sort: Sorting specification in the format[{"field": "field1", "sort": "asc"}]
+            db_session: Optional async database session
+            **kwargs: Additional filter criteria
+
+        Returns:
+            Tuple of (list of record for current page_size, total data count)
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     async def update_by_id(
         self, *, data: ModelType, db_session: Optional[AsyncSession] = None
     ) -> int:

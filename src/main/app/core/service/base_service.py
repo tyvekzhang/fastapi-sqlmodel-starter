@@ -34,7 +34,7 @@ class BaseService(Generic[T], ABC):
         ...
 
     @abstractmethod
-    async def batch_save(self, *, data: List[T]) -> int:
+    async def batch_save(self, *, data_list: List[T]) -> int:
         """Save multiple data and return the count saved."""
         ...
 

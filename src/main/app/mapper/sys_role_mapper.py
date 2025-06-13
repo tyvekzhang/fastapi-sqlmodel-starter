@@ -25,7 +25,10 @@ from src.main.app.model.sys_role_model import RoleModel
 
 class RoleMapper(SqlModelMapper[RoleModel]):
     async def select_by_user_ids(
-            self, *, user_ids: List[int], db_session: Union[AsyncSession, None] = None
+        self,
+        *,
+        user_ids: List[int],
+        db_session: Union[AsyncSession, None] = None,
     ) -> Union[RoleModel, None]:
         db_session = db_session or self.db.session
         query = select(RoleModel).where(RoleModel.id.in_(user_ids))
